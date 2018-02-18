@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package backendServlet;
+package Servlet;
 
-import backendEngine.EventHandler;
+import EventHandlers.EventHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
