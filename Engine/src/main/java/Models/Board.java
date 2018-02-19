@@ -10,6 +10,8 @@ import Models.Multiplier;
 import Models.Space;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static java.util.concurrent.ThreadLocalRandom.*;
+
 /**
  *  Contains the state of the Game board
  * @author Bill Cook
@@ -25,8 +27,8 @@ public class Board implements GameConstants {
     public Board() {
         board = new Space[BOARD_WIDTH][BOARD_WIDTH];
         // Select and load a random board layout
-        int variation = 
-                ThreadLocalRandom.current().nextInt(NUMBER_OF_VARIATIONS);
+        int variation =
+                current().nextInt(NUMBER_OF_VARIATIONS);
         int[][] layout = BOARD_VARIATIONS[variation];
         // Initialize board
         int multIndex = 0;
@@ -37,7 +39,7 @@ public class Board implements GameConstants {
                 if (multIndex < layout.length && r == layout[multIndex][c] 
                         && c == layout[r][multIndex]) {
                     // Generate Random Multiplier
-                    int multType = ThreadLocalRandom.current().nextInt(5);
+                    int multType = current().nextInt(5);
                     switch (multType) {
                         case 0: break;
                         case 1: mult = Multiplier.DOUBLE_LETTER; break;
