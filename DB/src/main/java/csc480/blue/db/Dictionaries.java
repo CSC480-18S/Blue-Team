@@ -1,3 +1,5 @@
+package csc480.blue.db;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
