@@ -27,35 +27,25 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.19.1</version>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.19</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.junit.platform</groupId>
+						<artifactId>junit-platform-surefire-provider</artifactId>
+						<version>1.0.0</version>
+					</dependency>
+				</dependencies>
+        	</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
 				<configuration>
-					<includes>
-						<include>**/Test*.java</include>
-						<include>**/*Test.java</include>
-						<include>**/*Tests.java</include>
-						<include>**/*TestCase.java</include>
-					</includes>
-					<properties>
-						<!-- <includeTags>fast</includeTags> -->
-						<excludeTags>slow</excludeTags>
-						<!--
-						<configurationParameters>
-							junit.jupiter.conditions.deactivate = *
-						</configurationParameters>
-						-->
-					</properties>
+				<!-- Does not exist yet, need to create when ready -->
+				<mainClass>csc480.blue.db.Main</mainClass>
 				</configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.6.0</version>
-        <configuration>
-          <!-- Does not exist yet, need to create when ready -->
-          <mainClass>csc480.blue.db.Main</mainClass>
-        </configuration>
-      </plugin>
+			</plugin>
 		</plugins>
 	</build>
 
