@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="BlueTeam:war">
+    <output-path>$PROJECT_DIR$/out/artifacts/BlueTeam_war</output-path>
+    <root id="archive" name="BlueTeam.war">
+      <element id="artifact" artifact-name="BlueTeam:war exploded" />
+    </root>
+  </artifact>
+</component>
