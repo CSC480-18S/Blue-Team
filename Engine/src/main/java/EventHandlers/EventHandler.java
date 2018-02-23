@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package EventHandlers;
+package main.java.EventHandlers;
+
+import main.java.Session.Session;
 
 /**
  *  Event Handler class that processes servlet API calls
@@ -20,10 +22,11 @@ public final class EventHandler {
         return "joinHandler username: " + username + " MAC: " + mac;
     }
     
-    public static String playHandler(int startX, int startY, int endX, int endY,
+    public static String playHandler(int startX, int startY, boolean horizontal,
             String word) {
+        boolean result = Session.getSession().playWord(startX, startY, horizontal, word);
         return "playHandler startX: " + startX + " startY: " + startY + 
-                " endX: " + endX + " endY: " + endY + " word: " + word;
+                " horizontal: "+ horizontal + " word: " + word + " result: " + result;
     }
     
     public static String leaveHandler(String username, String mac) {
