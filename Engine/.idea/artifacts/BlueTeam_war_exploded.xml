@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="BlueTeam:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/BlueTeam</output-path>
+    <output-path>$PROJECT_DIR$/../../tomcat/webapps</output-path>
     <root id="root">
       <element id="javaee-facet-resources" facet="BlueTeam/web/Web" />
       <element id="directory" name="WEB-INF">
