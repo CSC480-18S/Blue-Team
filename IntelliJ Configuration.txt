@@ -1,0 +1,31 @@
+Pre=requisites:
+Download tomcat 8 and drop files in to C:\Dev\tomcat (atleast put tomcat folder in same directory as repo).
+Download IntelliJ Ultimate. *Community version won't work with JavaEE..
+
+Clone repo from github to c:\dev
+
+Import Project:
+Open IntelliJ
+Import project "Engine" from repo folder
+Create project from existing sources, select Next
+Select next through using defaults for all, set SDK to JDK if not already set
+
+Set tomcat libraries:
+File > Project Structure > Libraries
+Add > Java
+Select c:\dev\tomcat\lib
+
+Setup war file build:
+File > Project Structure > Artifacts
+Add > WebApplication Archive
+Rename Servlet:war
+Set ouput directory to c:\dev\tomcat\webapps
+
+Build project:
+NOTE: in Engine\src\main\java\Session\Start.java, if using Windows, comment out the System.setProperty line.
+In intellij select Build > Build Artifcats > Servlet:war > Build
+
+Run tomcat:
+open cmd
+cd into c:\dev\tomcat\bin
+enter "startup"
