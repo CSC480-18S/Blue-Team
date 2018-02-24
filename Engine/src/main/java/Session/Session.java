@@ -1,8 +1,13 @@
 package main.java.Session;
+
 import main.java.Models.*;
 import main.java.Views.*;
+import main.java.Components.*;
+import main.java.Components.Log;
 
 import java.util.Scanner;
+import java.util.logging.Level;
+
 
 /**
  *
@@ -13,12 +18,22 @@ public class Session {
     private Board board;
     private BoardGUI gui;
     private Validator validator;
+    public Log log;
 
-    private Session(){
+    private Session()
+    {
         board = new Board();
         gui = new BoardGUI();
         validator = new Validator();
         //populateBoard();
+
+        // initialize logger
+        try
+        {
+            log = new Log();
+            log.logger.setLevel(Level.WARNING);
+        }
+        catch(Exception e){}
     }
 
     private void populateBoard(){
@@ -60,5 +75,14 @@ public class Session {
             session = new Session();
         }
         return session;
+    }
+
+    public static void LogInfo(String msg)
+    {
+        session.log.logger.info(msg);
+    }
+    public static void LogWarning(String msg)
+    {
+        session.log.logger.warning(msg);
     }
 }
