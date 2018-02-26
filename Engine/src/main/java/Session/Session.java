@@ -22,18 +22,16 @@ public class Session {
 
     private Session()
     {
+        // initialize logger
+        try {
+            log = new Log();
+            log.logger.setLevel(Level.INFO);
+        }
+        catch(Exception e){System.out.println("error: " + e);}
         board = new Board();
         gui = new BoardGUI();
         validator = new Validator();
         //populateBoard();
-
-        // initialize logger
-        try
-        {
-            log = new Log();
-            log.logger.setLevel(Level.WARNING);
-        }
-        catch(Exception e){}
     }
 
     private void populateBoard(){
@@ -79,10 +77,10 @@ public class Session {
 
     public static void LogInfo(String msg)
     {
-        session.log.logger.info(msg);
+        getSession().log.logger.info(msg);
     }
     public static void LogWarning(String msg)
     {
-        session.log.logger.warning(msg);
+        getSession().log.logger.warning(msg);
     }
 }
