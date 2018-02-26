@@ -24,3 +24,8 @@ hs_err_pid*
 #Maven Target
 /target
 /target/*
+
+# IDE
+.idea/
+*.iml
+nbproject/*
