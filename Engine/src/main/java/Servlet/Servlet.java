@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static main.java.Session.Session.LogWarning;
+
 /**
  *
  * @author ulocal
@@ -90,7 +92,11 @@ public class Servlet extends HttpServlet {
                 // Unknown request
                 out.print(EventHandler.unknownHandler());
             }
-        } finally {
+        }
+        catch (Exception e) {
+            LogWarning(e.getMessage() + "\n" + e.getStackTrace());
+        }
+        finally {
             out.close();
         }
     }
