@@ -55,7 +55,7 @@ public class Validator {
     private static int isDictionaryWord(String word)
     {
         try {
-            if (Dictionaries.getDictionaries().getEnglishWords().contains(word))
+            if (Dictionaries.getDictionaries().getEnglishWords().contains(word.toUpperCase()))
             {
                 return 1;
             }
@@ -71,7 +71,7 @@ public class Validator {
     private int isProfane(String word)
     {
         try {
-            if (Dictionaries.getDictionaries().getBadWords().contains(word))
+            if (Dictionaries.getDictionaries().getBadWords().contains(word.toUpperCase()))
             {
                 return -1;
             }
@@ -86,7 +86,7 @@ public class Validator {
     private int isBonus(String word)
     {
         try {
-            if (Dictionaries.getDictionaries().getSpecialWords().contains(word))
+            if (Dictionaries.getDictionaries().getSpecialWords().contains(word.toUpperCase()))
             {
                 return 2;
             }
