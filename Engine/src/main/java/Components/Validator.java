@@ -1,6 +1,5 @@
 package main.java.Components;
 
-import main.java.Models.*;
 import static main.java.Session.Session.LogWarning;
 
 import java.io.BufferedReader;
@@ -13,10 +12,13 @@ import java.io.FileReader;
  * Class to validate word and placement
  */
 public class Validator {
-    private Board board;
+    // This board is not used currently.
+    // We either need to make a copy of the board in session
+    // or keep this one updated to reflect the board in session
+    //private Board board;
 
     public Validator(){
-        board = new Board();
+        //board = new Board();
     }
 
     /**
@@ -25,7 +27,7 @@ public class Validator {
      * @param startY
      * @param horizontal
      * @param word
-     * @return 1 - Valid play, 0 - invalid, -1 - swear word
+     * @return 1 - Valid play, 0 - invalid, -1 - swear word, 2 - bonus word
      */
     public int isValidPlay(int startX, int startY, boolean horizontal, String word)
     {
@@ -35,11 +37,12 @@ public class Validator {
         {
             return valid;
         }
-        // Check if word is in dictionary
-        valid = isDictionaryWord(word);
-        if (valid == 0)
+        // Check if the user entered a bonus word
+        valid = isBonus(word);
+        if (valid != 2)
         {
-            return valid;
+            // If not a bonus, Check if word is in dictionary
+            valid = isDictionaryWord(word);
         }
 
         // Check for valid placement on the board
@@ -52,15 +55,10 @@ public class Validator {
     private static int isDictionaryWord(String word)
     {
         try {
-            BufferedReader in = new BufferedReader(new FileReader(
-                    "../resources/11charwords.txt"));
-            String str;
-            while ((str = in.readLine()) != null) {
-                if (str.contains(word)) {
-                    return 1;
-                }
+            if (Dictionaries.getDictionaries().getEnglishWords().contains(word))
+            {
+                return 1;
             }
-            in.close();
         } catch (Exception e) {
 
             LogWarning(e.getMessage() + "\n" + e.getStackTrace());
@@ -73,15 +71,25 @@ public class Validator {
     private int isProfane(String word)
     {
         try {
-            BufferedReader in = new BufferedReader(new FileReader(
-                    "/resources/profanity.txt"));
-            String str;
-            while ((str = in.readLine()) != null) {
-                if (str.contains(word)) {
-                    return -1;
-                }
+            if (Dictionaries.getDictionaries().getBadWords().contains(word))
+            {
+                return -1;
             }
-            in.close();
+        } catch (Exception e) {
+            LogWarning(e.getMessage() + "\n" + e.getStackTrace());
+        }
+
+        return 1;
+    }
+
+    /// Check if word is a bonus word
+    private int isBonus(String word)
+    {
+        try {
+            if (Dictionaries.getDictionaries().getSpecialWords().contains(word))
+            {
+                return 2;
+            }
         } catch (Exception e) {
             LogWarning(e.getMessage() + "\n" + e.getStackTrace());
         }

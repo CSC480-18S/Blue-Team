@@ -20,14 +20,15 @@ public class Session {
     private Validator validator;
     public Log log;
 
-    private Session()
+    public void InitializeObjects()
     {
-        // initialize logger
+        // Initialize logger
         try {
             log = new Log();
             log.logger.setLevel(Level.INFO);
         }
-        catch(Exception e){System.out.println("error: " + e);}
+        catch(Exception e){System.out.println("Error creating logger: \n" + e);}
+
         board = new Board();
         gui = new BoardGUI();
         validator = new Validator();

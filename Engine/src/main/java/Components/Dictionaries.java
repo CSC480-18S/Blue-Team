@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Scanner;
 
+import static main.java.Session.Session.LogWarning;
+
 /**
  * This class is used to store all (3) of the game's dictionaries.
  * The dictionaries can be separately loaded by reading text files.
@@ -17,7 +19,9 @@ import java.util.Scanner;
  *
  */
 
+// Singleton class
 public class Dictionaries implements Serializable {
+	private static Dictionaries dictionaries;
 	private static final long serialVersionUID = 6470362571456272072L;
 	private HashSet<String> englishWords;
 	private HashSet<String> specialWords; // Words like "snow" and "oswego"
@@ -48,7 +52,7 @@ public class Dictionaries implements Serializable {
 			englishWords.add(sc.nextLine());
 		}
 		sc.close();
-		
+
 		// Load special words
 		file = new File(spec);
 		sc = new Scanner(file);
@@ -56,7 +60,7 @@ public class Dictionaries implements Serializable {
 			specialWords.add(sc.nextLine());
 		}
 		sc.close();
-		
+
 		// Load bad words
 		file = new File(bad);
 		sc = new Scanner(file);
@@ -64,6 +68,26 @@ public class Dictionaries implements Serializable {
 			badWords.add(sc.nextLine());
 		}
 		sc.close();
+	}
+
+	public static Dictionaries getDictionaries()
+	{
+		// Load dictionaries
+		if (dictionaries == null)
+		{
+			try
+			{
+				dictionaries = new Dictionaries(
+						"resources\\dictionary_short.txt", "resources\\bonus.txt", "resources\\profanity.txt");
+			}
+			catch (Exception e)
+			{
+
+				LogWarning("" +e.getMessage() + "\n" + e.getStackTrace());
+			}
+		}
+		return dictionaries;
+
 	}
 	
 	public HashSet<String> getEnglishWords() {
