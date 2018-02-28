@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+
+
+body, html {   
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display:table;
+     overflow-y: hidden;
+}
+body {
+    display:table-cell;
+    vertical-align:middle;
+}
+form {
+    display:table;/* shrinks to fit content */
+    margin:auto;
+}
+ 
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+    min-width: 100%;
+    max-height: 100%:
+}
+
+img.avatar {
+    max-width: 100%;
+    max-height: 100%;   
+}
+.container{
+    width: 100%;
+    float: left;
+    border: none;
+    text-align: center;
+}
+.container button{
+    display: inline-block;
+}
+#btnmenu{
+    float:center;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 0px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 10%;
+    border-radius: 8px;
+    text-align:center;
+}
+#btnexit{
+    float:center;
+    background-color: #d11c12;
+    color: white;
+    padding: 14px 0px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 10%;
+    border-radius: 8px;
+}
+
+
+#btnt1{
+    float:center;
+    background-color: #d11c12;
+    color: white;
+    padding: 14px 0px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 12%;
+    border-radius: 8px;
+}
+#btnt2{
+    float:center;
+    background-color: #d11c12;
+    color: white;
+    padding: 14px 0px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 12%;
+    border-radius: 8px;
+}
+#btnt3{
+    float:center;
+    background-color: #d11c12;
+    color: white;
+    padding: 14px 0px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 12%;
+    border-radius: 8px;
+}#btnt4{
+    float:center;
+    background-color: #d11c12;
+    color: white;
+    padding: 14px 0px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 12%;
+    border-radius: 8px;
+}
+#btnt5{
+    float:center;
+    background-color: #d11c12;
+    color: white;
+    padding: 14px 0px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 12%;
+    border-radius: 8px;
+}
+#btnt6{
+    float:center;
+    background-color: #d11c12;
+    color: white;
+    padding: 14px 0px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 12%;
+    border-radius: 8px;
+}
+
+#btn1{
+    float:center;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 0px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 30%;
+    border-radius: 8px;
+}
+#btn2{
+    float:center;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 0px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 30%;
+    border-radius: 8px;
+}
+#btn3{
+    float:center;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 0px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 30%;
+    border-radius: 8px;
+}
+button:hover {
+    opacity: .5;
+}
+
+#btn1{
+    float:left;
+}
+#btn3{
+    float:right;
+}
+
+#btnexit{
+    float:left;
+}
+#btnmenu{
+    float:right;
+    }
+ .score-board {
+  text-align: center;
+  padding: 10px;
+}
+.player1 {
+  display: inline-block;
+  padding: 5px;
+  color: green;
+  
+}
+.player2 {
+  display: inline-block;
+  padding: 5px;
+  color: gold;
+  
+}
+.player1 h4 {
+  font-weight: bold;
+}
+.score-box1 {
+  border: 3px solid black;
+  padding: 20px;
+  color: white;
+  font-size: 25px;
+  background-color: green;
+      border-radius: 8px;
+  
+  
+}
+.score-box2 {
+  border: 3px solid black;
+  padding: 20px;
+  color: white;
+  font-size: 25px;
+  background-color: gold;
+  border-radius: 8px;
+  
+  
+}
+
+</style>
+</head>
+<body>
+
+
+<form action="" method="post" >
+
+ <div class='container'>
+     <button id="btnexit" name="Exit" value="True">X</button>
+     <div class="player1">
+    <h4> </h4>
+    <div class="score-box1">
+      15
+    </div>
+  </div>
+  <div class="player2">
+    <h4></h4>
+    <div class="score-box2">
+      10
+    </div>
+  </div>
+       <button id="btnmenu" name="Menu" value="True">Menu</button>
+</div>
+<div class="imgcontainer">
+<img style='height: 100%; width: 100%; object-fit: contain' src="game.png"/> 
+  </div>
+  <div class='container'>
+    <button id="btnt1" name="Letter1" value="True">A</button>
+    <button id="btnt2" name="Letter2" value="True">B</button>
+    <button id="btnt3" name="Letter3" value="True">C</button>
+    <button id="btnt4" name="Letter4" value="True">D</button>
+    <button id="btnt5" name="Letter5" value="True">E</button>
+    <button id="btnt6" name="Letter6" value="True">F</button>
+</div>
+ <div class='container'>
+     <button id="btn1" name="Exchange" value="True">Exchange</button>
+     <button id="btn2" name="Shuffle" value="True">Shuffle</button>
+     <button id="btn3" name="Done" value="True">Done</button>
+ </div>
+
+</form>
+<script> 
+var greenScore = 0;
+var goldScore = 0;
+
+function drawGreenScore() {
+	ctx.font = "16px Arial";
+	ctx.fillStyle = white
+	ctx.fillText(greenScore, 1, 1);
+}
+
+function drawGoldScore() {
+	ctx.font = "16px Arial";
+	ctx.fillStyle = white
+	ctx.fillText(greenScore, 12, 20);
+}
+
+var loaded = false;
+var time = 30000;
+window.onload = function() {
+     loaded = true;
+ };
+setTimeout(function() {
+     if(time = 30000) {
+    	 alert('Total Time: ' + secs + ' seconds');
+     }
+
+},time);</script>
+
+</body>
+</html>
