@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `CSC480Data`.`TEAM_TABLE` (
   `bonuses` INT NOT NULL,
   `dirty_word` INT NOT NULL,
   PRIMARY KEY (`team_name`))
-ENGINE = ndbcluster;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
