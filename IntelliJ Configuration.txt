@@ -20,6 +20,7 @@ File > Project Structure > Artifacts
 Add > WebApplication Archive
 Rename Servlet:war
 Set ouput directory to c:\dev\tomcat\webapps
+Set manifest properties
 
 Build project:
 NOTE: in Engine\src\main\java\Session\Start.java, if using Windows, comment out the System.setProperty line.

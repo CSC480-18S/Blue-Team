@@ -55,8 +55,11 @@ public class Session {
             } else {
                 horizontal = false;
             }
-            board.placeWord(startX,startY,horizontal, word);
-            gui.updateBoard(board.getBoard());
+            if (validator.isValidPlay(startX, startY, horizontal, word) == 1)
+            {
+                board.placeWord(startX,startY,horizontal, word);
+                gui.updateBoard(board.getBoard());
+            }
         }
     }
 
@@ -74,6 +77,11 @@ public class Session {
             session = new Session();
         }
         return session;
+    }
+
+    public Space[][] getBoardAsSpaces()
+    {
+        return board.getBoard();
     }
 
     public static void LogInfo(String msg)

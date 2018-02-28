@@ -1,8 +1,7 @@
 package main.java.Components;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.Serializable;
+import javax.servlet.ServletContext;
+import java.io.*;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -43,18 +42,24 @@ public class Dictionaries implements Serializable {
 		specialWords = new HashSet<String>();
 		badWords = new HashSet<String>();
 		Scanner sc = null;
-		File file = null;
-		
+		ClassLoader classloader;
+        InputStream file;
+
 		// Load English words
-		file = new File(eng);
+        classloader = Thread.currentThread().getContextClassLoader();
+        file = classloader.getResourceAsStream(eng);
+
 		sc = new Scanner(file);
 		while (sc.hasNextLine()) {
 			englishWords.add(sc.nextLine());
 		}
 		sc.close();
 
-		// Load special words
-		file = new File(spec);
+    	// Load special words
+		//file = new File(spec);
+        classloader = Thread.currentThread().getContextClassLoader();
+        file = classloader.getResourceAsStream(spec);
+
 		sc = new Scanner(file);
 		while (sc.hasNextLine()) {
 			specialWords.add(sc.nextLine());
@@ -62,12 +67,16 @@ public class Dictionaries implements Serializable {
 		sc.close();
 
 		// Load bad words
-		file = new File(bad);
+		//file = new File(bad);
+        classloader = Thread.currentThread().getContextClassLoader();
+        file = classloader.getResourceAsStream(bad);
+
 		sc = new Scanner(file);
 		while (sc.hasNextLine()) {
 			badWords.add(sc.nextLine());
 		}
 		sc.close();
+
 	}
 
 	public static Dictionaries getDictionaries()
@@ -78,11 +87,13 @@ public class Dictionaries implements Serializable {
 			try
 			{
 				dictionaries = new Dictionaries(
-						"resources\\dictionary_short.txt", "resources\\bonus.txt", "resources\\profanity.txt");
+                        "main/resources/dictionary_short.txt",
+                        "main/resources/bonus.txt",
+                        "main/resources/profanity.txt");
 			}
 			catch (Exception e)
 			{
-
+			    System.out.println("Dictionaries::Error loading dict\n");
 				LogWarning("" +e.getMessage() + "\n" + e.getStackTrace());
 			}
 		}
