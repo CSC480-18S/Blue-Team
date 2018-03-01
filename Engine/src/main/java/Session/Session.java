@@ -20,20 +20,19 @@ public class Session {
     private Validator validator;
     public Log log;
 
-    private Session()
+    public void InitializeObjects()
     {
+        // Initialize logger
+        try {
+            log = new Log();
+            log.logger.setLevel(Level.INFO);
+        }
+        catch(Exception e){System.out.println("Error creating logger: \n" + e);}
+
         board = new Board();
         gui = new BoardGUI();
         validator = new Validator();
         //populateBoard();
-
-        // initialize logger
-        try
-        {
-            log = new Log();
-            log.logger.setLevel(Level.WARNING);
-        }
-        catch(Exception e){}
     }
 
     private void populateBoard(){
@@ -56,8 +55,11 @@ public class Session {
             } else {
                 horizontal = false;
             }
-            board.placeWord(startX,startY,horizontal, word);
-            gui.updateBoard(board.getBoard());
+            if (validator.isValidPlay(startX, startY, horizontal, word) == 1)
+            {
+                board.placeWord(startX,startY,horizontal, word);
+                gui.updateBoard(board.getBoard());
+            }
         }
     }
 
@@ -77,12 +79,17 @@ public class Session {
         return session;
     }
 
+    public Space[][] getBoardAsSpaces()
+    {
+        return board.getBoard();
+    }
+
     public static void LogInfo(String msg)
     {
-        session.log.logger.info(msg);
+        getSession().log.logger.info(msg);
     }
     public static void LogWarning(String msg)
     {
-        session.log.logger.warning(msg);
+        getSession().log.logger.warning(msg);
     }
 }

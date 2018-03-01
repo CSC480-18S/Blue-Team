@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static main.java.Session.Session.LogInfo;
 import static main.java.Session.Session.LogWarning;
 
 /**
@@ -41,6 +42,7 @@ public class Servlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        LogInfo("Servlet: processing request");
 //        response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {

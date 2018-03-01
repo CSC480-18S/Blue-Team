@@ -11,7 +11,7 @@ public class Log
 {
     public Logger logger;
     private FileHandler handler;
-    private String filepath = "c:/temp/sqrabble_log";
+    private String filepath = "log\\sqrabble_log.txt";
 
     public Log() throws SecurityException, IOException
     {
@@ -19,6 +19,7 @@ public class Log
         File file = new File(filepath);
         if (!file.exists())
         {
+            file.getParentFile().mkdirs();
             file.createNewFile();
         }
 
