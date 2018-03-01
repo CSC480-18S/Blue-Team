@@ -3,21 +3,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servlet;
+package main.java.Servlet;
 
-import EventHandlers.EventHandler;
+import main.java.EventHandlers.EventHandler;
+import main.java.Session.Start;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static main.java.Session.Session.LogInfo;
+import static main.java.Session.Session.LogWarning;
 
 /**
  *
  * @author ulocal
  */
 public class Servlet extends HttpServlet {
+
+
+    public void init(){
+        Start.main(new String[0]);
+    }
+
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,6 +42,7 @@ public class Servlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        LogInfo("Servlet: processing request");
 //        response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
@@ -41,11 +54,15 @@ public class Servlet extends HttpServlet {
             } else if (request.getParameter("request").equals("play")) {
                 // Play Move request
                 int startX = Integer.parseInt(request.getParameter("startX"));
-                int starty = Integer.parseInt(request.getParameter("startY"));
-                int endX = Integer.parseInt(request.getParameter("endX"));
-                int endY = Integer.parseInt(request.getParameter("endY"));
+                int startY = Integer.parseInt(request.getParameter("startY"));
+                boolean horizontal = false;
+                if(request.getParameter("horizontal").equals("y")){
+                    horizontal = true;
+                } else if (request.getParameter("horizontal").equals("n")){
+                    horizontal = false;
+                }
                 String word = request.getParameter("word");
-                out.print(EventHandler.playHandler(startX, starty, endX, endY, 
+                out.print(EventHandler.playHandler(startX, startY, horizontal,
                         word));
             } else if (request.getParameter("request").equals("leave")) {
                 // Leave a Game request
@@ -77,7 +94,11 @@ public class Servlet extends HttpServlet {
                 // Unknown request
                 out.print(EventHandler.unknownHandler());
             }
-        } finally {
+        }
+        catch (Exception e) {
+            LogWarning(e.getMessage() + "\n" + e.getStackTrace());
+        }
+        finally {
             out.close();
         }
     }
