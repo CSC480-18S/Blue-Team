@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.Views;
+package Views;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
-import main.java.Models.*;
-import static main.java.Models.GameConstants.*;
+import Models.*;
+import static Models.GameConstants.*;
 
 /**
  * @author Bohdan

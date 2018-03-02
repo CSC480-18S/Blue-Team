@@ -1,4 +1,4 @@
-package main.java.Components;
+package Components;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,9 +1,9 @@
-package main.java.Components;
+package Components;
 
-import main.java.Models.Space;
-import main.java.Session.Session;
+import Models.Space;
+import Session.Session;
 
-import static main.java.Session.Session.LogWarning;
+import static Session.Session.LogWarning;
 
 
 

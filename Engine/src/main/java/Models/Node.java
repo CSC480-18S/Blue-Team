@@ -1,6 +1,6 @@
 // Node utilized in gaddag
 
-package main.java.Models;
+package Models;
 
 import java.util.HashMap;
 import java.util.Set;

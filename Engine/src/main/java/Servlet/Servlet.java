@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.Servlet;
+package Servlet;
 
-import main.java.EventHandlers.EventHandler;
-import main.java.Session.Start;
+import EventHandlers.EventHandler;
+import Session.Start;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,8 +16,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static main.java.Session.Session.LogInfo;
-import static main.java.Session.Session.LogWarning;
+import static Session.Session.LogInfo;
+import static Session.Session.LogWarning;
+
 
 /**
  *

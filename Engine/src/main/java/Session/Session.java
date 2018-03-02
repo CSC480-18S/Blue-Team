@@ -1,9 +1,9 @@
-package main.java.Session;
+package Session;
 
-import main.java.Models.*;
-import main.java.Views.*;
-import main.java.Components.*;
-import main.java.Components.Log;
+import Models.*;
+import Views.*;
+import Components.*;
+import Components.Log;
 
 import java.util.Scanner;
 import java.util.logging.Level;

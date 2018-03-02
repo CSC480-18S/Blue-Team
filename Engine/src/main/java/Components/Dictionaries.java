@@ -1,11 +1,11 @@
-package main.java.Components;
+package Components;
 
 import javax.servlet.ServletContext;
 import java.io.*;
 import java.util.HashSet;
 import java.util.Scanner;
 
-import static main.java.Session.Session.LogWarning;
+import static Session.Session.LogWarning;
 
 /**
  * This class is used to store all (3) of the game's dictionaries.
