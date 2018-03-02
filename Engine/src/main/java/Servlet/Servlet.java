@@ -27,7 +27,8 @@ public class Servlet extends HttpServlet {
 
 
     public void init(){
-        Start.main(new String[0]);
+
+        //Start.main(new String[0]);
     }
 
 
@@ -42,61 +43,61 @@ public class Servlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        LogInfo("Servlet: processing request");
+        //LogInfo("Servlet: processing request");
 //        response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
             if (request.getParameter("request").equals("join")) {
-                // Join request
+                // Join request TODO: add team name
                 String username = request.getParameter("username");
-                String mac = request.getParameter("macAddress");
-                out.print(EventHandler.joinHandler(username, mac));
-            } else if (request.getParameter("request").equals("play")) {
-                // Play Move request
-                int startX = Integer.parseInt(request.getParameter("startX"));
-                int startY = Integer.parseInt(request.getParameter("startY"));
-                boolean horizontal = false;
-                if(request.getParameter("horizontal").equals("y")){
-                    horizontal = true;
-                } else if (request.getParameter("horizontal").equals("n")){
-                    horizontal = false;
-                }
-                String word = request.getParameter("word");
-                out.print(EventHandler.playHandler(startX, startY, horizontal,
-                        word));
-            } else if (request.getParameter("request").equals("leave")) {
-                // Leave a Game request
-                String username = request.getParameter("username");
-                String mac = request.getParameter("macAddress");
-                out.print(EventHandler.leaveHandler(username, mac));
-            } else if (request.getParameter("request").equals("forfeit")) {
-                // Forfeit a Game request
-                String username = request.getParameter("username");
-                String mac = request.getParameter("macAddress");
-                out.print(EventHandler.forfeitHandler(username, mac));
-            } else if (request.getParameter("request").equals("login")) {
-                // Login request
-                String username = request.getParameter("username");
-                String password = request.getParameter("password");
-                out.print(EventHandler.loginHandler(username, password));
-            } else if (request.getParameter("request").equals("exchange")) {
-                // Exchange Tiles request
-                String tiles = request.getParameter("tiles");
-                out.print(EventHandler.exchangeHandler(tiles));
-            } else if (request.getParameter("request").equals("pass")) {
-                // Pass to Next Player request
-                String username = request.getParameter("username");
-                out.print(EventHandler.passHandler(username));
-            } else if (request.getParameter("request").equals("stats")) {
-                // Open Stats request
-                out.print(EventHandler.statsHandler());
-            } else {
-                // Unknown request
-                out.print(EventHandler.unknownHandler());
+                out.print(EventHandler.joinHandler(username));
             }
+//            } else if (request.getParameter("request").equals("play")) {
+//                // Play Move request
+//                int startX = Integer.parseInt(request.getParameter("startX"));
+//                int startY = Integer.parseInt(request.getParameter("startY"));
+//                boolean horizontal = false;
+//                if(request.getParameter("horizontal").equals("y")){
+//                    horizontal = true;
+//                } else if (request.getParameter("horizontal").equals("n")){
+//                    horizontal = false;
+//                }
+//                String word = request.getParameter("word");
+//                out.print(EventHandler.playHandler(startX, startY, horizontal,
+//                        word));
+//            } else if (request.getParameter("request").equals("leave")) {
+//                // Leave a Game request
+//                String username = request.getParameter("username");
+//                String mac = request.getParameter("macAddress");
+//                out.print(EventHandler.leaveHandler(username, mac));
+//            } else if (request.getParameter("request").equals("forfeit")) {
+//                // Forfeit a Game request
+//                String username = request.getParameter("username");
+//                String mac = request.getParameter("macAddress");
+//                out.print(EventHandler.forfeitHandler(username, mac));
+//            } else if (request.getParameter("request").equals("login")) {
+//                // Login request
+//                String username = request.getParameter("username");
+//                String password = request.getParameter("password");
+//                out.print(EventHandler.loginHandler(username, password));
+//            } else if (request.getParameter("request").equals("exchange")) {
+//                // Exchange Tiles request
+//                String tiles = request.getParameter("tiles");
+//                out.print(EventHandler.exchangeHandler(tiles));
+//            } else if (request.getParameter("request").equals("pass")) {
+//                // Pass to Next Player request
+//                String username = request.getParameter("username");
+//                out.print(EventHandler.passHandler(username));
+//            } else if (request.getParameter("request").equals("stats")) {
+//                // Open Stats request
+//                out.print(EventHandler.statsHandler());
+//            } else {
+//                // Unknown request
+//                out.print(EventHandler.unknownHandler());
+//            }
         }
         catch (Exception e) {
-            LogWarning(e.getMessage() + "\n" + e.getStackTrace());
+            //LogWarning(e.getMessage() + "\n" + e.getStackTrace());
         }
         finally {
             out.close();
