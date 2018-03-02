@@ -5,6 +5,7 @@ import main.java.Views.*;
 import main.java.Components.*;
 import main.java.Components.Log;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 
@@ -19,6 +20,8 @@ public class Session {
     private BoardGUI gui;
     private Validator validator;
     public Log log;
+
+    ArrayList<String> users = new ArrayList<String>();
 
     public void InitializeObjects()
     {
@@ -70,6 +73,19 @@ public class Session {
             return true;
         }
         return false;
+    }
+
+    public boolean addUser(String username)
+    {
+        if (users.size() < 4)
+        {
+            this.users.add(username);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public static Session getSession(){

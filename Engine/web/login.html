@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+        <style>
+            body {font-family: Arial, Helvetica, sans-serif;}
+            body, html {   
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                display:table;
+            }
+            body {
+                display:table-cell;
+                vertical-align:middle;
+                text-align: center;
+            }
+            form {
+                display:table;/* shrinks to fit content */
+                margin:auto;
+            }
+            input[type=text]{
+                width: 66%;
+                padding: 12px 20px;
+                margin: 8px 0;
+                display: inline-block;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+                border-radius: 8px;
+            }
+            button {
+                background-color: #4CAF50;
+                color: white;
+                padding: 14px 20px;
+                margin: 8px 0;
+                border: none;
+                cursor: pointer;
+                width: 66%;
+                border-radius: 8px;
+            }
+            button:hover {
+                opacity: 0.5;
+            }
+            .imgcontainer {
+                text-align: center;
+                margin:auto;
+                max-width: 99%;
+                max-height: 99%;
+            }
+            img.avatar {
+                max-width:100%;
+                height:auto;
+            }
+            .container {
+                padding: 16px;
+                text-align: center;
+                margin:auto;
+                top: 50%;
+                left: 50%;
+            }
+            span.psw {
+                float: right;
+                padding-top: 16px;
+            }
+            /* Change styles for span and cancel button on extra small screens */
+            @media screen and (max-width: 300px) {
+                span.psw {
+                    display: block;
+                    float: none;
+                }
+                .cancelbtn {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="imgcontainer">
+            <img src="oswebble.png" alt="Avatar" class="avatar">
+        </div>
+
+        <div id="successIndicator">Nothing So far</div>
+
+
+
+        <input type="text" name="uname" placeholder="Enter Username">
+        <button type="button" value="Login" onclick="validateForm();">Submit</button>
+
+
+
+
+        <script>
+            //    function next() {location.href="mobileController.html"} 
+
+            function validateForm() {
+                //var un = document.loginform.uname.value;
+                var un = "blab la";
+
+                if (un !== "") {
+                    submitUsername();
+                } else {
+                    alert("Name must be filled out");
+                }
+            }
+
+            // This is the listener that handles your response from the server
+            function reqListener() {
+                // Do something with responseText (Json)
+                alert(this.responseText);
+                var response = JSON.parse(this.responseText);
+                // Here you would modify a text field or something in your HTML document
+                // using the contents of your response variable
+                // In this case the contents are a boolean called success
+                // This assumes you have labled a text element in your HTML document
+                // successIndicator
+                alert("got response");
+                if (response.success === true) {
+                    document.getElementById("successIndicator").innerHTML = "SUCCESS!";
+                } else if (response.success === false) {
+                    document.getElementById("successIndicator").innerHTML = "FAIL!";
+                }
+            }
+
+            // This is the function your button calls when clicked
+            // Your button is made in plain old normal HTML
+            function submitUsername() {
+
+                // Encode POST parameters into map to attach to request
+//                    var params = {
+//                        "username": id
+//                    };
+                // Create new request
+                var oReq = new XMLHttpRequest();
+                // Open the HTTP connection
+                // Replace localhost with the IP Address of server
+                oReq.open('POST', 'http://localhost:8080/LettersAgainstSkyCat/api?request=join', true);
+                // Create a listener so you can do something with the Json we send back
+                oReq.onload = function () {
+                    alert("loaded");
+                    if (oReq.readyState === 4) {
+                        if (oReq.status === 200) {
+                            alert(this.responseText);
+                            var response = JSON.parse(this.responseText);
+                            // Here you would modify a text field or something in your HTML document
+                            // using the contents of your response variable
+                            // In this case the contents are a boolean called success
+                            // This assumes you have labled a text element in your HTML document
+                            // successIndicator
+                            alert("got response");
+                            if (response.success === true) {
+                                document.getElementById("successIndicator").innerHTML = "SUCCESS!";
+                            } else if (response.success === false) {
+                                document.getElementById("successIndicator").innerHTML = "FAIL!";
+                            }
+                        } else {
+                            alert("failure status = " + oReq.status);
+                        }
+                    }
+                    alert("cant get readystate onload");
+                };
+                oReq.onerror = function () {
+                    alert("error");
+                };
+                // Send the request with POST parameters attached
+                //oReq.send(JSON.stringify(params));
+                oReq.send(null);
+            }
+
+        </script>
+
+
+    </body>
+</html>
