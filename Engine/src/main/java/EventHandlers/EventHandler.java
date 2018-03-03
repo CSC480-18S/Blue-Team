@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.EventHandlers;
+package EventHandlers;
 
-import main.java.Session.Session;
+import Session.Session;
 
 /**
  *  Event Handler class that processes servlet API calls

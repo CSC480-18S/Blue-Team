@@ -1,6 +1,6 @@
 /// Data structure to check for possible available words.
 /// Useful for scrabble AI player.
-package main.java.Models;
+package Models;
 import java.util.*;
 
 public class Gaddag
