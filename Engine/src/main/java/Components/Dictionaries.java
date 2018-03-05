@@ -87,9 +87,9 @@ public class Dictionaries implements Serializable {
 			try
 			{
 				dictionaries = new Dictionaries(
-                        "main/resources/dictionary_short.txt",
-                        "main/resources/bonus.txt",
-                        "main/resources/profanity.txt");
+                        "dictionary_short.txt",
+                        "bonus.txt",
+                        "profanity.txt");
 			}
 			catch (Exception e)
 			{

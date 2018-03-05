@@ -16,21 +16,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static Session.Session.LogInfo;
-import static Session.Session.LogWarning;
+import Session.Session;
 
 
 /**
  *
  * @author ulocal
  */
+@WebServlet(urlPatterns = "/Servlet", loadOnStartup=1)
 public class Servlet extends HttpServlet {
 
-
+    @Override
     public void init(){
-        Start.main(new String[0]);
-    }
+        try{
+            Start.main(null);
 
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,27 +49,38 @@ public class Servlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        LogInfo("Servlet: processing request");
-//        response.setContentType("text/html;charset=UTF-8");
+
+        response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
+        response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
         PrintWriter out = response.getWriter();
         try {
             if (request.getParameter("request").equals("join")) {
                 // Join request
                 String username = request.getParameter("username");
-                String mac = request.getParameter("macAddress");
-                out.print(EventHandler.joinHandler(username, mac));
+                //String mac = request.getParameter("macAddress");
+                //out.print(EventHandler.joinHandler(username));
+                // response.getWriter()
+
+                out.write("Added user: " + username);       // Write response body.
+
             } else if (request.getParameter("request").equals("play")) {
+                String word = request.getParameter("word");
                 // Play Move request
-                int startX = Integer.parseInt(request.getParameter("startX"));
-                int startY = Integer.parseInt(request.getParameter("startY"));
+
+                String coords = request.getParameter("coords");
+
                 boolean horizontal = false;
-                if(request.getParameter("horizontal").equals("y")){
+                if(request.getParameter("direction").equals("h")){
                     horizontal = true;
-                } else if (request.getParameter("horizontal").equals("n")){
+                } else if (request.getParameter("direction").equals("v")){
                     horizontal = false;
                 }
-                String word = request.getParameter("word");
-                out.print(EventHandler.playHandler(startX, startY, horizontal,
+                
+                String[] splitCoords = coords.split(",");
+                int startX = Integer.parseInt(splitCoords[0]);
+                int startY = Integer.parseInt(splitCoords[1]);
+
+                out.write(EventHandler.playHandler(startX, startY, horizontal,
                         word));
             } else if (request.getParameter("request").equals("leave")) {
                 // Leave a Game request
@@ -97,7 +114,7 @@ public class Servlet extends HttpServlet {
             }
         }
         catch (Exception e) {
-            LogWarning(e.getMessage() + "\n" + e.getStackTrace());
+            Session.LogWarning(e.getMessage() + "\n" + e.getStackTrace());
         }
         finally {
             out.close();
@@ -116,7 +133,11 @@ public class Servlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String text = "Success message";
+
+        response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
+        response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
+        response.getWriter().write(text);       // Write response body.
     }
 
     /**

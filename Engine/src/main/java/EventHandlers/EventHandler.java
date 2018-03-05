@@ -18,15 +18,16 @@ public final class EventHandler {
     */
     private EventHandler() {}
     
-    public static String joinHandler(String username, String mac) {
-        return "joinHandler username: " + username + " MAC: " + mac;
+    public static String joinHandler(String username) {
+        //return "joinHandler username: " + username + " MAC: " + mac;
+        return "User joined successfully.\njoinHandler username: " + username;
     }
     
     public static String playHandler(int startX, int startY, boolean horizontal,
             String word) {
         boolean result = Session.getSession().playWord(startX, startY, horizontal, word);
         return "playHandler startX: " + startX + " startY: " + startY + 
-                " horizontal: "+ horizontal + " word: " + word + " result: " + result;
+                " horizontal: "+ horizontal + " word: " + word + "\nResult: " + result;
     }
     
     public static String leaveHandler(String username, String mac) {

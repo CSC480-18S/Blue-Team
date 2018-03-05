@@ -15,20 +15,14 @@ import java.util.logging.Level;
  */
 public class Session {
     private static Session session;
+    private Log log;
     private Board board;
     private BoardGUI gui;
     private Validator validator;
-    public Log log;
 
     public void InitializeObjects()
     {
-        // Initialize logger
-        try {
-            log = new Log();
-            log.logger.setLevel(Level.INFO);
-        }
-        catch(Exception e){System.out.println("Error creating logger: \n" + e);}
-
+        Session.LogInfo("Initializing objects");
         board = new Board();
         gui = new BoardGUI();
         validator = new Validator();
@@ -79,6 +73,24 @@ public class Session {
         return session;
     }
 
+    public Log getLogger()
+    {
+        // Just incase session hasn't been instantiated yet
+        if (session == null) getSession();
+
+        if (session.log == null)
+        {
+            // Initialize logger
+            try {
+                session.log = new Log();
+                session.log.logger.setLevel(Level.INFO);
+            }
+            catch(Exception e){System.out.println("Error creating logger: \n" + e);}
+        }
+
+        return session.log;
+    }
+
     public Space[][] getBoardAsSpaces()
     {
         return board.getBoard();
@@ -86,10 +98,10 @@ public class Session {
 
     public static void LogInfo(String msg)
     {
-        getSession().log.logger.info(msg);
+        getSession().getLogger().logger.info(msg);
     }
     public static void LogWarning(String msg)
     {
-        getSession().log.logger.warning(msg);
+        getSession().getLogger().logger.warning(msg);
     }
 }
