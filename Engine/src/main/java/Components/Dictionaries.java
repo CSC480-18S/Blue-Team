@@ -46,8 +46,11 @@ public class Dictionaries implements Serializable {
         InputStream file;
 
 		// Load English words
+
         classloader = Thread.currentThread().getContextClassLoader();
-        file = classloader.getResourceAsStream(eng);
+
+		file = classloader.getResourceAsStream(eng);
+
 
 		sc = new Scanner(file);
 		while (sc.hasNextLine()) {
@@ -94,6 +97,8 @@ public class Dictionaries implements Serializable {
 			catch (Exception e)
 			{
 			    System.out.println("Dictionaries::Error loading dict\n");
+				System.out.println(System.getProperty("user.dir"));
+				e.printStackTrace();
 				LogWarning("" +e.getMessage() + "\n" + e.getStackTrace());
 			}
 		}

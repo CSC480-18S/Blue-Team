@@ -15,24 +15,19 @@ import java.util.Random;
  */
 public abstract class User {
     
-    // <editor-fold defaultstate="collapsed" desc="Private Instance Variables">
     private Tile[] hand;
-    private int numTilesInHand;
     private final int maxTilesInHand = 7;
     private int score;
     private String username;
-    private Random r = new Random();
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructor">
-    public User()
-    {
-        hand = generateRandomHand();
-        score = 0;
-    }
-    // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Abstract Methods">
+    public User(String username)
+    {
+        score = 0;
+        hand = new Tile[maxTilesInHand];
+        this.username = username;
+        draw();
+    }
+
     /* This method takes in a word as a string as well as the start and end coordinate.
     The method then calls the board’s updateBoard method.
     The method then returns the move’s score.
@@ -43,18 +38,15 @@ public abstract class User {
     /* Return the User's type. */
     abstract  String getType();
     
-    // </editor-fold>
 
-    //<editor-fold desc="Public Methods">
     /* Check the hand size and add tiles when necessary. */
     public void draw()
     {
-        // If hand is smaller than maxTilesInHand, add tiles
-        while (numTilesInHand < maxTilesInHand)
-        {
-            // then a letter is generated and added to the hand
-            hand[numTilesInHand - 1] = new Tile(GameConstants.ALPHABET.charAt(r.nextInt(GameConstants.ALPHABET.length())), 1);
-            numTilesInHand++;
+        TileGenerator tg = TileGenerator.getInstance();
+        for(int i =0; i< hand.length; i ++){
+            if(hand[i] == null){
+                hand[i] = tg.getRandTile();
+            }
         }
     }
 
@@ -70,19 +62,6 @@ public abstract class User {
         return score;
     }
 
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Helper Methods">
-    /* Create a char array filling it with random tiles. */
-    private Tile[] generateRandomHand()
-    {
-        Tile[] hand = new Tile[maxTilesInHand];
-        for (int i = 0; i < hand.length; ++i)
-        {
-            hand[i] = new Tile(GameConstants.ALPHABET.charAt(r.nextInt(GameConstants.ALPHABET.length())), 1);
-        }
-        return hand;
-    }
 
     public String getUsername(){
         return username;
@@ -92,8 +71,4 @@ public abstract class User {
         this.username = username;
     }
 
-
-
-    //</editor-fold>
-    
 }

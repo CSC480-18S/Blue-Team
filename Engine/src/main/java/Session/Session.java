@@ -33,12 +33,19 @@ public class Session {
 
 
     public String playWord(int startX, int startY, boolean horizontal, String word, User user){
-        //if(validator.isValidPlay(startX, startY, horizontal, word) == 1){
+        int result = validator.isValidPlay(startX, startY, horizontal, word);
+        if(result == 1){
             board.placeWord(startX,startY,horizontal, word);
             gui.updateBoard(board.getBoard());
             return "success";
-        //}
-        //return "invalid";
+        } else if(result == 2){
+            board.placeWord(startX,startY,horizontal, word);
+            gui.updateBoard(board.getBoard());
+            return "success, bonus";
+        } else if(result == -1){
+            return "profane word";
+        }
+        return "invalid";
     }
 
     public static Session getSession(){
