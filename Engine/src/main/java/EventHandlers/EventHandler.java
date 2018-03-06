@@ -6,8 +6,10 @@
 package EventHandlers;
 
 import Models.Player;
+import Models.Tile;
 import Models.User;
 import Session.Session;
+import com.google.gson.Gson;
 
 /**
  *  Event Handler class that processes servlet API calls
@@ -44,6 +46,20 @@ public final class EventHandler {
         }
         return "playHandler startX: " + startX + " startY: " + startY + 
                 " horizontal: "+ horizontal + " word: " + word + "\nResult: " + result;
+    }
+
+    public static String getHandHandler(String macAddress){
+        User[] users = Session.getSession().getUsers();
+        for(User user : users){
+            if(user != null && user.getClass() == Player.class){
+                Player player = (Player) user;
+                Tile[] hand = player.getHand();
+                Gson gson = new Gson();
+                String jsonHand = gson.toJson(hand);
+                return jsonHand;
+            }
+        }
+        return "Error: user not found";
     }
     
     public static String leaveHandler(String username, String mac) {

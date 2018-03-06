@@ -9,7 +9,7 @@ public class Player extends User {
 
 
     public Player(String username, String macAddress){
-        setUsername(username);
+        super(username);
         this.macAddress = macAddress;
     }
     @Override

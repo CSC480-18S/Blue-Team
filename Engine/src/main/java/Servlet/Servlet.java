@@ -56,15 +56,18 @@ public class Servlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
         PrintWriter out = response.getWriter();
         try {
-            if (request.getParameter("request").equals("join")) {
+            String req = request.getParameter("request");
+            req = req.toLowerCase();
+            if (req.equals("join")) {
                 // Join request
                 String username = request.getParameter("username");
                 String mac = getMACAddress(request.getRemoteAddr());
 
                 out.write(EventHandler.joinHandler(username, mac));       // Write response body.
 
-            } else if (request.getParameter("request").equals("play")) {
+            } else if (req.equals("play")) {
                 String word = request.getParameter("word");
+                word = word.toUpperCase();
                 // Play Move request
 
                 String coords = request.getParameter("coords");
@@ -82,30 +85,33 @@ public class Servlet extends HttpServlet {
                 String macAddress = getMACAddress(request.getRemoteAddr());
                 out.write(EventHandler.playHandler(startX, startY, horizontal,
                         word, macAddress));
-            } else if (request.getParameter("request").equals("leave")) {
+            } else if(req.equals("gethand")) {
+                String macAddress = getMACAddress(request.getRemoteAddr());
+                out.write(EventHandler.getHandHandler(macAddress));
+            }else if (req.equals("leave")) {
                 // Leave a Game request
                 String username = request.getParameter("username");
                 String mac = request.getParameter("macAddress");
                 out.print(EventHandler.leaveHandler(username, mac));
-            } else if (request.getParameter("request").equals("forfeit")) {
+            } else if (req.equals("forfeit")) {
                 // Forfeit a Game request
                 String username = request.getParameter("username");
                 String mac = request.getParameter("macAddress");
                 out.print(EventHandler.forfeitHandler(username, mac));
-            } else if (request.getParameter("request").equals("login")) {
+            } else if (req.equals("login")) {
                 // Login request
                 String username = request.getParameter("username");
                 String password = request.getParameter("password");
                 out.print(EventHandler.loginHandler(username, password));
-            } else if (request.getParameter("request").equals("exchange")) {
+            } else if (req.equals("exchange")) {
                 // Exchange Tiles request
                 String tiles = request.getParameter("tiles");
                 out.print(EventHandler.exchangeHandler(tiles));
-            } else if (request.getParameter("request").equals("pass")) {
+            } else if (req.equals("pass")) {
                 // Pass to Next Player request
                 String username = request.getParameter("username");
                 out.print(EventHandler.passHandler(username));
-            } else if (request.getParameter("request").equals("stats")) {
+            } else if (req.equals("stats")) {
                 // Open Stats request
                 out.print(EventHandler.statsHandler());
             } else {

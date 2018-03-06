@@ -25,6 +25,8 @@ hs_err_pid*
 #Maven Target
 /target
 /target/*
+Engine/target
+Engine/target/*
 
 # IDE
 .idea/
