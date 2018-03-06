@@ -5,6 +5,8 @@
  */
 package EventHandlers;
 
+import Models.Player;
+import Models.User;
 import Session.Session;
 
 /**
@@ -18,14 +20,28 @@ public final class EventHandler {
     */
     private EventHandler() {}
     
-    public static String joinHandler(String username) {
-        //return "joinHandler username: " + username + " MAC: " + mac;
-        return "User joined successfully.\njoinHandler username: " + username;
+    public static String joinHandler(String username, String macAddress) {
+        String response = Session.getSession().addPlayer(username, macAddress);
+        return "joinHandler username: " + username + " MAC: " + macAddress + " result: " + response;
+
     }
     
     public static String playHandler(int startX, int startY, boolean horizontal,
-            String word) {
-        boolean result = Session.getSession().playWord(startX, startY, horizontal, word);
+            String word, String macAddress) {
+
+        //searching for user
+        Session session = Session.getSession();
+        String result = "unauthorized";
+        User[]users = session.getUsers();
+        for(int i =0; i < users.length; i++){
+            if(users[i] != null && users[i].getClass() == Player.class) {
+                Player player = (Player) users[i];
+                if (player.getMacAddress().equals(macAddress)) {
+                    result = Session.getSession().playWord(startX, startY, horizontal, word, users[i]);
+                    break;
+                }
+            }
+        }
         return "playHandler startX: " + startX + " startY: " + startY + 
                 " horizontal: "+ horizontal + " word: " + word + "\nResult: " + result;
     }

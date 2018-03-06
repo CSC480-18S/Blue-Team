@@ -13,14 +13,14 @@ import java.util.Random;
  * Provides methods for player hand actions.
  * @author Rick
  */
-abstract class User {
+public abstract class User {
     
     // <editor-fold defaultstate="collapsed" desc="Private Instance Variables">
-    private char[] hand;
-    private String type;
+    private Tile[] hand;
     private int numTilesInHand;
     private final int maxTilesInHand = 7;
     private int score;
+    private String username;
     private Random r = new Random();
     // </editor-fold>
     
@@ -53,13 +53,13 @@ abstract class User {
         while (numTilesInHand < maxTilesInHand)
         {
             // then a letter is generated and added to the hand
-            hand[numTilesInHand - 1] = GameConstants.ALPHABET.charAt(r.nextInt(GameConstants.ALPHABET.length()));
+            hand[numTilesInHand - 1] = new Tile(GameConstants.ALPHABET.charAt(r.nextInt(GameConstants.ALPHABET.length())), 1);
             numTilesInHand++;
         }
     }
 
     /* Return the current hand. */
-    public synchronized char[] getHand()
+    public synchronized Tile[] getHand()
     {
         return hand;
     }
@@ -74,15 +74,25 @@ abstract class User {
 
     //<editor-fold defaultstate="collapsed" desc="Helper Methods">
     /* Create a char array filling it with random tiles. */
-    private char[] generateRandomHand()
+    private Tile[] generateRandomHand()
     {
-        char[] hand = new char[maxTilesInHand];
+        Tile[] hand = new Tile[maxTilesInHand];
         for (int i = 0; i < hand.length; ++i)
         {
-            hand[i] = GameConstants.ALPHABET.charAt(r.nextInt(GameConstants.ALPHABET.length()));
+            hand[i] = new Tile(GameConstants.ALPHABET.charAt(r.nextInt(GameConstants.ALPHABET.length())), 1);
         }
         return hand;
     }
+
+    public String getUsername(){
+        return username;
+    }
+
+    public void setUsername(String username){
+        this.username = username;
+    }
+
+
 
     //</editor-fold>
     

@@ -11,7 +11,7 @@ public class Log
 {
     public Logger logger;
     private FileHandler handler;
-    private String filepath = "log\\sqrabble_log.txt";
+    private String filepath = "sqrabble_log.txt";
 
     public Log() throws SecurityException, IOException
     {
