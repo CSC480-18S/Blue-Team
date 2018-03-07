@@ -63,7 +63,7 @@ public class Validator {
             }
         } catch (Exception e) {
 
-            LogWarning(e.getMessage() + "\n" + e.getStackTrace());
+            //LogWarning(e.getMessage() + "\n" + e.getStackTrace());
         }
 
         return 0;
@@ -78,7 +78,7 @@ public class Validator {
                 return -1;
             }
         } catch (Exception e) {
-            LogWarning(e.getMessage() + "\n" + e.getStackTrace());
+            //LogWarning(e.getMessage() + "\n" + e.getStackTrace());
         }
 
         return 1;
@@ -93,7 +93,7 @@ public class Validator {
                 return 2;
             }
         } catch (Exception e) {
-            LogWarning(e.getMessage() + "\n" + e.getStackTrace());
+            //LogWarning(e.getMessage() + "\n" + e.getStackTrace());
         }
 
         return 1;

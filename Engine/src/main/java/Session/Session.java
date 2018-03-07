@@ -19,51 +19,33 @@ public class Session {
     private Board board;
     private BoardGUI gui;
     private Validator validator;
+    private User[] users;
 
-    public void InitializeObjects()
+
+    private Session()
     {
-        Session.LogInfo("Initializing objects");
+        //Session.LogInfo("Initializing objects");
         board = new Board();
         gui = new BoardGUI();
         validator = new Validator();
-        //populateBoard();
+        users = new User[4];
     }
 
-    private void populateBoard(){
-        Scanner sc = new Scanner(System.in);
-        while(true) {
-            System.out.print("Enter the word: ");
-            String word = sc.next();
 
-            System.out.print("Enter X: ");
-            int startX = sc.nextInt();
-
-            System.out.print("Enter Y: ");
-            int startY = sc.nextInt();
-
-            System.out.print("Horizontal?(y/n): ");
-            String hor = sc.next();
-            boolean horizontal;
-            if (hor.equals("y")) {
-                horizontal = true;
-            } else {
-                horizontal = false;
-            }
-            if (validator.isValidPlay(startX, startY, horizontal, word) == 1)
-            {
-                board.placeWord(startX,startY,horizontal, word);
-                gui.updateBoard(board.getBoard());
-            }
-        }
-    }
-
-    public boolean playWord(int startX, int startY, boolean horizontal, String word ){
-        if(validator.isValidPlay(startX, startY, horizontal, word) == 1){
+    public String playWord(int startX, int startY, boolean horizontal, String word, User user){
+        int result = validator.isValidPlay(startX, startY, horizontal, word);
+        if(result == 1){
             board.placeWord(startX,startY,horizontal, word);
             gui.updateBoard(board.getBoard());
-            return true;
+            return "success";
+        } else if(result == 2){
+            board.placeWord(startX,startY,horizontal, word);
+            gui.updateBoard(board.getBoard());
+            return "success, bonus";
+        } else if(result == -1){
+            return "profane word";
         }
-        return false;
+        return "invalid";
     }
 
     public static Session getSession(){
@@ -91,6 +73,26 @@ public class Session {
         return session.log;
     }
 
+    public String addPlayer(String username, String macAddress){
+        //check if username already exists first
+        for(int i = 0; i < users.length; i++){
+            if(users[i] != null) {
+                if(users[i].getUsername().equals(username)){
+                    return "already joined";
+                }
+            }
+        }
+        //check if any users are not initialized yet
+        for(int i = 0; i < users.length; i++) {
+            if(users[i] == null){
+                users[i] = new Player(username, macAddress);
+                return "joined";
+            }
+        }
+
+        return "not joined";
+    }
+
     public Space[][] getBoardAsSpaces()
     {
         return board.getBoard();
@@ -103,5 +105,9 @@ public class Session {
     public static void LogWarning(String msg)
     {
         getSession().getLogger().logger.warning(msg);
+    }
+
+    public User[] getUsers(){
+        return users;
     }
 }
