@@ -120,9 +120,9 @@ public class Validator {
                     else
                         finished = true;
                 } else {
-                    if (y < boardLocal[0].length && boardLocal[x][y+1].getTile()
+                    if (y < boardLocal[0].length && boardLocal[x+1][y].getTile()
                             != null)
-                        rightChars += boardLocal[x][y+1].getTile().getLetter();
+                        rightChars += boardLocal[x-1][y].getTile().getLetter();
                     else
                         finished = true;
                 }
