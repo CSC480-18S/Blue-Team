@@ -58,10 +58,10 @@ public class Board implements GameConstants {
         return board;
     }
 
-    public boolean placeWord(int startX, int startY,boolean horizontal , String word){
+    public synchronized boolean placeWord(int startX, int startY, boolean horizontal, String word){
 
         for (char c : word.toCharArray()){
-            board[startY][startX].setTile(new Tile(c, 1));
+            board[startX][startY].setTile(new Tile(c, 1));
             if(horizontal){
                 startX++;
             } else {
