@@ -24,6 +24,9 @@ public class Validator {
      * @return 1 - Valid play, 0 - invalid, -1 - swear word, 2 - bonus word
      */
     public int isValidPlay(int startX, int startY, boolean horizontal, String word) {
+        // Get full word, appending any characters on the ends due to placement
+        word = getFullWord(startX, startY, horizontal, word);
+
         // Check if the user has entered a bad word
         int valid = isProfane(word);
 
@@ -38,7 +41,8 @@ public class Validator {
         }
 
         // Check for valid placement on the board
-        valid = checkPlacement(startX, startY, horizontal, word);
+        if (valid <= 0 || checkPlacement(startX, startY, horizontal, word) == 0)
+            return 0;
 
         return valid;
     }
@@ -46,8 +50,7 @@ public class Validator {
     /// Check if word is a dictionary word
     private static int isDictionaryWord(String word) {
         try {
-            if (Dictionaries.getDictionaries().getEnglishWords().contains(word.toUpperCase())
-                    || Dictionaries.getDictionaries().getSpecialWords().contains(word.toUpperCase())) {
+            if (Dictionaries.getDictionaries().getEnglishWords().contains(word.toUpperCase())) {
                 return 1;
             }
         } catch (Exception e) {
@@ -82,6 +85,52 @@ public class Validator {
         }
 
         return 1;
+    }
+
+    /*
+        Appends any extra characters on the end of the word that may have
+        been overlooked when submitting a word for validation
+        -Bill Cook
+     */
+    private String getFullWord(int startX, int startY, boolean horizontal,
+            String word) {
+        String leftChars = "";
+        String rightChars = "";
+        boolean finished = false;
+        Space[][] boardLocal = Session.getSession().getBoardAsSpaces();
+
+        int x = startX;
+        int y = startY;
+        if (horizontal) {
+            while (x > 0 && boardLocal[x - 1][y].getTile() != null) {
+                leftChars = boardLocal[x - 1][y].getTile().getLetter()
+                        + leftChars;
+                x--;
+            }
+            x = startX + word.length()-1;
+            while (x < boardLocal.length
+                    && boardLocal[x + 1][y].getTile() != null) {
+                rightChars += boardLocal[x + 1][y].getTile().getLetter();
+                x++;
+            }
+            finished = true;
+        } else {
+            while (y > 0 && boardLocal[x][y - 1].getTile() != null) {
+                leftChars = boardLocal[x][y - 1].getTile().getLetter()
+                        + leftChars;
+                y--;
+            }
+            y = startY + word.length()-1;
+            while (y < boardLocal[0].length
+                    && boardLocal[x][y + 1].getTile() != null) {
+                rightChars += boardLocal[x][y + 1].getTile().getLetter();
+                y++;
+            }
+            finished = true;
+        }
+        word = leftChars + word + rightChars;
+
+        return word;
     }
 
     /*
