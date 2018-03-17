@@ -41,11 +41,7 @@ public class Validator {
         }
 
         // Check for valid placement on the board
-<<<<<<< HEAD
         if (valid <= 0 || checkPlacement(startX, startY, horizontal, word) == 0)
-=======
-        if (checkPlacement(startX, startY, horizontal, word) == 0)
->>>>>>> 9e001f1576a2e1d7c02c6a4311a67eba21a5dc3d
             return 0;
 
         return valid;
