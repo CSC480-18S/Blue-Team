@@ -1,5 +1,6 @@
 package Components;
 
+import Models.Move;
 import Models.Space;
 import Session.Session;
 
@@ -21,17 +22,23 @@ public class Validator {
      * @param startY
      * @param horizontal
      * @param word
-     * @return 1 - Valid play, 0 - invalid, -1 - swear word, 2 - bonus word
+     * @return An array containing an int:
+     *      1 - Valid play, 0 - invalid, -1 - swear word, 2 - bonus word
+     *         as well as the updated Move
      */
-    public int isValidPlay(int startX, int startY, boolean horizontal, String word) {
+    public Object[] isValidPlay(Move move) {
+        int startX = move.getStartX();
+        int startY = move.getStartY();
+        boolean horizontal = move.isHorizontal();
         // Get full word, appending any characters on the ends due to placement
-        word = getFullWord(startX, startY, horizontal, word);
+        String word = move.setWord(getFullWord(startX, startY, horizontal, 
+                move.getWord()));
 
         // Check if the user has entered a bad word
         int valid = isProfane(word);
 
         if (valid == -1) {
-            return valid;
+            return new Object[] {valid, move};
         }
         // Check if the user entered a bonus word
         valid = isBonus(word);
@@ -42,9 +49,9 @@ public class Validator {
 
         // Check for valid placement on the board
         if (valid <= 0 || checkPlacement(startX, startY, horizontal, word) == 0)
-            return 0;
+            return new Object[] {0, move};
 
-        return valid;
+        return new Object[] {valid, move};
     }
 
     /// Check if word is a dictionary word
