@@ -227,14 +227,14 @@ public class QueryClass {
     public int getTeamCumulative(String teamname){
         String query = "SELECT cumulative_game_score FROM team_table WHERE team_name = ?";
 		
-		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			preparedStmt.setString(1, teamname);
-			ResultSet rs = preparedStmt.executeQuery();
-			return rs;
-		} catch (SQLException se) {
-			se.printStackTrace();
-		}
+	try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+		PreparedStatement preparedStmt = con.prepareStatement(query);
+		preparedStmt.setString(1, teamname);
+		ResultSet rs = preparedStmt.executeQuery();
+		return rs;
+	} catch (SQLException se) {
+		se.printStackTrace();
+	}
     }
 	
     /**
@@ -244,14 +244,14 @@ public class QueryClass {
     public int getHighestWordScore(String teamname){
         String query = "SELECT highest_word_score FROM team_table WHERE team_name = ?";
 		
-		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			preparedStmt.setString(1, teamname);
-			ResultSet rs = preparedStmt.executeQuery();
-			return rs;
-		} catch (SQLException se) {
-			se.printStackTrace();
-		}
+	try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+		PreparedStatement preparedStmt = con.prepareStatement(query);
+		preparedStmt.setString(1, teamname);
+		ResultSet rs = preparedStmt.executeQuery();
+		return rs;
+	} catch (SQLException se) {
+		se.printStackTrace();
+	}
     }
 	
     /**
@@ -261,14 +261,14 @@ public class QueryClass {
     public int getHighestGameSessionScore(String teamname){
         String query = "SELECT highest_game_session_score FROM team_table WHERE team_name = ?";
 		
-		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			preparedStmt.setString(1, teamname);
-			ResultSet rs = preparedStmt.executeQuery();
-			return rs;
-		} catch (SQLException se) {
-			se.printStackTrace();
-		}
+	try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+		PreparedStatement preparedStmt = con.prepareStatement(query);
+		preparedStmt.setString(1, teamname);
+		ResultSet rs = preparedStmt.executeQuery();
+		return rs;
+	} catch (SQLException se) {
+		se.printStackTrace();
+	}
     }
 	
     /**
@@ -278,14 +278,14 @@ public class QueryClass {
     public int getTeamWinCount(String teamname){
         String query = "SELECT win_count FROM team_table WHERE team_name = ?";
 		
-		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			preparedStmt.setString(1, teamname);
-			ResultSet rs = preparedStmt.executeQuery();
-			return rs;
-		} catch (SQLException se) {
-			se.printStackTrace();
-		}
+	try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+		PreparedStatement preparedStmt = con.prepareStatement(query);
+		preparedStmt.setString(1, teamname);
+		ResultSet rs = preparedStmt.executeQuery();
+		return rs;
+	} catch (SQLException se) {
+		se.printStackTrace();
+	}
     }
 	
     /**
@@ -295,14 +295,14 @@ public class QueryClass {
     public int getTeamLoseCount(String teamname){
         String query = "SELECT lose_count FROM team_table WHERE team_name = ?";
 		
-		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			preparedStmt.setString(1, teamname);
-			ResultSet rs = preparedStmt.executeQuery();
-			return rs;
-		} catch (SQLException se) {
-			se.printStackTrace();
-		}
+	try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+		PreparedStatement preparedStmt = con.prepareStatement(query);
+		preparedStmt.setString(1, teamname);
+		ResultSet rs = preparedStmt.executeQuery();
+		return rs;
+	} catch (SQLException se) {
+		se.printStackTrace();
+	}
     }
 	
     /**
@@ -312,14 +312,14 @@ public class QueryClass {
     public int getTeamTieCount(String teamname){
         String query = "SELECT tie_count FROM team_table WHERE team_name = ?";
 		
-		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			preparedStmt.setString(1, teamname);
-			ResultSet rs = preparedStmt.executeQuery();
-			return rs;
-		} catch (SQLException se) {
-			se.printStackTrace();
-		}
+	try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+		PreparedStatement preparedStmt = con.prepareStatement(query);
+		preparedStmt.setString(1, teamname);
+		ResultSet rs = preparedStmt.executeQuery();
+		return rs;
+	} catch (SQLException se) {
+		se.printStackTrace();
+	}
     }
 	
     /**
@@ -329,14 +329,14 @@ public class QueryClass {
     public String getTeamLongestWord(String teamname){
         String query = "SELECT longest_word FROM team_table WHERE team_name = ?";
 		
-		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			preparedStmt.setString(1, teamname);
-			ResultSet rs = preparedStmt.executeQuery();
-			return rs;
-		} catch (SQLException se) {
-			se.printStackTrace();
-		}
+	try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+		PreparedStatement preparedStmt = con.prepareStatement(query);
+		preparedStmt.setString(1, teamname);
+		ResultSet rs = preparedStmt.executeQuery();
+		return rs;
+	} catch (SQLException se) {
+		se.printStackTrace();
+	}
     }
 	
     /**
@@ -346,14 +346,14 @@ public class QueryClass {
     public int getTeamBonuses(String teamname){
         String query = "SELECT bonuses FROM team_table WHERE team_name = ?";
 		
-		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			preparedStmt.setString(1, teamname);
-			ResultSet rs = preparedStmt.executeQuery();
-			return rs;
-		} catch (SQLException se) {
-			se.printStackTrace();
-		}
+	try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+		PreparedStatement preparedStmt = con.prepareStatement(query);
+		preparedStmt.setString(1, teamname);
+		ResultSet rs = preparedStmt.executeQuery();
+		return rs;
+	} catch (SQLException se) {
+		se.printStackTrace();
+	}
     }
 	
     /**
@@ -363,13 +363,13 @@ public class QueryClass {
     public int getTeamDirtyWordAttempt(String teamname){
         String query = "SELECT dirty_word FROM team_table WHERE team_name = ?";
 		
-		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			preparedStmt.setString(1, teamname);
-			ResultSet rs = preparedStmt.executeQuery();
-			return rs;
-		} catch (SQLException se) {
-			se.printStackTrace();
-		}
+	try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+		PreparedStatement preparedStmt = con.prepareStatement(query);
+		preparedStmt.setString(1, teamname);
+		ResultSet rs = preparedStmt.executeQuery();
+		return rs;
+	} catch (SQLException se) {
+		se.printStackTrace();
+	}
     }
 }
