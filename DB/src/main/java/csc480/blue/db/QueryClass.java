@@ -220,7 +220,7 @@ public class QueryClass {
         }
     }
 	
-	/**
+    /**
      * get cumulative game score of a team
      * @return an integer indicating the cumulative score of specified team
      */
@@ -237,7 +237,7 @@ public class QueryClass {
 		}
     }
 	
-	/**
+    /**
      * get highest word score of a team
      * @return an integer indicating the highest word score of specified team
      */
@@ -254,7 +254,7 @@ public class QueryClass {
 		}
     }
 	
-	/**
+    /**
      * get highest game session score of a team
      * @return an integer indicating the cumulative score of specified team
      */
@@ -271,7 +271,7 @@ public class QueryClass {
 		}
     }
 	
-	/**
+    /**
      * get team win count
      * @return an integer indicating the win count of specified team
      */
@@ -288,7 +288,7 @@ public class QueryClass {
 		}
     }
 	
-	/**
+    /**
      * get team lose count
      * @return an integer indicating the lose count of specified team
      */
@@ -305,7 +305,7 @@ public class QueryClass {
 		}
     }
 	
-	/**
+    /**
      * get team tie count
      * @return an integer indicating the tie count of specified team
      */
@@ -322,7 +322,7 @@ public class QueryClass {
 		}
     }
 	
-	/**
+    /**
      * get longest word of a team
      * @return a String indicating the Longest Word of specified team
      */
@@ -339,7 +339,7 @@ public class QueryClass {
 		}
     }
 	
-	/**
+    /**
      * get number of bonuses a team used
      * @return an integer indicating the number of bonuses a specified team used
      */
@@ -356,7 +356,7 @@ public class QueryClass {
 		}
     }
 	
-	/**
+    /**
      * get the number of dirty word attempt of a team
      * @return an integer indicating the number of times a specified team tried using a "dirty word"
      */
