@@ -49,11 +49,11 @@ public class BoardGUI {
     }
 
     public void updateBoard (Space[][] board){
-        for (int r = 0; r < BOARD_WIDTH; r++) {
-            for (int c = 0; c < BOARD_WIDTH; c++) {
-                if(board[r][c].getTile() != null){
-                    char letter = board[r][c].getTile().getLetter();
-                    data[r][c] = Character.toString(letter);
+        for (int x = 0; x < BOARD_WIDTH; x++) {
+            for (int y = 0; y < BOARD_WIDTH; y++) {
+                if(board[x][y].getTile() != null){
+                    char letter = board[x][y].getTile().getLetter();
+                    data[y][x] = Character.toString(letter);
                 }
             }
         }
