@@ -24,7 +24,7 @@ public final class EventHandler {
     
     public static String joinHandler(String username, String macAddress) {
         String response = Session.getSession().addPlayer(username, macAddress);
-        return "joinHandler username: " + username + " MAC: " + macAddress + " result: " + response;
+        return response;
 
     }
     

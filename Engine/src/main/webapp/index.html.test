@@ -111,7 +111,7 @@
 
      function play()
      {
-         var _word = document.getElementById('txtWords').value;
+         var _word = document.getElementById('txtWord').value;
          var _coords = document.getElementById('txtCoords').value;
          var _dir = document.getElementById('txtDir').value;
 
