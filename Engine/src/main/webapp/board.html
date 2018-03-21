@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<head>
+
+    <style type="text/css">
+        . {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .borderClass {
+            border-color: brown;
+            border-style: solid;
+        }
+
+        .drag {
+            height: 55px;
+            width: 55px;
+            border: 2px solid black;
+            float: left;
+            margin-top: 20px;
+            margin-left: 30px;
+            data-attribute: window.location=$(this).data("location");
+
+
+        }
+
+        .drop {
+            height: 55px;
+            width: 55px;
+            border: 2px solid black;
+            float: left;
+            data-attribute: window.location=$(this).data("location");
+
+
+
+        }
+
+        .content {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 10px;
+        }
+
+        .container {
+            width: 650px;
+            float: left;
+            border: none;
+            text-align: center;
+        }
+
+
+        image {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        form {
+            border: 3px solid #f1f1f1;
+        }
+
+        .imgcontainer {
+            text-align: center;
+            margin: 24px 0 12px 0;
+
+        }
+
+        img.avatar {
+            width: 40%;
+            border-radius: 100%;
+
+        }
+
+        .container button {
+            display: inline-block;
+        }
+
+        #menu {
+            float: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 10%;
+            border-radius: 8px;
+        }
+
+        #exit {
+            float: center;
+            background-color: #d11c12;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 10%;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+
+        #exchange {
+            float: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            font-size: 14pt;
+            border: none;
+            cursor: pointer;
+            width: 30%;
+            border-radius: 8px;
+        }
+
+        #shuffle {
+            float: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            font-size: 14pt;
+            border: none;
+            cursor: pointer;
+            width: 30%;
+            border-radius: 8px;
+        }
+
+        #recall {
+            float: center;
+            background-color: red;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            font-size: 14pt;
+            border: none;
+            cursor: pointer;
+            width: 15%;
+            border-radius: 8px;
+        }
+
+        #confirmed {
+            float: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            font-size: 14pt;
+            border: none;
+            cursor: pointer;
+            width: 15%;
+            border-radius: 8px;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        button:active {
+            background-color: #3e8e41;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+
+        button:focus,
+        input:focus {
+            outline: none;
+        }
+
+        #exit {
+            float: left;
+            width: 100px;
+            height: 50px;
+            font-size: 14pt;
+        }
+
+        #menu {
+            float: right;
+            width: 100px;
+            height: 50px;
+            font-size: 14pt;
+        }
+
+        .score-board {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .player1 {
+            display: inline-block;
+            padding: 30px;
+            color: green;
+
+        }
+
+        .player2 {
+            display: inline-block;
+            padding: 30px;
+            color: gold;
+
+        }
+
+        .player1 h4 {
+            font-weight: bold;
+        }
+
+        .score-box1 {
+            border: 3px solid black;
+            padding: 20px;
+            color: white;
+            font-size: 25px;
+            background-color: green;
+            border-radius: 8px;
+
+
+        }
+
+        .score-box2 {
+            border: 3px solid black;
+            padding: 20px;
+            color: white;
+            font-size: 25px;
+            background-color: gold;
+            border-radius: 8px;
+
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+    <div class="content">
+
+
+        <div class="container">
+            <button id="exit" onClick="exit()"><img src="exit.svg" alt="exit button height="height="55px" width="100%"></button>
+            <div class="player1">
+                <h4> </h4>
+                <div class="score-box1">
+                    15
+                </div>
+            </div>
+            <div class="player2">
+                <h4></h4>
+                <div class="score-box2">
+                    10
+                </div>
+            </div>
+            <button id="menu"><img src="hamburgermenu.svg" alt="menu button"height="55px" width="100%"></button>
+
+            <br>
+            <br>
+
+            <div class="container">
+
+                <div class="drop" id="0,0" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="0,1" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="0,2" style="background-color:#2f563f" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="0,3" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="0,4" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="0,5" style="background-color:#bf9c46" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="0,6" ondragover="allowDrop(event)" ondrop="drop(event)">
+                </div>
+
+                <div class="drop" id="0,7" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="0,8" style="background-color:#2f563f" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="0,9" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="0,10" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+            </div>
+            <div class="container">
+
+                <div class="drop" id="1,0" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="1,1" style="background-color:#f4d46c" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="1,2" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="1,3" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="1,4" style="background-color:#35e228" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="1,5" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="1,6" style="background-color:#35e228" ondragover="allowDrop(event)" ondrop="drop(event)">
+                </div>
+
+                <div class="drop" id="1,7" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="1,8" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="1,9" style="background-color:#f4d46c" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="1,10" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+            </div>
+            <div class="container">
+
+                <div class="drop" id="2,0" style="background-color:#2f563f" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="2,1" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="2,2" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="2,3" style="background-color:#f4d46c" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="2,4" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="2,5" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="2,6" ondragover="allowDrop(event)" ondrop="drop(event)">
+                </div>
+
+                <div class="drop" id="2,7" style="background-color:#f4d46c" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="2,8" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="2,9" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="2,10" style="background-color:#2f563f" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+            </div>
+            <div class="container">
+
+                <div class="drop" id="3,0" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="3,1" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="3,2" style="background-color:#f4d46c" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="3,3" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="3,4" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="3,5" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="3,6" ondragover="allowDrop(event)" ondrop="drop(event)">
+                </div>
+
+                <div class="drop" id="3,7" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="3,8" style="background-color:#f4d46c" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="3,9" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="3,10" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+            </div>
+            <div class="container">
+
+                <div class="drop" id="4,0" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="4,1" style="background-color:#35e228" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="4,2" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="4,3" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="4,4" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="4,5" style="background-color:#2f563f" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="4,6" ondragover="allowDrop(event)" ondrop="drop(event)">
+                </div>
+
+                <div class="drop" id="4,7" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="4,8" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="4,9" style="background-color:#35e228" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="4,10" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+            </div>
+            <div class="container">
+
+                <div class="drop" id="5,0" style="background-color:#bf9c46" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="5,1" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="5,2" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="5,3" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="5,4" style="background-color:#2f563f" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="5,5" style="background-color:red" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="5,6" style="background-color:#2f563f" ondragover="allowDrop(event)" ondrop="drop(event)">
+                </div>
+
+                <div class="drop" id="5,7" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="5,8" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="5,9" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="5,10" style="background-color:#bf9c46" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+            </div>
+            <div class="container">
+
+                <div class="drop" id="6,0" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="6,1" style="background-color:#35e228" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="6,2" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="6,3" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="6,4" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="6,5" style="background-color:#2f563f" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="6,6" ondragover="allowDrop(event)" ondrop="drop(event)">
+                </div>
+
+                <div class="drop" id="6,7" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="6,8" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="6,9" style="background-color:#35e228" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="6,10" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+            </div>
+            <div class="container">
+
+                <div class="drop" id="7,0" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="7,1" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="7,2" style="background-color:#f4d46c" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="7,3" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="7,4" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="7,5" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="7,6" ondragover="allowDrop(event)" ondrop="drop(event)">
+                </div>
+
+                <div class="drop" id="7,7" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="7,8" style="background-color:#f4d46c" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="7,9" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="7,10" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+            </div>
+            <div class="container">
+
+                <div class="drop" id="8,0" style="background-color:#2f563f" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="8,1" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="8,2" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="8,3" style="background-color:#f4d46c" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="8,4" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="8,5" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="8,6" ondragover="allowDrop(event)" ondrop="drop(event)">
+                </div>
+
+                <div class="drop" id="8,7" style="background-color:#f4d46c" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="8,8" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="8,9" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="8,10" style="background-color:#2f563f" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+            </div>
+            <div class="container">
+
+                <div class="drop" id="9,0" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="9,1" style="background-color:#f4d46c" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="9,2" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="9,3" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="9,4" style="background-color:#35e228" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="9,5" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="9,6" style="background-color:#35e228" ondragover="allowDrop(event)" ondrop="drop(event)">
+                </div>
+
+                <div class="drop" id="9,7" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="9,8" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="9,9" style="background-color:#f4d46c" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="9,10" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+            </div>
+            <div class="container">
+
+                <div class="drop" id="10,0" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="10,1" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="10,2" style="background-color:#2f563f" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="10,3" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="10,4" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="10,5" style="background-color:#bf9c46" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="10,6" ondragover="allowDrop(event)" ondrop="drop(event)">
+                </div>
+
+                <div class="drop" id="10,7" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="10,8" style="background-color:#2f563f" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="10,9" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+
+                <div class="drop" id="10,10" ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                </div>
+            </div>
+            <div class="container">
+
+                <div class="drag" id="div0">
+
+                    <img src="https://images-na.ssl-images-amazon.com/images/I/31jp01jMOCL.jpg" class="M" id="img0" height="55px" width="100%" ondragstart="dragStart(event)">
+
+                </div>
+
+                <div class="drag" id="div1">
+
+                    <img src="https://i.ebayimg.com/images/g/TvAAAOSwx2dYCWqu/s-l300.jpg" class="S" id="img1" height="55px" width="100%" ondragstart="dragStart(event)">
+
+                </div>
+
+                <div class="drag" id="div2">
+
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUn1LQ0hp-dBI64rqfcRoel1upofgM-4Y9j5wyP6xXAQnAdfM-" class="C" id="img2" height="55px" width="100%" ondragstart="dragStart(event)">
+
+                </div>
+                <div class="drag" id="div3">
+
+                    <img src="https://i.ebayimg.com/images/g/goAAAOSwn7JYCWat/s-l300.jpg" class="G" id="img3" height="55px" width="100%" ondragstart="dragStart(event)">
+
+                </div>
+
+                <div class="drag" id="div4">
+
+                    <img src="https://i.ebayimg.com/images/g/PaEAAOSwUEVYCWSg/s-l300.jpg" class="C" id="img4" height="55px" width="100%" ondragstart="dragStart(event)">
+
+                </div>
+
+
+                <div class="drag" id="div5">
+
+                    <img src="https://images-na.ssl-images-amazon.com/images/I/21Lzb-Jdw5L.jpg" class="O" id="img5" height="55px" width="100%" ondragstart="dragStart(event)">
+                </div>
+
+                <div class="drag" id="div6">
+
+                    <img src="https://images-na.ssl-images-amazon.com/images/I/419EGYAtbmL._SY355_.jpg" class="B" id="img6" height="55px" width="100%" ondragstart="dragStart(event)">
+
+                </div>
+            </div>
+        </div>
+
+        <div class='container'>
+            <br>
+            <br>
+            <button id="exchange" onClick="exchange()"><img src="exchange.svg" alt="exchange button"height="55px" width="100%"></button>
+            <button id="shuffle" onClick="shuffle()"><img src="shuffle.svg" alt="shuffle button"height="55px" width="100%"></button>
+            <button id="recall" onClick="recall()"><img src="recall.svg" alt="recall button"height="55px" width="100%"></button>
+            <button id="confirmed" onClick="confirmed()"><img src="confirm.svg" alt="confirm button"height="55px" width="100%"></button>
+
+        </div>
+
+    </div>
+    <script>
+        //fix so images for icons arent grabbable
+        //maybe change tile images to different class
+        // $("img").click(function(){
+        //	$(this).addClass('borderClass');
+        //	$img = $(this).get();
+        //});
+        $("#img0").click(function() {
+            $(this).addClass('borderClass');
+            $img = $(this).get();
+        });
+        $("#img1").click(function() {
+            $(this).addClass('borderClass');
+            $img = $(this).get();
+        });
+        $("#img2").click(function() {
+            $(this).addClass('borderClass');
+            $img = $(this).get();
+        });
+        $("#img3").click(function() {
+            $(this).addClass('borderClass');
+            $img = $(this).get();
+        });
+        $("#img4").click(function() {
+            $(this).addClass('borderClass');
+            $img = $(this).get();
+        });
+        $("#img5").click(function() {
+            $(this).addClass('borderClass');
+            $img = $(this).get();
+        });
+        $("#img6").click(function() {
+            $(this).addClass('borderClass');
+            $img = $(this).get();
+        });
+
+        $(".drag").click(function() {
+            $(this).addClass('borderClass');
+            $(this).append($img);
+
+        });
+        $(".drop").click(function() {
+            $(this).append($img);
+            $($img).removeClass('borderClass');
+
+        });
+        //random number for shuffle	
+        var numRand = Math.floor(Math.random() * 7);
+        //array for images in tile hand
+        var imgArray = new Array();
+        imgArray[0] = "#img0";
+        imgArray[1] = "#img1";
+        imgArray[2] = "#img2";
+        imgArray[3] = "#img3";
+        imgArray[4] = "#img4";
+        imgArray[5] = "#img5";
+        imgArray[6] = "#img6";
+
+        //array of divs
+        var divArray = new Array();
+
+        //shuffles image array
+        function shuffleMe(array) {
+            let counter = array.length;
+
+            // While there are elements in the array
+            while (counter > 0) {
+                // Pick a random index
+                let index = Math.floor(Math.random() * counter);
+
+                // Decrease counter by 1
+                counter--;
+
+                // And swap the last element with it
+                let temp = array[counter];
+                array[counter] = array[index];
+                array[index] = temp;
+            }
+
+            return array;
+        }
+        //give random letters back from bag. we need to have an array full of letters
+        //with a weighted distribution that we can randomly draw from
+        //then we need to be able to get that image src
+        //and put it into the div
+        //must be able to make img id= a variable for referencing image in div 
+        //or just place image in div in a different way
+
+        //make array and get which they choose and put in random tile into those spots
+        $(function exchange() {
+
+            $("#exchange").click(function() {
+
+                var exit = prompt("Do you want to exchange some tiles?", "Yes");
+                switch (exit.toUpperCase()) {
+                    case "NO":
+                        alert("Continue playing");
+                        break;
+                    case "YES":
+                        alert("Select how many tiles you want to exchange");
+                        switchTiles();
+                        break;
+                }
+
+
+            });
+        });
+        //grab new tiles from bag
+        $(function switchTiles() {
+            
+/*            //This is the Exchanging tiles request. Requires a string of tiles to be passed to the server.
+            $.post("Servlet", {
+                request: "exchange",
+                tiles: _tiles, //sends the tiles to be exchanged, in a string named tiles
+            }, function(data, status) { // execute ajax get request on url of "someservlet" and execute the following function with                                                ajax response text...                    
+                alert("Data: " + data + "\nStatus: " + status); // response text.
+            });*/
+            
+        });
+
+        //only problem is if you have words in play it recalls all
+        //the letters on the board
+        $(function shuffle() {
+            $("#shuffle").click(function() {
+
+                var shuffled = new Array();
+                shuffled = shuffleMe(imgArray);
+                $('#div0').prepend($(shuffled[0]));
+                $('#div1').prepend($(shuffled[1]));
+                $('#div2').prepend($(shuffled[2]));
+                $('#div3').prepend($(shuffled[3]));
+                $('#div4').prepend($(shuffled[4]));
+                $('#div5').prepend($(shuffled[5]));
+                $('#div6').prepend($(shuffled[6]));
+            });
+        });
+        //get array of current tile hand layout then 
+        //without this above then it unshuffles if you had shuffled
+        $(function recall() {
+            //var currentHand = new Array();
+            $("#recall").click(function() {
+                $('#div0').prepend($(imgArray[0]));
+                $('#div1').prepend($(imgArray[1]));
+                $('#div2').prepend($(imgArray[2]));
+                $('#div3').prepend($(imgArray[3]));
+                $('#div4').prepend($(imgArray[4]));
+                $('#div5').prepend($(imgArray[5]));
+                $('#div6').prepend($(imgArray[6]));
+            });
+        });
+        //need to store tile placement and check if they are in valid spots
+        //change to buttons to click on for yes or no
+        $(function exit() {
+            $("#exit").click(function() {
+                var text;
+                var exit = prompt("Are you sure you want to exit?", "Yes");
+                switch (exit) {
+                    case "No":
+                        alert("Continue playing");
+                        break;
+                    case "no":
+                        alert("Continue playing");
+                        break;
+                    case "Yes":
+                        alert("Bye bye! See you next time.");
+                        //leave page
+                        //window.open('','_parent',''); 
+                        var win = window.open("about:blank", "_self")
+                        
+                        //This is the Leave Game request. 
+                        $.post("Servlet", {
+                            request: "leave",
+                            username:uname
+                        }, function(data, status) {
+                            alert("Data: " + data + "\nStatus: " + status); // response text.
+                        });
+                        win.close()
+                        break;
+
+                    case "yes":
+                        alert("Bye bye! See you next time.");
+                        //leave please
+                        window.open('', '_parent', '');
+                        
+                        //This is the Leave Game request to the server. 
+                        $.post("Servlet", {
+                            request: "leave",
+                            username:uname
+                        }, function(data, status) {
+                            alert("Data: " + data + "\nStatus: " + status); // response text.
+                        });
+                        window.close()
+                        break;
+                }
+            });
+
+        });
+        //need to store tile placement and check if they are in valid spots
+        //place tiles
+        //can be annoying to do this everytime
+        $(function place() {
+
+        });
+
+        //first tile placed needs xy coordinates (will always be lowest or highest coordinate)
+        //if x increased then vertical if y horizontal 
+        //send h or v for horizontal or vertical
+        //string of word played
+        //if x-x = 0 then its horizontal
+
+        //change to buttons to click on for yes or no
+        $(function confirmed() {
+            $("#confirmed").click(function() {
+
+                var xyCoord = [];
+                i = 0;
+                var div;
+                var wordPlayed = new Array();
+
+
+                //send these 3 to engine
+                var wordString;
+                var firstCoord;
+                var orientationWord;
+
+                //this get me every image that is on board
+                $(".drop").find("img").length
+
+                //checks to see where each image is placed
+                $(".drop").find("#img0");
+                $(".drop").find("#img1");
+                $(".drop").find("#img2");
+                $(".drop").find("#img3");
+                $(".drop").find("#img4");
+                $(".drop").find("#img5");
+                $(".drop").find("#img6");
+
+                //gets the coordinate id for the div containing an image
+                var div0 = $(".drop:has(#img0)").attr('id');
+                var div1 = $(".drop:has(#img1)").attr('id');
+                var div2 = $(".drop:has(#img2)").attr('id');
+                var div3 = $(".drop:has(#img3)").attr('id');
+                var div4 = $(".drop:has(#img4)").attr('id');
+                var div5 = $(".drop:has(#img5)").attr('id');
+                var div6 = $(".drop:has(#img6)").attr('id');
+
+                //gets coordinate
+                //loops through board and gets all the coordinates
+                $(".drop:has(img)").each(function() {
+                    alert($(this).attr("id"));
+
+                    xyCoord[i++] = $(this).attr('id');
+
+
+                });
+                //gives me last
+                var firstCoord = xyCoord[0];
+                var secondCoord = xyCoord[1]
+
+                var xy1 = firstCoord.split(",");
+                var x1 = xy1[0];
+                var y1 = xy1[1];
+
+                var xy2 = secondCoord.split(",");
+                var x2 = xy2[0];
+                var y2 = xy2[1];
+                var x = x1 - x2;
+                if (x == 0) {
+                    orientationWord = ("h");
+                } else {
+                    orientationWord = ("v");
+
+                }
+
+                //gets letters that are on board
+                $(".drop").find("img").each(function() {
+                    // grab the src "attribute"
+                    //this gets id of image
+                    var id = $(this).attr("class");
+                    // alert(id);
+                    wordPlayed[i++] = $(this).attr('class');
+                    //send to engine
+                    //this is the word that was played    
+                    //var wordPlayed = new Array();
+
+                });
+                var wordString = wordPlayed.join("");
+                alert(wordString);
+                
+                
+                
+                //This is the Play request
+                $.post("Servlet", { //needs variables for word, coordinates and direction (h or v)
+                    request: "play",
+                    word: wordString,
+                    coords: firstCoord + "," + secondCoord,
+                    direction: orientationWord
+                }, function(data, status) {
+                    alert("Data: " + data + "\nStatus: " + status); // response text.
+                });
+
+
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
