@@ -34,3 +34,4 @@ Engine/target/*
 nbproject/*
 */out/production/*
 */out/artifacts/*
+/Engine/nbproject/
