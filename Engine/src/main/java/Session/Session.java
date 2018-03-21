@@ -33,8 +33,8 @@ public class Session {
     }
 
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
-        if (playedMoves.isEmpty() && startY != GameConstants.BOARD_WIDTH/2 + 1) {
-            return "invalid first move";
+        if (playedMoves.isEmpty() && startY != GameConstants.BOARD_WIDTH/2) {
+            return "Please start in the center of the board.";
         }
         
         Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, word, user));
