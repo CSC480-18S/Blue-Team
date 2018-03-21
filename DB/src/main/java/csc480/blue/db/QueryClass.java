@@ -50,7 +50,6 @@ public class QueryClass {
                 + "VALUES (?, 0, '', 0, 0)";
         boolean pastQ1 = false; //If an exception occurs after query1 is executed, the database will not be consistent.
         
-        
         if(userAlreadyExists(uname)){
             return false;
         }
@@ -231,9 +230,11 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
-            return rs;
+            int teamCumulative = rs.getInt("cumulative_game_score");
+            return teamCumulative;
         } catch (SQLException se) {
             se.printStackTrace();
+            return 0;
         }
     }
     
@@ -248,9 +249,11 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
-            return rs;
+            int teamHighestW = rs.getInt("highest_word_score");
+            return teamHighestW;
         } catch (SQLException se) {
             se.printStackTrace();
+            return 0;
         }
     }
     
@@ -265,9 +268,11 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
-            return rs;
+            int teamHighest = rs.getInt("highest_game_session_score");
+            return teamHighest;
         } catch (SQLException se) {
             se.printStackTrace();
+            return 0;
         }
     }
     
@@ -282,9 +287,11 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
-            return rs;
+            int teamWin = rs.getInt("win_count");
+            return teamWin;
         } catch (SQLException se) {
             se.printStackTrace();
+            return 0;
         }
     }
     
@@ -299,9 +306,11 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
-            return rs;
+            int teamLose = rs.getInt("lose_count");
+            return teamLose;
         } catch (SQLException se) {
             se.printStackTrace();
+            return 0;
         }
     }
     
@@ -316,9 +325,11 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
-            return rs;
+            int teamTie = rs.getInt("tie_count");
+            return teamTie;
         } catch (SQLException se) {
             se.printStackTrace();
+            return 0;
         }
     }
     
@@ -333,9 +344,11 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
-            return rs;
+            String teamLongWord = rs.getString("longest_word");
+            return teamLongWord;
         } catch (SQLException se) {
             se.printStackTrace();
+            return null;
         }
     }
     
@@ -350,12 +363,14 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
-            return rs;
+            int teamBonuses = rs.getInt("bonuses");
+            return teamBonuses;
         } catch (SQLException se) {
             se.printStackTrace();
+            return 0;
         }
     }
-    
+
     /**
      * get the number of dirty word attempt of a team
      * @return an integer indicating the number of times a specified team tried using a "dirty word"
@@ -366,10 +381,12 @@ public class QueryClass {
         try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
-            ResultSet rs = preparedStmt.executeQuery();
-            return rs;
+                        ResultSet rs = preparedStmt.executeQuery();
+            int teamDirtyCount = rs.getInt("dirty_word");
+            return teamDirtyCount;
         } catch (SQLException se) {
             se.printStackTrace();
+            return 0;
         }
-    }
+	}
 }
