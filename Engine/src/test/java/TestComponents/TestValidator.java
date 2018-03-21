@@ -6,6 +6,7 @@
 package TestComponents;
 
 import Components.Validator;
+import Models.Move;
 import Models.Player;
 import Session.Session;
 import org.junit.After;
@@ -22,13 +23,14 @@ import static org.junit.Assert.*;
 public class TestValidator {
     
     Validator val;
+    static Player p;
     
     public TestValidator() {
     }
     
     @BeforeClass
     public static void setUpClass() {
-        Player p = new Player("jim", "fakeMac");
+        p = new Player("jim", "fakeMac");
         Session.getSession().playWord(0, 0, true, "wine", p);
     }
     
@@ -39,6 +41,7 @@ public class TestValidator {
     @Before
     public void setUp() {
         val = new Validator();
+        p = new Player("jim", "fakeMac");
     }
     
     @After
@@ -48,14 +51,14 @@ public class TestValidator {
     // Test a valid multi-word play
     @Test
     public void testIsValidPlay1() {
-        int result = val.isValidPlay(1, 1, true, "no");
+        int result = (int) val.isValidPlay(new Move(1, 1, true, "no", p))[0];
         assertEquals(1, result);
     }
     
     // Test an invalid multi-word play
     @Test
     public void testIsValidPlay2() {
-        int result = val.isValidPlay(1, 1, true, "on");
+        int result = (int) val.isValidPlay(new Move(1, 1, true, "on", p))[0];
         assertEquals(0, result);
     }
 }
