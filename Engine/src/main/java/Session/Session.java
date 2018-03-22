@@ -4,13 +4,13 @@ import Models.*;
 import Views.*;
 import Components.*;
 import Components.Log;
+
 import java.util.ArrayList;
 
 import java.util.Scanner;
 import java.util.logging.Level;
 
 /**
- *
  * @author Bohdan Yevdokymov
  */
 public class Session {
@@ -22,6 +22,7 @@ public class Session {
     private Validator validator;
     private User[] users;
     private ArrayList<Move> playedMoves;
+    private QueryClass dbQueries;
 
     private Session() {
         //Session.LogInfo("Initializing objects");
@@ -30,13 +31,14 @@ public class Session {
         validator = new Validator();
         users = new User[4];
         playedMoves = new ArrayList();
+        dbQueries = new QueryClass();
     }
 
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
-        if (playedMoves.isEmpty() && startY != GameConstants.BOARD_WIDTH/2 + 1) {
-            return "invalid first move";
+        if (playedMoves.isEmpty() && startY != GameConstants.BOARD_WIDTH / 2) {
+            return "Please start in the center of the board.";
         }
-        
+
         Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, word, user));
 
         if ((int) result[0] == 1) {
@@ -82,24 +84,54 @@ public class Session {
         return session.log;
     }
 
-    public String addPlayer(String username, String macAddress) {
-        //check if username already exists first
+    public String addPlayer(String username, String macAddress, String team) {
+        Player newPlayer = null;
+
+        //validating the team name
+        if (team.toUpperCase().compareTo("GREEN") != 0 && team.toUpperCase().compareTo("GOLD") != 0
+                && team != "" && team != null)
+            return "Invalid team name.";
+
+        //check if username already exists in game first
         for (int i = 0; i < users.length; i++) {
             if (users[i] != null) {
-                if (users[i].getUsername().equals(username)) {
-                    return "already joined";
+                if (users[i].getClass() == Player.class) {
+                    Player player = (Player) users[i];
+                    if (player.getMacAddress().equals(macAddress)) {
+                        return "JOINED";
+                    }
                 }
             }
         }
+
+        /*checking for mac address in the user database to see if user already has a user profile. If a profile exists then userInfo will have the
+        username stored in index 0 and team stored in index 1*/
+        String[] userInfo = dbQueries.findUser(macAddress);
+
+        if (userInfo != null) {
+            newPlayer = new Player(userInfo[0], macAddress, userInfo[1]);
+        }
+        //creating a new user profile in the database if the mac address is not already registered
+        else {
+            if (!dbQueries.userAlreadyExists(username)) {
+                dbQueries.addNewUser(username, macAddress, team);
+            } else {
+                return "The username chosen is already in use.";
+            }
+
+            newPlayer = new Player(username, macAddress, team);
+        }
+
         //check if any users are not initialized yet
         for (int i = 0; i < users.length; i++) {
             if (users[i] == null) {
-                users[i] = new Player(username, macAddress);
-                return "joined";
+
+                users[i] = newPlayer;
+                return "JOINED";
             }
         }
 
-        return "not joined";
+        return "Could not join game.";
     }
 
     public Space[][] getBoardAsSpaces() {
@@ -116,5 +148,52 @@ public class Session {
 
     public User[] getUsers() {
         return users;
+    }
+
+    public String removePlayer(String mac) {
+        for (int i = 0; i < users.length; i++) {
+            if (users[i] != null && users[i].getClass() == Player.class) {
+                Player player = (Player) users[i];
+                if (player.getMacAddress().equals(mac)) {
+                    users[i] = null;
+                    return "removed";
+                }
+            }
+        }
+        return "user not found";
+    }
+
+    public String exchange(String mac, String letters) {
+        letters = letters.toUpperCase();
+        TileGenerator tg = TileGenerator.getInstance();
+        int count = 0;
+        //add letter to ArrayList
+        ArrayList<Character> replace = new ArrayList<>();
+        for (int i = 0; i < letters.length(); i++) {
+            replace.add(letters.charAt(i));
+        }
+
+        //find corresponding user
+        for (int i = 0; i < users.length; i++) {
+            if (users[i] != null && users[i].getClass() == Player.class) {
+                Player player = (Player) users[i];
+                if (player.getMacAddress().equals(mac)) {
+                    Tile[] hand = player.getHand();
+                    //check each tile in hand for match
+                    for (int k = 0; k < hand.length; k++) {
+                        if (replace.contains(hand[k].getLetter())) {
+                            //generate new tile instead
+                            replace.remove((Character) hand[k].getLetter());
+
+                            hand[k] = tg.getRandTile();
+                            count++;
+                        }
+                    }
+                    player.setHand(hand);
+                    return "Exchanged: " + count + " tiles";
+                }
+            }
+        }
+        return "Username not found";
     }
 }

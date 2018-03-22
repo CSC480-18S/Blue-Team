@@ -1,10 +1,12 @@
+package Components;
+
 import java.sql.*;
 
 public class QueryClass {
     private String dbDriver = "com.mysql.jdbc.Driver";
     private String dbAddress = "jdbc:mysql://localhost:3306/csc480data";
-    private String dbUser = "csc";
-    private String dbPass = "blueteam";
+    private String dbUser = "root";
+    private String dbPass = "2547";
 
     public QueryClass() {
         try {
@@ -103,7 +105,7 @@ public class QueryClass {
      * @param mac The mac address to find a related user from
      * @return String the username related to the mac, null if nonexistent user or error
      */
-    public String findUser(String mac){
+    public String[] findUser(String mac){
         String query = "SELECT uid FROM user_table where mac_addr=?";
 
         try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
@@ -111,8 +113,8 @@ public class QueryClass {
             preparedStmt.setString(1, mac);
             ResultSet rs = preparedStmt.executeQuery();
             if(rs.next()){ //If this executes, it found a user. I don't check to see if it finds more than 1, it shouldn't
-                String uname = rs.getString("uid");
-                return uname;
+                String userInfo [] = {rs.getString("uid"), "Test"};
+                return userInfo;
             }
             return null;
         } catch (SQLException se) {
