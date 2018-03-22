@@ -55,6 +55,10 @@ public abstract class User {
     {
         return hand;
     }
+    public synchronized void setHand(Tile[] hand)
+    {
+        this.hand = hand;
+    }
 
     /* Return the current user's score.*/
     public synchronized int getScore()

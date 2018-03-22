@@ -6,11 +6,13 @@ package Models;
  */
 public class Player extends User {
     private String macAddress;
+    private String team;
 
 
-    public Player(String username, String macAddress){
+    public Player(String username, String macAddress, String team){
         super(username);
         this.macAddress = macAddress;
+        this.team = team;
     }
     @Override
     int playWord(String word, int startX, int startY, int endX, int endY, Board board) {
@@ -27,4 +29,5 @@ public class Player extends User {
         return macAddress;
     }
 
+    public String getTeam(){return team;}
 }
