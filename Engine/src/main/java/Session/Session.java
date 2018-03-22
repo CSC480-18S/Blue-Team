@@ -4,6 +4,7 @@ import Models.*;
 import Views.*;
 import Components.*;
 import Components.Log;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -195,5 +196,12 @@ public class Session {
             }
         }
         return "Username not found";
+    }
+
+    public String getBoardJSON(){
+        String json = "";
+        Gson gson = new Gson();
+        json = gson.toJson(board.getBoard());
+        return json;
     }
 }

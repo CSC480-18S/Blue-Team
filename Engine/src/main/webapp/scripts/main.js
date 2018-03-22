@@ -173,6 +173,8 @@ $(function place() {
 //string of word played
 //if x-x = 0 then its horizontal
 //change to buttons to click on for yes or no
+
+
 $(function confirmed() {
     $("#confirmed").click(function() {
         var xyCoord = [];
