@@ -80,11 +80,6 @@ public final class EventHandler {
         String result = Session.getSession().exchange(mac,tiles);
         return result;
     }
-
-    public static String getBoardJSON(){
-        String result = Session.getSession().getBoardJSON();
-        return result;
-    }
     
     public static String passHandler(String username) {
         return "passHandler username: " + username;

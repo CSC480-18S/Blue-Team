@@ -115,8 +115,6 @@ public class Servlet extends HttpServlet {
             } else if (req.equals("stats")) {
                 // Open Stats request
                 out.print(EventHandler.statsHandler());
-            } else if (req.equals("getboard")){
-                out.print(Session.getSession().getBoardJSON());
             } else {
                 // Unknown request
                 out.print(EventHandler.unknownHandler());

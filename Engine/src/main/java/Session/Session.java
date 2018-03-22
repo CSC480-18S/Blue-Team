@@ -4,7 +4,6 @@ import Models.*;
 import Views.*;
 import Components.*;
 import Components.Log;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -104,16 +103,18 @@ public class Session {
                 }
             }
         }
-
+        //System.out.println("Preparing to check for user with macAddress of" + macAddress + " ********************************");
         /*checking for mac address in the user database to see if user already has a user profile. If a profile exists then userInfo will have the
         username stored in index 0 and team stored in index 1*/
         String[] userInfo = dbQueries.findUser(macAddress);
 
         if (userInfo != null) {
             newPlayer = new Player(userInfo[0], macAddress, userInfo[1]);
+            //System.out.println("Found User ******************************************");
         }
         //creating a new user profile in the database if the mac address is not already registered
         else {
+            //System.out.println("No Existing User Found ***********************************");
             if (!dbQueries.userAlreadyExists(username)) {
                 dbQueries.addNewUser(username, macAddress, team);
             } else {
@@ -196,12 +197,5 @@ public class Session {
             }
         }
         return "Username not found";
-    }
-
-    public String getBoardJSON(){
-        String json = "";
-        Gson gson = new Gson();
-        json = gson.toJson(board.getBoard());
-        return json;
     }
 }
