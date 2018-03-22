@@ -35,7 +35,9 @@ public class Session {
     }
 
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
-        if (playedMoves.isEmpty() && startY != GameConstants.BOARD_WIDTH / 2) {
+        if (playedMoves.isEmpty() 
+                && startY != GameConstants.BOARD_WIDTH / 2 + 1
+                && startX != GameConstants.BOARD_WIDTH / 2 + 1) {
             return "Please start in the center of the board.";
         }
 

@@ -6,6 +6,7 @@
 package TestComponents;
 
 import Components.Validator;
+import static Models.GameConstants.BOARD_WIDTH;
 import Models.Move;
 import Models.Player;
 import Session.Session;
@@ -30,8 +31,9 @@ public class TestValidator {
     
     @BeforeClass
     public static void setUpClass() {
-        p = new Player("jim", "fakeMac","test");
-        Session.getSession().playWord(0, 0, true, "wine", p);
+        p = new Player("jim","fakeMac", "test");
+        Session.getSession().playWord(BOARD_WIDTH/2+1, BOARD_WIDTH/2+1, 
+                true, "wine", p);
     }
     
     @AfterClass
@@ -41,7 +43,7 @@ public class TestValidator {
     @Before
     public void setUp() {
         val = new Validator();
-        p = new Player("jim", "fakeMac","test");
+        p = new Player("jim", "fakeMac", "test");
     }
     
     @After
