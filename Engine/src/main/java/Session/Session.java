@@ -198,4 +198,9 @@ public class Session {
         }
         return "Username not found";
     }
+
+    public static String getBoardJSON(){
+        String result = Session.getSession().getBoardJSON();
+        return result;
+    }
 }
