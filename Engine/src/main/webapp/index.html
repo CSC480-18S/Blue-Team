@@ -86,7 +86,7 @@
 <div id="joinResult"></div>
 
 <input id="txtUserName" type="text" placeholder="Enter Username">
-<button type="button" id="btnLogin" onclick="join()">Join</button>
+<button type="button" id="btnLogin" onclick="join()">Join!</button>
 
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -97,10 +97,11 @@
     {
         var uname = document.getElementById('txtUserName').value;
 
-        $.post("Servlet", {request:"join", username:uname}, function(responsetext)
-        {   // execute ajax get request on url of "someservlet" and execute the following function with ajax response text...
+        $.post("Servlet", {request:"join", username:uname, team:"Green"}, function(responsetext)
+        {
+            // execute ajax get request on url of "someservlet" and execute the following function with ajax response text...
             // if success, show board, otherwise displayed message
-            if (responsetext == "join")
+            if (responsetext == "joined");
             {
                 $("#joinResult").text(responsetext);
                 window.open("localhost:8080/Sqrabble/board.html");

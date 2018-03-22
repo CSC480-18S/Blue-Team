@@ -22,8 +22,8 @@ public final class EventHandler {
     */
     private EventHandler() {}
     
-    public static String joinHandler(String username, String macAddress) {
-        String response = Session.getSession().addPlayer(username, macAddress);
+    public static String joinHandler(String username, String macAddress, String team) {
+        String response = Session.getSession().addPlayer(username, macAddress, team);
         return response;
 
     }
@@ -62,8 +62,9 @@ public final class EventHandler {
         return "Error: user not found";
     }
     
-    public static String leaveHandler(String username, String mac) {
-        return "leaveHandler username: " + username + " MAC: " + mac;
+    public static String leaveHandler( String mac) {
+        String response = Session.getSession().removePlayer(mac);
+        return " MAC: " + mac + "\nResult: " + response;
     }
     
     public static String forfeitHandler(String username, String mac) {
@@ -74,8 +75,10 @@ public final class EventHandler {
         return "loginHandler username: " + username + " password: " + pass;
     }
     
-    public static String exchangeHandler(String tiles) {
-        return "exchangeHandler tiles: " + tiles;
+    public static String exchangeHandler(String mac, String tiles) {
+        tiles = tiles.toUpperCase();
+        String result = Session.getSession().exchange(mac,tiles);
+        return result;
     }
     
     public static String passHandler(String username) {

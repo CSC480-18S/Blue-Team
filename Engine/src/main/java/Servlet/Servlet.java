@@ -62,8 +62,9 @@ public class Servlet extends HttpServlet {
                 // Join request
                 String username = request.getParameter("username");
                 String mac = getMACAddress(request.getRemoteAddr());
+                String team = request.getParameter("team");
 
-                out.write(EventHandler.joinHandler(username, mac));       // Write response body.
+                out.write(EventHandler.joinHandler(username, mac, team));       // Write response body.
 
             } else if (req.equals("play")) {
                 String word = request.getParameter("word");
@@ -90,9 +91,8 @@ public class Servlet extends HttpServlet {
                 out.write(EventHandler.getHandHandler(macAddress));
             }else if (req.equals("leave")) {
                 // Leave a Game request
-                String username = request.getParameter("username");
-                String mac = request.getParameter("macAddress");
-                out.print(EventHandler.leaveHandler(username, mac));
+                String mac = getMACAddress(request.getRemoteAddr());
+                out.print(EventHandler.leaveHandler(mac));
             } else if (req.equals("forfeit")) {
                 // Forfeit a Game request
                 String username = request.getParameter("username");
@@ -106,7 +106,8 @@ public class Servlet extends HttpServlet {
             } else if (req.equals("exchange")) {
                 // Exchange Tiles request
                 String tiles = request.getParameter("tiles");
-                out.print(EventHandler.exchangeHandler(tiles));
+                String mac = getMACAddress(request.getRemoteAddr());
+                out.print(EventHandler.exchangeHandler(mac, tiles));
             } else if (req.equals("pass")) {
                 // Pass to Next Player request
                 String username = request.getParameter("username");
@@ -120,7 +121,7 @@ public class Servlet extends HttpServlet {
             }
         }
         catch (Exception e) {
-            //Session.LogWarning(e.getMessage() + "\n" + e.getStackTrace());
+            e.printStackTrace();
         }
         finally {
             out.close();
