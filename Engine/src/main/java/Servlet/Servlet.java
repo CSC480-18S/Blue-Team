@@ -61,8 +61,8 @@ public class Servlet extends HttpServlet {
             if (req.equals("join")) {
                 // Join request
                 String username = request.getParameter("username");
-                String mac = getMACAddress(request.getRemoteAddr());
                 String team = request.getParameter("team");
+                String mac = getMACAddress(request.getRemoteAddr());
 
                 out.write(EventHandler.joinHandler(username, mac, team));       // Write response body.
 
@@ -121,6 +121,10 @@ public class Servlet extends HttpServlet {
             }
         }
         catch (Exception e) {
+            if (out != null)
+            {
+                out.write("Error in servlet: \n" + e.getMessage());
+            }
             e.printStackTrace();
         }
         finally {
