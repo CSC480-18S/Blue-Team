@@ -32,7 +32,7 @@ public class TestValidator {
     @BeforeClass
     public static void setUpClass() {
         p = new Player("jim","fakeMac", "test");
-        Session.getSession().playWord(BOARD_WIDTH/2+1, BOARD_WIDTH/2+1, 
+        Session.getSession().playWord(BOARD_WIDTH/2, BOARD_WIDTH/2, 
                 true, "wine", p);
     }
     
@@ -53,14 +53,14 @@ public class TestValidator {
     // Test a valid multi-word play
     @Test
     public void testIsValidPlay1() {
-        int result = (int) val.isValidPlay(new Move(1, 1, true, "no", p))[0];
+        int result = (int) val.isValidPlay(new Move(BOARD_WIDTH/2+1, BOARD_WIDTH/2+1, true, "no", p))[0];
         assertEquals(1, result);
     }
     
     // Test an invalid multi-word play
     @Test
     public void testIsValidPlay2() {
-        int result = (int) val.isValidPlay(new Move(1, 1, true, "on", p))[0];
+        int result = (int) val.isValidPlay(new Move(BOARD_WIDTH/2+1, BOARD_WIDTH/2+1, true, "on", p))[0];
         assertEquals(0, result);
     }
 }
