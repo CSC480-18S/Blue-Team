@@ -23,7 +23,7 @@ public class QueryClass {
      */
     public ResultSet getTopPlayers() {
         int num = 5; // Number of top players to retrieve
-        String query = "SELECT uid, cumulative_score FROM player_table ORDER BY cumulative_score DESC LIMIT ?";
+        String query = "SELECT uid, cumulative_score FROM PLAYER_TABLE ORDER BY cumulative_score DESC LIMIT ?";
 
         try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
 
@@ -144,7 +144,7 @@ public class QueryClass {
         int count = -1;
         try {
             Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
-            String sqlQuery = "SELECT COUNT(*) FROM csc480data.game_table ";
+            String sqlQuery = "SELECT COUNT(*) FROM GAME_TABLE";
             aStatement = connection.createStatement();
             ResultSet rs = aStatement.executeQuery(sqlQuery);
             while(rs.next()) {
@@ -167,7 +167,7 @@ public class QueryClass {
         int count = 0;
         try {
             Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
-            String sqlQuery = "SELECT COUNT(*) FROM csc480data.valid_word_table ";
+            String sqlQuery = "SELECT COUNT(*) FROM VALID_WORD_TABLE";
             aStatement = connection.createStatement();
             ResultSet rs = aStatement.executeQuery(sqlQuery);
             while(rs.next()) {
@@ -191,7 +191,7 @@ public class QueryClass {
 
         try{
             Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
-            String sqlQuery = "INSERT INTO game_table VALUES (?,?,?);";
+            String sqlQuery = "INSERT INTO GAME_TABLE VALUES (?,?,?);";
             PreparedStatement ps = connection.prepareStatement(sqlQuery);
 
             ps.setInt(1,game_id);
@@ -217,7 +217,7 @@ public class QueryClass {
 
         try{
             Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
-            String sqlQuery = "INSERT INTO valid_word_table VALUES (?,?,?,?,?,?);";
+            String sqlQuery = "INSERT INTO VALID_WORD_TABLE VALUES (?,?,?,?,?,?);";
             PreparedStatement ps = connection.prepareStatement(sqlQuery);
 
             ps.setInt(1,word_id);
@@ -238,7 +238,7 @@ public class QueryClass {
      * @return an integer indicating the cumulative score of specified team
      */
     public int getTeamCumulative(String teamname){
-        String query = "SELECT cumulative_game_score FROM team_table WHERE team_name = ?";
+        String query = "SELECT cumulative_game_score FROM TEAM_TABLE WHERE team_name = ?";
         
         try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
             PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -257,7 +257,7 @@ public class QueryClass {
      * @return an integer indicating the highest word score of specified team
      */
     public int getHighestWordScore(String teamname){
-        String query = "SELECT highest_word_score FROM team_table WHERE team_name = ?";
+        String query = "SELECT highest_word_score FROM TEAM_TABLE WHERE team_name = ?";
         
         try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
             PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -276,7 +276,7 @@ public class QueryClass {
      * @return an integer indicating the cumulative score of specified team
      */
     public int getHighestGameSessionScore(String teamname){
-        String query = "SELECT highest_game_session_score FROM team_table WHERE team_name = ?";
+        String query = "SELECT highest_game_session_score FROM TEAM_TABLE WHERE team_name = ?";
         
         try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
             PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -295,7 +295,7 @@ public class QueryClass {
      * @return an integer indicating the win count of specified team
      */
     public int getTeamWinCount(String teamname){
-        String query = "SELECT win_count FROM team_table WHERE team_name = ?";
+        String query = "SELECT win_count FROM TEAM_TABLE WHERE team_name = ?";
         
         try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
             PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -314,7 +314,7 @@ public class QueryClass {
      * @return an integer indicating the lose count of specified team
      */
     public int getTeamLoseCount(String teamname){
-        String query = "SELECT lose_count FROM team_table WHERE team_name = ?";
+        String query = "SELECT lose_count FROM TEAM_TABLE WHERE team_name = ?";
         
         try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
             PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -333,7 +333,7 @@ public class QueryClass {
      * @return an integer indicating the tie count of specified team
      */
     public int getTeamTieCount(String teamname){
-        String query = "SELECT tie_count FROM team_table WHERE team_name = ?";
+        String query = "SELECT tie_count FROM TEAM_TABLE WHERE team_name = ?";
         
         try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
             PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -352,7 +352,7 @@ public class QueryClass {
      * @return a String indicating the Longest Word of specified team
      */
     public String getTeamLongestWord(String teamname){
-        String query = "SELECT longest_word FROM team_table WHERE team_name = ?";
+        String query = "SELECT longest_word FROM TEAM_TABLE WHERE team_name = ?";
         
         try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
             PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -371,7 +371,7 @@ public class QueryClass {
      * @return an integer indicating the number of bonuses a specified team used
      */
     public int getTeamBonuses(String teamname){
-        String query = "SELECT bonuses FROM team_table WHERE team_name = ?";
+        String query = "SELECT bonuses FROM TEAM_TABLE WHERE team_name = ?";
         
         try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
             PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -390,7 +390,7 @@ public class QueryClass {
      * @return an integer indicating the number of times a specified team tried using a "dirty word"
      */
     public int getTeamDirtyWordAttempt(String teamname){
-        String query = "SELECT dirty_word FROM team_table WHERE team_name = ?";
+        String query = "SELECT dirty_word FROM TEAM_TABLE WHERE team_name = ?";
         
         try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
             PreparedStatement preparedStmt = con.prepareStatement(query);
