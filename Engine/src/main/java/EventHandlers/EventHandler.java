@@ -3,9 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.EventHandlers;
+package EventHandlers;
 
-import main.java.Session.Session;
+import Models.Player;
+import Models.Tile;
+import Models.User;
+import Session.Session;
+import com.google.gson.Gson;
 
 /**
  *  Event Handler class that processes servlet API calls
@@ -18,19 +22,49 @@ public final class EventHandler {
     */
     private EventHandler() {}
     
-    public static String joinHandler(String username, String mac) {
-        return "joinHandler username: " + username + " MAC: " + mac;
+    public static String joinHandler(String username, String macAddress, String team) {
+        String response = Session.getSession().addPlayer(username, macAddress, team);
+        return response;
+
     }
     
     public static String playHandler(int startX, int startY, boolean horizontal,
-            String word) {
-        boolean result = Session.getSession().playWord(startX, startY, horizontal, word);
+            String word, String macAddress) {
+
+        //searching for user
+        Session session = Session.getSession();
+        String result = "unauthorized";
+        User[]users = session.getUsers();
+        for(int i =0; i < users.length; i++){
+            if(users[i] != null && users[i].getClass() == Player.class) {
+                Player player = (Player) users[i];
+                if (player.getMacAddress().equals(macAddress)) {
+                    result = Session.getSession().playWord(startX, startY, horizontal, word, users[i]);
+                    break;
+                }
+            }
+        }
         return "playHandler startX: " + startX + " startY: " + startY + 
-                " horizontal: "+ horizontal + " word: " + word + " result: " + result;
+                " horizontal: "+ horizontal + " word: " + word + "\nResult: " + result;
+    }
+
+    public static String getHandHandler(String macAddress){
+        User[] users = Session.getSession().getUsers();
+        for(User user : users){
+            if(user != null && user.getClass() == Player.class){
+                Player player = (Player) user;
+                Tile[] hand = player.getHand();
+                Gson gson = new Gson();
+                String jsonHand = gson.toJson(hand);
+                return jsonHand;
+            }
+        }
+        return "Error: user not found";
     }
     
-    public static String leaveHandler(String username, String mac) {
-        return "leaveHandler username: " + username + " MAC: " + mac;
+    public static String leaveHandler( String mac) {
+        String response = Session.getSession().removePlayer(mac);
+        return " MAC: " + mac + "\nResult: " + response;
     }
     
     public static String forfeitHandler(String username, String mac) {
@@ -41,10 +75,18 @@ public final class EventHandler {
         return "loginHandler username: " + username + " password: " + pass;
     }
     
-    public static String exchangeHandler(String tiles) {
-        return "exchangeHandler tiles: " + tiles;
+    public static String exchangeHandler(String mac, String tiles) {
+        tiles = tiles.toUpperCase();
+        String result = Session.getSession().exchange(mac,tiles);
+        return result;
     }
-    
+
+    public static String getBoardJSON(){
+        String result = Session.getSession().getBoardJSON();
+        return result;
+    }
+
+
     public static String passHandler(String username) {
         return "passHandler username: " + username;
     }

@@ -3,8 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.Models;
-import main.java.Models.*;
+package Models;
+import Models.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static java.util.concurrent.ThreadLocalRandom.*;
@@ -58,10 +58,10 @@ public class Board implements GameConstants {
         return board;
     }
 
-    public boolean placeWord(int startX, int startY,boolean horizontal , String word){
+    public synchronized boolean placeWord(int startX, int startY, boolean horizontal, String word){
 
         for (char c : word.toCharArray()){
-            board[startY][startX].setTile(new Tile(c, 1));
+            board[startX][startY].setTile(new Tile(c, 1));
             if(horizontal){
                 startX++;
             } else {

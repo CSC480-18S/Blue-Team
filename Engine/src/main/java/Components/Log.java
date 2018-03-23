@@ -1,4 +1,4 @@
-package main.java.Components;
+package Components;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +11,7 @@ public class Log
 {
     public Logger logger;
     private FileHandler handler;
-    private String filepath = "log\\sqrabble_log.txt";
+    private String filepath = "sqrabble_log.txt";
 
     public Log() throws SecurityException, IOException
     {

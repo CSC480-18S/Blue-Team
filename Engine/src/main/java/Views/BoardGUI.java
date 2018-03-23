@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.Views;
+package Views;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
-import main.java.Models.*;
-import static main.java.Models.GameConstants.*;
+import Models.*;
+import static Models.GameConstants.*;
 
 /**
  * @author Bohdan
@@ -49,11 +49,11 @@ public class BoardGUI {
     }
 
     public void updateBoard (Space[][] board){
-        for (int r = 0; r < BOARD_WIDTH; r++) {
-            for (int c = 0; c < BOARD_WIDTH; c++) {
-                if(board[r][c].getTile() != null){
-                    char letter = board[r][c].getTile().getLetter();
-                    data[r][c] = Character.toString(letter);
+        for (int x = 0; x < BOARD_WIDTH; x++) {
+            for (int y = 0; y < BOARD_WIDTH; y++) {
+                if(board[x][y].getTile() != null){
+                    char letter = board[x][y].getTile().getLetter();
+                    data[y][x] = Character.toString(letter);
                 }
             }
         }

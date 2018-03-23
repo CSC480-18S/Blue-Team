@@ -7,12 +7,12 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema CSC480Data
 -- -----------------------------------------------------
--- v1 of team blue's database for CSC480
+-- v2 of team blue's database for CSC480
 
 -- -----------------------------------------------------
 -- Schema CSC480Data
 --
--- v1 of team blue's database for CSC480
+-- v2 of team blue's database for CSC480
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `CSC480Data` DEFAULT CHARACTER SET utf8 ;
 USE `CSC480Data` ;
@@ -100,7 +100,7 @@ COMMENT = 'Used for associating a team with players';
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `CSC480Data`.`USER_TABLE` (
   `uid` VARCHAR(12) NOT NULL,
-  `mac_addr` VARCHAR(20) NULL,
+  `mac_addr` VARCHAR(20) NOT NULL UNIQUE,
   PRIMARY KEY (`uid`))
 ENGINE = InnoDB
 COMMENT = 'Used to associate players with thier mac_addr';
