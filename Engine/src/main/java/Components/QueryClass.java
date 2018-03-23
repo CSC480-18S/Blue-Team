@@ -4,9 +4,9 @@ import java.sql.*;
 
 public class QueryClass {
     private String dbDriver = "com.mysql.jdbc.Driver";
-    private String dbAddress = "jdbc:mysql://localhost:3306/csc480data";
+    private String dbAddress = "jdbc:mysql://localhost:3306/CSC480Data";
     private String dbUser = "root";
-    private String dbPass = "2547";
+    private String dbPass = "blueteam";
 
     public QueryClass() {
         try {
@@ -46,9 +46,9 @@ public class QueryClass {
      * @throws RuntimeException if database consistency problem occurs
      */
     public Boolean addNewUser(String uname, String mac, String team){
-        String query1 = "INSERT INTO user_table (uid, mac_addr) VALUES (?, ?)"; //Will automatically return false if user or mac exists
-        String query2 = "INSERT INTO player_team (uid, teamid) VALUES (?, ?)";
-        String query3 = "INSERT INTO player_table (uid, cumulative_score, longest_word, bonuses, highest_word_score) "
+        String query1 = "INSERT INTO USER_TABLE (uid, mac_addr) VALUES (?, ?)"; //Will automatically return false if user or mac exists
+        String query2 = "INSERT INTO PLAYER_TEAM (uid, teamid) VALUES (?, ?)";
+        String query3 = "INSERT INTO PLAYER_TABLE (uid, cumulative_score, longest_word, bonuses, highest_word_score) "
                 + "VALUES (?, 0, '', 0, 0)";
         boolean pastQ1 = false; //If an exception occurs after query1 is executed, the database will not be consistent.
         
@@ -59,6 +59,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query1);
             preparedStmt.setString(1, uname);
             preparedStmt.setString(2, mac);
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             preparedStmt.execute();
             pastQ1 = true;
             preparedStmt = con.prepareStatement(query2);
@@ -84,7 +85,7 @@ public class QueryClass {
      * @return Boolean true if username taken, false if not, null if error
      */
     public Boolean userAlreadyExists(String uname){
-        String query = "SELECT uid FROM user_table WHERE uid=?";
+        String query = "SELECT uid FROM USER_TABLE WHERE uid=?";
 
         try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
             PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -106,15 +107,26 @@ public class QueryClass {
      * @return String the username related to the mac, null if nonexistent user or error
      */
     public String[] findUser(String mac){
-        String query = "SELECT uid FROM user_table where mac_addr=?";
-
+        String query = "SELECT uid FROM USER_TABLE where mac_addr=?";
         try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, mac);
             ResultSet rs = preparedStmt.executeQuery();
             if(rs.next()){ //If this executes, it found a user. I don't check to see if it finds more than 1, it shouldn't
-                String userInfo [] = {rs.getString("uid"), "Test"};
-                return userInfo;
+
+                //using user name to create a query to find team id
+                String userid = rs.getString("uid");
+                String query2 = "SELECT teamid FROM PLAYER_TEAM where uid=?";
+                PreparedStatement preparedStmt2 = con.prepareStatement(query2);
+                preparedStmt2.setString(1,userid);
+                ResultSet rs2 = preparedStmt2.executeQuery();
+                if(rs2.next()) {//if this executes then a team preference was found for the user and both a username and team is returned
+                    String userInfo[] = {userid, rs2.getString("teamid")};
+                    return userInfo;
+                }
+                else {//if no team is found then this returns a null as the team, This should never actually be executed based on the setup of the registration but figured it couldn't hurt
+                    return new String[]{userid, null};
+                }
             }
             return null;
         } catch (SQLException se) {
