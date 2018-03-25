@@ -6,6 +6,7 @@
 package TestComponents;
 
 import Components.Validator;
+import static Models.GameConstants.BOARD_WIDTH;
 import Models.Move;
 import Models.Player;
 import Session.Session;
@@ -22,5 +23,44 @@ import static org.junit.Assert.*;
  */
 public class TestValidator {
     
+    static Player p;
+    static Validator val;
     
+    public TestValidator() {
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+        p = new Player("jim","fakeMac", "test");
+        Session.getSession().playWord(BOARD_WIDTH/2, BOARD_WIDTH/2, 
+                true, "wine", p);
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+        val = new Validator();
+        p = new Player("jim", "fakeMac", "test");
+    }
+    
+    @After
+    public void tearDown() {
+    }
+
+    // Test a valid multi-word play
+    @Test
+    public void testIsValidPlay1() {
+        int result = (int) val.isValidPlay(new Move(BOARD_WIDTH/2+1, BOARD_WIDTH/2+1, true, "no", p))[0];
+        assertEquals(1, result);
+    }
+    
+    // Test an invalid multi-word play
+    @Test
+    public void testIsValidPlay2() {
+        int result = (int) val.isValidPlay(new Move(BOARD_WIDTH/2+1, BOARD_WIDTH/2+1, true, "on", p))[0];
+        assertEquals(0, result);
+    }
 }
