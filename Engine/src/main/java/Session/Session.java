@@ -4,6 +4,7 @@ import Models.*;
 import Views.*;
 import Components.*;
 import Components.Log;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -112,11 +113,17 @@ public class Session {
 
         if (userInfo != null) {
             newPlayer = new Player(userInfo[0], macAddress, userInfo[1]);
+
         }
+
         //creating a new user profile in the database if the mac address is not already registered
         else {
+
             if (!dbQueries.userAlreadyExists(username)) {
-                dbQueries.addNewUser(username, macAddress, team);
+                if(username.compareTo("") != 0)
+                    dbQueries.addNewUser(username, macAddress, team);
+                else
+                    return "empty user name";
             } else {
                 return "The username chosen is already in use.";
             }
@@ -197,5 +204,11 @@ public class Session {
             }
         }
         return "Username not found";
+    }
+
+    public String getBoardJSON(){
+        Gson gson = new Gson();
+        String result = gson.toJson(board);
+        return result;
     }
 }
