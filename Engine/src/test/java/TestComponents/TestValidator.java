@@ -23,6 +23,8 @@ import static org.junit.Assert.*;
  */
 public class TestValidator {
     
+    static Player p;
+    static Validator val;
     
     public TestValidator() {
     }
