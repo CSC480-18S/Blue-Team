@@ -1,5 +1,6 @@
 package Components;
 
+import Models.GameConstants;
 import Models.Move;
 import Models.Space;
 import Session.Session;
@@ -30,6 +31,12 @@ public class Validator {
         int startX = move.getStartX();
         int startY = move.getStartY();
         boolean horizontal = move.isHorizontal();
+        
+        // Check that move connects to existing tiles
+        if (!connectsToTiles(move)) {
+            return new Object[] {0, move};
+        }
+        
         // Get full word, appending any characters on the ends due to placement
         String word = move.setWord(getFullWord(startX, startY, horizontal, 
                 move.getWord()));
@@ -52,6 +59,41 @@ public class Validator {
             return new Object[] {0, move};
 
         return new Object[] {valid, move};
+    }
+    
+    // Check if move connects to existing tiles
+    private boolean connectsToTiles(Move move) {
+        // Starts from center of board - valid
+        if (move.getStartX() == GameConstants.BOARD_WIDTH/2
+                && move.getStartY() == GameConstants.BOARD_WIDTH/2)
+            return true;
+        else {
+            int remaining = move.getWord().length();
+            boolean hor = move.isHorizontal();
+            Space boardLocal[][] = Session.getSession().getBoardAsSpaces();
+            int x = move.getStartX();
+            int y = move.getStartY();
+            while (remaining > 0) {
+                if (boardLocal[x][y].getTile() != null
+                        || (x > 0 && boardLocal[x-1][y].getTile() != null)
+                        || (x < GameConstants.BOARD_WIDTH-1 
+                        && boardLocal[x+1][y].getTile() != null)
+                        || (y > 0 && boardLocal[x][y-1].getTile() != null)
+                        || (y < GameConstants.BOARD_WIDTH-1 
+                        && boardLocal[x][y+1].getTile() != null))
+                    return true;
+                else if (hor && x < GameConstants.BOARD_WIDTH)
+                    x++;
+                else if (!hor && y < GameConstants.BOARD_WIDTH)
+                    y++;
+                // Move extends off board
+                else
+                    return false;
+                remaining--;
+            }
+            // Move does not connect
+            return false;
+        }
     }
 
     /// Check if word is a dictionary word
