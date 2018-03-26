@@ -13,11 +13,11 @@
 <!-- Join Form -->
 <div id="overlay">
     <div class="loginbox">
-        
+
         <img src="imgs/logo.png" class="logo">
         <p id="usernameLbl">Username</p>
         <input id="txtUserName" type="text" placeholder="Enter Username">
-        <div id="joinResult"> </div>
+        <div id="joinResult"></div>
         <button type="button" id="btnLogin" onclick="join()">Join</button>
         <p id="teamLbl">Team:</p>
         <input type="checkbox" class="toggle-switch" id="teamToggle"> <label for="teamToggle"></label>
@@ -47,58 +47,66 @@
         <br>
         <br>
 
-        <!-- Board Squares -->
         <div class="container">
 
-            <div class="drop" id="0,0" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="0,1" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="0,2" style="background-color:#2f563f" ondragover="allowDrop(event)"
+            <div class="drop" id="0,0" ondragover="allowDrop(event)"
                  ondrop="drop(event)">
 
             </div>
 
-            <div class="drop" id="0,3" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="0,4" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="0,5" style="background-color:#bf9c46" ondragover="allowDrop(event)"
+            <div class="drop" id="1,0" ondragover="allowDrop(event)"
                  ondrop="drop(event)">
 
             </div>
 
-            <div class="drop" id="0,6" ondragover="allowDrop(event)" ondrop="drop(event)">
-            </div>
-
-            <div class="drop" id="0,7" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="0,8" style="background-color:#2f563f" ondragover="allowDrop(event)"
+            <div class="drop" id="2,0" style="background-color:#2f563f" ondragover="allowDrop(event)"
                  ondrop="drop(event)">
 
             </div>
 
-            <div class="drop" id="0,9" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <div class="drop" id="3,0" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
 
             </div>
 
-            <div class="drop" id="0,10" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <div class="drop" id="4,0" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="5,0" style="background-color:#bf9c46" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="6,0" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+            </div>
+
+            <div class="drop" id="7,0" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="8,0" style="background-color:#2f563f" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="9,0" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="10,0" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
 
             </div>
         </div>
         <div class="container">
 
-            <div class="drop" id="1,0" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <div class="drop" id="0,1" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
 
             </div>
 
@@ -107,143 +115,13 @@
 
             </div>
 
-            <div class="drop" id="1,2" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="1,3" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="1,4" style="background-color:#35e228" ondragover="allowDrop(event)"
+            <div class="drop" id="2,1" ondragover="allowDrop(event)"
                  ondrop="drop(event)">
 
             </div>
 
-            <div class="drop" id="1,5" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="1,6" style="background-color:#35e228" ondragover="allowDrop(event)"
+            <div class="drop" id="3,1" ondragover="allowDrop(event)"
                  ondrop="drop(event)">
-            </div>
-
-            <div class="drop" id="1,7" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="1,8" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="1,9" style="background-color:#f4d46c" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="1,10" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-        </div>
-        <div class="container">
-
-            <div class="drop" id="2,0" style="background-color:#2f563f" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="2,1" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="2,2" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="2,3" style="background-color:#f4d46c" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="2,4" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="2,5" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="2,6" ondragover="allowDrop(event)" ondrop="drop(event)">
-            </div>
-
-            <div class="drop" id="2,7" style="background-color:#f4d46c" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="2,8" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="2,9" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="2,10" style="background-color:#2f563f" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-        </div>
-        <div class="container">
-
-            <div class="drop" id="3,0" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="3,1" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="3,2" style="background-color:#f4d46c" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="3,3" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="3,4" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="3,5" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="3,6" ondragover="allowDrop(event)" ondrop="drop(event)">
-            </div>
-
-            <div class="drop" id="3,7" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="3,8" style="background-color:#f4d46c" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="3,9" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="3,10" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-        </div>
-        <div class="container">
-
-            <div class="drop" id="4,0" ondragover="allowDrop(event)" ondrop="drop(event)">
 
             </div>
 
@@ -252,239 +130,22 @@
 
             </div>
 
-            <div class="drop" id="4,2" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="4,3" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="4,4" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="4,5" style="background-color:#2f563f" ondragover="allowDrop(event)"
+            <div class="drop" id="5,1" ondragover="allowDrop(event)"
                  ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="4,6" ondragover="allowDrop(event)" ondrop="drop(event)">
-            </div>
-
-            <div class="drop" id="4,7" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="4,8" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="4,9" style="background-color:#35e228" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="4,10" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-        </div>
-        <div class="container">
-
-            <div class="drop" id="5,0" style="background-color:#bf9c46" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="5,1" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="5,2" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="5,3" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="5,4" style="background-color:#2f563f" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="5,5" style="background-color:red" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="5,6" style="background-color:#2f563f" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-            </div>
-
-            <div class="drop" id="5,7" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="5,8" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="5,9" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="5,10" style="background-color:#bf9c46" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-        </div>
-        <div class="container">
-
-            <div class="drop" id="6,0" ondragover="allowDrop(event)" ondrop="drop(event)">
 
             </div>
 
             <div class="drop" id="6,1" style="background-color:#35e228" ondragover="allowDrop(event)"
                  ondrop="drop(event)">
-
             </div>
 
-            <div class="drop" id="6,2" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="6,3" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="6,4" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="6,5" style="background-color:#2f563f" ondragover="allowDrop(event)"
+            <div class="drop" id="7,1" ondragover="allowDrop(event)"
                  ondrop="drop(event)">
 
             </div>
 
-            <div class="drop" id="6,6" ondragover="allowDrop(event)" ondrop="drop(event)">
-            </div>
-
-            <div class="drop" id="6,7" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="6,8" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="6,9" style="background-color:#35e228" ondragover="allowDrop(event)"
+            <div class="drop" id="8,1" ondragover="allowDrop(event)"
                  ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="6,10" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-        </div>
-        <div class="container">
-
-            <div class="drop" id="7,0" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="7,1" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="7,2" style="background-color:#f4d46c" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="7,3" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="7,4" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="7,5" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="7,6" ondragover="allowDrop(event)" ondrop="drop(event)">
-            </div>
-
-            <div class="drop" id="7,7" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="7,8" style="background-color:#f4d46c" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="7,9" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="7,10" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-        </div>
-        <div class="container">
-
-            <div class="drop" id="8,0" style="background-color:#2f563f" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="8,1" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="8,2" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="8,3" style="background-color:#f4d46c" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="8,4" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="8,5" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="8,6" ondragover="allowDrop(event)" ondrop="drop(event)">
-            </div>
-
-            <div class="drop" id="8,7" style="background-color:#f4d46c" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="8,8" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="8,9" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="8,10" style="background-color:#2f563f" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">
-
-            </div>
-        </div>
-        <div class="container">
-
-            <div class="drop" id="9,0" ondragover="allowDrop(event)" ondrop="drop(event)">
 
             </div>
 
@@ -493,11 +154,166 @@
 
             </div>
 
-            <div class="drop" id="9,2" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <div class="drop" id="10,1" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="drop" id="0,2" style="background-color:#2f563f" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
 
             </div>
 
-            <div class="drop" id="9,3" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <div class="drop" id="1,2" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="2,2" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="3,2" style="background-color:#f4d46c" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="4,2" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="5,2" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="6,2" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+            </div>
+
+            <div class="drop" id="7,2" style="background-color:#f4d46c" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="8,2" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="9,2" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="10,2" style="background-color:#2f563f" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="drop" id="0,3" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="1,3" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="2,3" style="background-color:#f4d46c" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="3,3" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="4,3" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="5,3" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="6,3" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+            </div>
+
+            <div class="drop" id="7,3" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="8,3" style="background-color:#f4d46c" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="9,3" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="10,3" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="drop" id="0,4" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="1,4" style="background-color:#35e228" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="2,4" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="3,4" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="4,4" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="5,4" style="background-color:#2f563f" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="6,4" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+            </div>
+
+            <div class="drop" id="7,4" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="8,4" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
 
             </div>
 
@@ -506,19 +322,278 @@
 
             </div>
 
-            <div class="drop" id="9,5" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <div class="drop" id="10,4" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="drop" id="0,5" style="background-color:#bf9c46" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="1,5" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="2,5" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="3,5" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="4,5" style="background-color:#2f563f" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="5,5" style="background-color:red" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="6,5" style="background-color:#2f563f" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+            </div>
+
+            <div class="drop" id="7,5" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="8,5" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="9,5" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="10,5" style="background-color:#bf9c46" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="drop" id="0,6" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="1,6" style="background-color:#35e228" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="2,6" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="3,6" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="4,6" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="5,6" style="background-color:#2f563f" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="6,6" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+            </div>
+
+            <div class="drop" id="7,6" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="8,6" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
 
             </div>
 
             <div class="drop" id="9,6" style="background-color:#35e228" ondragover="allowDrop(event)"
                  ondrop="drop(event)">
-            </div>
-
-            <div class="drop" id="9,7" ondragover="allowDrop(event)" ondrop="drop(event)">
 
             </div>
 
-            <div class="drop" id="9,8" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <div class="drop" id="10,6" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="drop" id="0,7" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="1,7" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="2,7" style="background-color:#f4d46c" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="3,7" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="4,7" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="5,7" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="6,7" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+            </div>
+
+            <div class="drop" id="7,7" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="8,7" style="background-color:#f4d46c" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="9,7" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="10,7" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="drop" id="0,8" style="background-color:#2f563f" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="1,8" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="2,8" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="3,8" style="background-color:#f4d46c" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="4,8" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="5,8" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="6,8" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+            </div>
+
+            <div class="drop" id="7,8" style="background-color:#f4d46c" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="8,8" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="9,8" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="10,8" style="background-color:#2f563f" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="drop" id="0,9" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="1,9" style="background-color:#f4d46c" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="2,9" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="3,9" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="4,9" style="background-color:#35e228" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="5,9" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="6,9" style="background-color:#35e228" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+            </div>
+
+            <div class="drop" id="7,9" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="8,9" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
 
             </div>
 
@@ -527,107 +602,113 @@
 
             </div>
 
-            <div class="drop" id="9,10" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <div class="drop" id="10,9" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
 
             </div>
         </div>
         <div class="container">
 
-            <div class="drop" id="10,0" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="10,1" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="10,2" style="background-color:#2f563f" ondragover="allowDrop(event)"
+            <div class="drop" id="0,10" ondragover="allowDrop(event)"
                  ondrop="drop(event)">
 
             </div>
 
-            <div class="drop" id="10,3" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="10,4" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="10,5" style="background-color:#bf9c46" ondragover="allowDrop(event)"
+            <div class="drop" id="1,10" ondragover="allowDrop(event)"
                  ondrop="drop(event)">
 
             </div>
 
-            <div class="drop" id="10,6" ondragover="allowDrop(event)" ondrop="drop(event)">
-            </div>
-
-            <div class="drop" id="10,7" ondragover="allowDrop(event)" ondrop="drop(event)">
-
-            </div>
-
-            <div class="drop" id="10,8" style="background-color:#2f563f" ondragover="allowDrop(event)"
+            <div class="drop" id="2,10" style="background-color:#2f563f" ondragover="allowDrop(event)"
                  ondrop="drop(event)">
 
             </div>
 
-            <div class="drop" id="10,9" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <div class="drop" id="3,10" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
 
             </div>
 
-            <div class="drop" id="10,10" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <div class="drop" id="4,10" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="5,10" style="background-color:#bf9c46" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="6,10" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+            </div>
+
+            <div class="drop" id="7,10" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="8,10" style="background-color:#2f563f" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="9,10" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
+
+            </div>
+
+            <div class="drop" id="10,10" ondragover="allowDrop(event)"
+                 ondrop="drop(event)">
 
             </div>
         </div>
         <div class="container">
 
-
-            <!-- Hand -->
             <div class="drag" id="div0">
-
-                <img src="https://images-na.ssl-images-amazon.com/images/I/31jp01jMOCL.jpg" class="M" id="img0"
-                     height="55px" width="100%" ondragstart="dragStart(event)">
+                <!-- 		<img src="letter_A.png" id="img0" height="55px" width="100%"> -->
+                <img id="img0" src="imgs/B.png" height="55px" width="100%">
 
             </div>
 
             <div class="drag" id="div1">
+                <!-- 				<img src="letter_B.png" id="img1" height="55px" width="100%"> -->
 
-                <img src="https://i.ebayimg.com/images/g/TvAAAOSwx2dYCWqu/s-l300.jpg" class="S" id="img1" height="55px"
-                     width="100%" ondragstart="dragStart(event)">
+                <img id="img1" src="imgs/A.png" height="55px" width="100%">
 
             </div>
 
             <div class="drag" id="div2">
 
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUn1LQ0hp-dBI64rqfcRoel1upofgM-4Y9j5wyP6xXAQnAdfM-"
-                     class="C" id="img2" height="55px" width="100%" ondragstart="dragStart(event)">
+                <!-- 			<img src="letter_C.png" id="img2" height="55px" width="100%"> -->
+                <img id="img2" src="imgs/S.png" height="55px" width="100%">
 
             </div>
             <div class="drag" id="div3">
 
-                <img src="https://i.ebayimg.com/images/g/goAAAOSwn7JYCWat/s-l300.jpg" class="G" id="img3" height="55px"
-                     width="100%" ondragstart="dragStart(event)">
+                <!-- 			<img src="letter_D.png" id="img3" height="55px" width="100%"> -->
+                <img id="img3" src="imgs/O.png" height="55px" width="100%">
 
             </div>
 
             <div class="drag" id="div4">
+                <!-- 				<img src="letter_E.png" id="img4" height="55px" width="100%"> -->
 
-                <img src="https://i.ebayimg.com/images/g/PaEAAOSwUEVYCWSg/s-l300.jpg" class="C" id="img4" height="55px"
-                     width="100%" ondragstart="dragStart(event)">
+                <img id="img4" src="imgs/R.png" height="55px" width="100%">
 
             </div>
 
 
             <div class="drag" id="div5">
+                <!-- 				<img src="letter_F.png" id="img5" height="55px" width="100%"> -->
+                <img id="img5" src="imgs/T.png" height="55px" width="100%">
 
-                <img src="https://images-na.ssl-images-amazon.com/images/I/21Lzb-Jdw5L.jpg" class="O" id="img5"
-                     height="55px" width="100%" ondragstart="dragStart(event)">
             </div>
 
             <div class="drag" id="div6">
+                <!-- 				<img src="letter_G.png" id="img6" height="55px" width="100%"> -->
 
-                <img src="https://images-na.ssl-images-amazon.com/images/I/419EGYAtbmL._SY355_.jpg" class="B" id="img6"
-                     height="55px" width="100%" ondragstart="dragStart(event)">
+                <img id="img6" src="imgs/E.png" height="55px" width="100%">
 
             </div>
         </div>
@@ -636,19 +717,19 @@
     <div class='container'>
         <br>
         <br>
+        <button id="recall" onClick="recall()"><img src="imgs/recall.svg" alt="recall button" height="55px"
+                                                    width="100%"></button>
         <button id="exchange" onClick="exchange()"><img src="imgs/exchange.svg" alt="exchange button" height="55px"
                                                         width="100%"></button>
         <button id="shuffle" onClick="shuffle()"><img src="imgs/shuffle.svg" alt="shuffle button" height="55px"
                                                       width="100%"></button>
-        <button id="recall" onClick="recall()"><img src="imgs/recall.svg" alt="recall button" height="55px"
-                                                    width="100%">
-        </button>
         <button id="confirmed" onClick="confirmed()"><img src="imgs/confirm.svg" alt="confirm button" height="55px"
                                                           width="100%"></button>
 
     </div>
 
 </div>
+
 
 <!-- Moved javascript to separate file -->
 <script src="scripts/main.js" async></script>
