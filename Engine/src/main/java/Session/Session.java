@@ -93,7 +93,7 @@ public class Session {
         String[] userInfo = dbQueries.findUser(macAddress);
 
         if (userInfo != null) {
-            newPlayer = new Player(userInfo[0], macAddress, userInfo[1]);
+            newPlayer = new Player(userInfo[0], macAddress, userInfo[1], this);
 
         }
 
@@ -109,7 +109,7 @@ public class Session {
                 return "The username chosen is already in use.";
             }
 
-            newPlayer = new Player(username, macAddress, team);
+            newPlayer = new Player(username, macAddress, team, this);
         }
 
         //check if any users are not initialized yet
@@ -225,5 +225,9 @@ public class Session {
         Gson gson = new Gson();
         String result = gson.toJson(board);
         return result;
+    }
+
+    public int calculateMovePoints(Move move) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

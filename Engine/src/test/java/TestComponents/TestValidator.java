@@ -31,7 +31,7 @@ public class TestValidator {
     
     @BeforeClass
     public static void setUpClass() {
-        p = new Player("jim","fakeMac", "test");
+        p = new Player("jim","fakeMac", "test", Session.getSession());
         Session.getSession().playWord(BOARD_WIDTH/2, BOARD_WIDTH/2, 
                 true, "wine", p);
     }
@@ -43,7 +43,7 @@ public class TestValidator {
     @Before
     public void setUp() {
         val = new Validator();
-        p = new Player("jim", "fakeMac", "test");
+        p = new Player("jim", "fakeMac", "test", Session.getSession());
     }
     
     @After
