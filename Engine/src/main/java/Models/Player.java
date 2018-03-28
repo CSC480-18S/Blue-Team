@@ -11,8 +11,9 @@ public class Player extends User {
     private String team;
 
 
-    public Player(String username, String macAddress, String team){
-        super(username);
+    public Player(String username, String macAddress, String team, 
+            Session session){
+        super(username, session);
         this.macAddress = macAddress;
         this.team = team;
     }
