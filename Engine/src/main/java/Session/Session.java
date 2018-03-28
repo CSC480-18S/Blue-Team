@@ -112,7 +112,7 @@ public class Session {
         String[] userInfo = dbQueries.findUser(macAddress);
 
         if (userInfo != null) {
-            newPlayer = new Player(userInfo[0], macAddress, userInfo[1], this);
+            newPlayer = new Player(userInfo[0], macAddress, userInfo[1]);
 
         }
 
@@ -128,7 +128,7 @@ public class Session {
                 return "The username chosen is already in use.";
             }
 
-            newPlayer = new Player(username, macAddress, team, this);
+            newPlayer = new Player(username, macAddress, team);
         }
 
         //check if any users are not initialized yet
