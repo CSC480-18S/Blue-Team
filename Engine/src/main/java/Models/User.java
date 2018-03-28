@@ -5,6 +5,7 @@
  */
 package Models;
 
+import Session.Session;
 import java.util.Random;
 
 /**
@@ -17,26 +18,35 @@ public abstract class User {
     
     private Tile[] hand;
     private final int maxTilesInHand = 7;
-    private int score;
+    protected int score;
     private String username;
+    protected final Session thisSession;
 
-    public User(String username)
+    public User(String username, Session session)
     {
+        thisSession = session;
         score = 0;
         hand = new Tile[maxTilesInHand];
         this.username = username;
         draw();
     }
 
-    /* This method takes in a word as a string as well as the start and end coordinate.
-    The method then calls the board’s updateBoard method.
-    The method then returns the move’s score.
+    /* 
+       Update's the user's score for the move successfully played
+       @return the value of the play
      */
-    abstract int playWord(String word, int startX, int startY,
-            int endX, int endY, Board board);
+    public int updateScore(Move move) {
+        // Calculate Score
+        int points = thisSession.calculateMovePoints(move);
+        score += points;
+        
+        // Update score via SQL?
+        
+        return score;
+    }
 
     /* Return the User's type. */
-    abstract  String getType();
+    abstract String getType();
     
 
     /* Check the hand size and add tiles when necessary. */
