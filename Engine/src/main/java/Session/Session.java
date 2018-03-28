@@ -211,4 +211,8 @@ public class Session {
         String result = gson.toJson(board);
         return result;
     }
+
+    public int calculateMovePoints(Move move) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
