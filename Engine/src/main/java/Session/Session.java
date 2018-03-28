@@ -36,13 +36,18 @@ public class Session {
     }
 
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
-        if (playedMoves.isEmpty() 
+        if (playedMoves.isEmpty()
                 && startY != GameConstants.BOARD_WIDTH / 2
                 && startX != GameConstants.BOARD_WIDTH / 2) {
             return "Please start in the center of the board.";
         }
 
-        Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, word, user));
+        Tile[] wordTiles = new Tile[word.length()];
+        for (int i = 0; i < word.length(); i++)
+            wordTiles[i] = TileGenerator.getTile(word.charAt(i));
+            
+        
+        Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, wordTiles, user));
 
         if ((int) result[0] == 1) {
             board.placeWord(startX, startY, horizontal, word);
@@ -92,8 +97,9 @@ public class Session {
 
         //validating the team name
         if (team.toUpperCase().compareTo("GREEN") != 0 && team.toUpperCase().compareTo("GOLD") != 0
-                && team != "" && team != null)
+                && team != "" && team != null) {
             return "Invalid team name.";
+        }
 
         //check if username already exists in game first
         for (int i = 0; i < users.length; i++) {
@@ -114,16 +120,15 @@ public class Session {
         if (userInfo != null) {
             newPlayer = new Player(userInfo[0], macAddress, userInfo[1]);
 
-        }
-
-        //creating a new user profile in the database if the mac address is not already registered
+        } //creating a new user profile in the database if the mac address is not already registered
         else {
 
             if (!dbQueries.userAlreadyExists(username)) {
-                if(username.compareTo("") != 0)
+                if (username.compareTo("") != 0) {
                     dbQueries.addNewUser(username, macAddress, team);
-                else
+                } else {
                     return "empty user name";
+                }
             } else {
                 return "The username chosen is already in use.";
             }
@@ -206,13 +211,38 @@ public class Session {
         return "Username not found";
     }
 
-    public String getBoardJSON(){
+    public String getBoardJSON() {
         Gson gson = new Gson();
         String result = gson.toJson(board);
         return result;
     }
 
     public int calculateMovePoints(Move move) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Space[][] boardLocal = board.getBoard();
+        boolean horizontal = move.isHorizontal();
+        int points = 0;
+        int wordMult = 1;
+        int letterMult = 1;
+        Multiplier mult = Multiplier.NONE;
+        for (int i = 0; i < move.getWordString().length(); i++) {
+            if (horizontal) {
+                mult = boardLocal[move.getStartX() + i][move.getStartY()].
+                        getMultiplier();
+            } else {
+                mult = boardLocal[move.getStartX()][move.getStartY() + 1].
+                        getMultiplier();
+            }
+                switch (mult) {
+                    case NONE : letterMult = 1; break;
+                    case DOUBLE_LETTER : letterMult = 2; break;
+                    case DOUBLE_WORD : wordMult *= 2; break;
+                    case TRIPLE_LETTER : letterMult = 3; break;
+                    case TRIPLE_WORD : wordMult *=3; break;
+                }
+            
+            points += letterMult * move.getWord()[i].getValue();
+        }
+        points *= wordMult;
+        return points;
     }
 }

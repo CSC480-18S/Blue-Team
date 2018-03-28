@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class TileGenerator {
     private static TileGenerator generator;
     private int totalPoints;
-    ArrayList<Entry> entries;
+    private static ArrayList<Entry> entries;
 
     private TileGenerator(){
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -75,6 +75,15 @@ public class TileGenerator {
             }
         }
         return generator;
+    }
+    
+    public static Tile getTile(char letter) {
+        for (Entry e : entries) {
+            if (e.letter == letter) {
+                return new Tile(letter, e.points);
+            }
+        }
+        return null;
     }
 
     private class Entry{
