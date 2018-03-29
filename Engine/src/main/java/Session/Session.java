@@ -34,38 +34,6 @@ public class Session {
         playedMoves = new ArrayList();
         dbQueries = new QueryClass();
     }
-
-    public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
-        if (playedMoves.isEmpty()
-                && startY != GameConstants.BOARD_WIDTH / 2
-                && startX != GameConstants.BOARD_WIDTH / 2) {
-            return "Please start in the center of the board.";
-        }
-
-        Tile[] wordTiles = new Tile[word.length()];
-        for (int i = 0; i < word.length(); i++)
-            wordTiles[i] = TileGenerator.getTile(word.charAt(i));
-            
-        
-        Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, wordTiles, user));
-
-        if ((int) result[0] == 1) {
-            board.placeWord(startX, startY, horizontal, word);
-            gui.updateBoard(board.getBoard());
-            playedMoves.add((Move) result[1]);
-            return "success";
-        } else if ((int) result[0] == 2) {
-            board.placeWord(startX, startY, horizontal, word);
-            gui.updateBoard(board.getBoard());
-            playedMoves.add((Move) result[1]);
-            return "success, bonus";
-        } else if ((int) result[0] == -1) {
-            return "profane word";
-        }
-        return "invalid";
-
-    }
-
     public static Session getSession() {
         if (session == null) {
             session = new Session();
@@ -92,6 +60,8 @@ public class Session {
         return session.log;
     }
 
+
+    /// Setup Player object and join the game
     public String addPlayer(String username, String macAddress, String team) {
         Player newPlayer = null;
 
@@ -112,6 +82,11 @@ public class Session {
                 }
             }
         }
+
+        // If user hasn't joined yet make sure they have entered a username
+        // This prevents the user from auto joining at page load
+        if (username == "")
+            return "";
 
         /*checking for mac address in the user database to see if user already has a user profile. If a profile exists then userInfo will have the
         username stored in index 0 and team stored in index 1*/
@@ -146,6 +121,46 @@ public class Session {
         }
 
         return "Could not join game.";
+    }
+
+    // Check if first move
+    public boolean firstMove()
+    {
+      return playedMoves.isEmpty();
+    }
+  
+    // Validate word and place on board
+    public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
+        // If first move check
+        if (firstMove())
+        {
+            int boardCenter = GameConstants.BOARD_WIDTH/2;
+            if ((horizontal ? startX : startY) > boardCenter
+                    || ((horizontal ? startX : startY) + word.length() - 1) < boardCenter
+                    || (horizontal ? startY : startX) != boardCenter)
+            {
+                return "Please start in the center of the board.";
+            }
+
+        }
+
+        Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, word, user));
+
+        if ((int) result[0] == 1) {
+            board.placeWord(startX, startY, horizontal, word);
+            gui.updateBoard(board.getBoard());
+            playedMoves.add((Move) result[1]);
+            return "success";
+        } else if ((int) result[0] == 2) {
+            board.placeWord(startX, startY, horizontal, word);
+            gui.updateBoard(board.getBoard());
+            playedMoves.add((Move) result[1]);
+            return "success, bonus";
+        } else if ((int) result[0] == -1) {
+            return "profane word";
+        }
+        return "invalid";
+
     }
 
     public Space[][] getBoardAsSpaces() {
