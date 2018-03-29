@@ -3,6 +3,8 @@ package Components;
 import Models.GameConstants;
 import Models.Move;
 import Models.Space;
+import Models.Tile;
+import Models.TileGenerator;
 import Session.Session;
 
 import static Session.Session.LogWarning;
@@ -38,8 +40,9 @@ public class Validator {
         }
         
         // Get full word, appending any characters on the ends due to placement
-        String word = move.setWord(getFullWord(startX, startY, horizontal, 
-                move.getWord()));
+        move.setWord(getFullWord(startX, startY, horizontal, 
+                move.getWordString()));
+        String word = move.getWordString();
 
         // Check if the user has entered a bad word
         int valid = isProfane(word);
@@ -67,7 +70,7 @@ public class Validator {
         if (Session.getSession().firstMove())
             return true;
         else {
-            int remaining = move.getWord().length();
+            int remaining = move.getWordString().length();
             boolean hor = move.isHorizontal();
             Space boardLocal[][] = Session.getSession().getBoardAsSpaces();
             int x = move.getStartX();
@@ -140,7 +143,7 @@ public class Validator {
         been overlooked when submitting a word for validation
         -Bill Cook
      */
-    private String getFullWord(int startX, int startY, boolean horizontal,
+    private Tile[] getFullWord(int startX, int startY, boolean horizontal,
             String word) {
         String leftChars = "";
         String rightChars = "";
@@ -177,8 +180,11 @@ public class Validator {
             finished = true;
         }
         word = leftChars + word + rightChars;
-
-        return word;
+        Tile[] wordTiles = new Tile[word.length()];
+        for (int i = 0; i < word.length(); i++)
+            wordTiles[i] = TileGenerator.getTile(word.charAt(i));
+        
+        return wordTiles;
     }
 
     /*
