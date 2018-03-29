@@ -9,6 +9,8 @@ import Components.Validator;
 import static Models.GameConstants.BOARD_WIDTH;
 import Models.Move;
 import Models.Player;
+import Models.Tile;
+import Models.TileGenerator;
 import Session.Session;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -53,14 +55,18 @@ public class TestValidator {
     // Test a valid multi-word play
     @Test
     public void testIsValidPlay1() {
-        int result = (int) val.isValidPlay(new Move(BOARD_WIDTH/2+1, BOARD_WIDTH/2+1, true, "no", p))[0];
+        int result = (int) val.isValidPlay(new Move(BOARD_WIDTH/2+1, 
+                BOARD_WIDTH/2+1, true, new Tile[] {TileGenerator.getTile('n'), 
+                    TileGenerator.getTile('o')}, p))[0];
         assertEquals(1, result);
     }
     
     // Test an invalid multi-word play
     @Test
     public void testIsValidPlay2() {
-        int result = (int) val.isValidPlay(new Move(BOARD_WIDTH/2+1, BOARD_WIDTH/2+1, true, "on", p))[0];
+        int result = (int) val.isValidPlay(new Move(BOARD_WIDTH/2+1, 
+                BOARD_WIDTH/2+1, true, new Tile[] {TileGenerator.getTile('o'), 
+                    TileGenerator.getTile('n')}, p))[0];
         assertEquals(0, result);
     }
 }
