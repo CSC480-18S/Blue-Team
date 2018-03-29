@@ -130,18 +130,18 @@ var imgArray = new Array();
 
 //method to shuffle array
 function shuffleMe(array) {
-    let counter = array.length;
+    var counter = array.length;
 
     // While there are elements in the array
     while (counter > 0) {
         // Pick a random index
-        let index = Math.floor(Math.random() * counter);
+        var index = Math.floor(Math.random() * counter);
 
         // Decrease counter by 1
         counter--;
 
         // And swap the last element with it
-        let temp = array[counter];
+        var temp = array[counter];
         array[counter] = array[index];
         array[index] = temp;
     }
@@ -489,14 +489,14 @@ $(function confirmed() {
         var firstCoord = xyCoord[0];
         var secondCoord = xyCoord[1]
 
-        var xy1 = firstCoord.split(",");
+        var xy1 = firstCoord.split("_");
         //alert(xy1);
         var x1 = xy1[0];
         //alert(x1);
         var y1 = xy1[1];
 //		    alert(y1);
 
-        var xy2 = secondCoord.split(",");
+        var xy2 = secondCoord.split("_");
         // alert(xy2);
         var x2 = xy2[0];
         // alert(x2);
@@ -728,7 +728,7 @@ $(function confirmed() {
         $.post("Servlet", { //needs variables for word, coordinates and direction (h or v)
             request: "play",
             word: wordString,
-            coords: firstCoord + "," + secondCoord,
+            coords: xy1[0] + "," + xy1[1],
             direction: orientationWord
         }, function (responsetext) {
             alert(responsetext); // response text.
