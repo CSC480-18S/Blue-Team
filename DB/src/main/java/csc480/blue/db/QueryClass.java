@@ -167,58 +167,191 @@ public class QueryClass {
         }
     }
 
-    /**
-     * Add a new game table to the database
-     * @param game_id The game id
-     * @param gold_team_score final Gold team score as an integer
-     * @param green_team_score  final Greem team score as an integer
-     */
-    public void addNewToGameTable(int game_id, int gold_team_score, int green_team_score){
+   /**
+         * Add a new game table to the database
+         * @param game_id The game id
+         * @param gold_team_score final Gold team score as an integer
+         * @param green_team_score  final Greem team score as an integer
+         * @return true = operation successful ; false = operation failed because of game_id already exists;
+         * @throws RuntimeException if database error
+         */
+        public Boolean addNewToGameTable(int game_id, int gold_team_score, int green_team_score){
 
-        try{
-            Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
-            String sqlQuery = "INSERT INTO game_table VALUES (?,?,?);";
-            PreparedStatement ps = connection.prepareStatement(sqlQuery);
+            try{
+                Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
+                if(!this.gameIDAlreadyExists(game_id)){ //if game_id doesnt exist
+                    String sqlQuery = "INSERT INTO game_table VALUES (?,?,?);";
+                    PreparedStatement ps = connection.prepareStatement(sqlQuery);
 
-            ps.setInt(1,game_id);
-            ps.setInt(2,gold_team_score);
-            ps.setInt(3,green_team_score);
-            ps.executeUpdate();
-            ps.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+                    ps.setInt(1, game_id);
+                    ps.setInt(2, gold_team_score);
+                    ps.setInt(3, green_team_score);
+                    ps.executeUpdate();
+                    ps.close();
+                    return true;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
+            return false;
         }
-    }
 
-    /**
-     * Add a new valid word to the database
-     * @param word_id word id as an integer
-     * @param word the word itself as a String
-     * @param value how much point the word worth in the game, as an integer
-     * @param length length of the word, as an integer
-     * @param is_extension whether the word has been used as an extension, as a boolean
-     * @param bonuses_used how many times the word has been used as a bonus word, as an integer
-     */
-    public void addNewToValidWordTable(int word_id, String word, int value, int length, boolean is_extension, int bonuses_used){
+        /**
+         * Check if a game_id already exist in the game_table
+         * @param game_id The game id
+         * @return Boolean true if username taken, false if not, null if error
+         */
+        public Boolean gameIDAlreadyExists(int game_id){
+            String query = "SELECT game_id FROM game_table WHERE game_id=?";
 
-        try{
-            Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
-            String sqlQuery = "INSERT INTO valid_word_table VALUES (?,?,?,?,?,?);";
-            PreparedStatement ps = connection.prepareStatement(sqlQuery);
-
-            ps.setInt(1,word_id);
-            ps.setString(2,word);
-            ps.setInt(3,value);
-            ps.setInt(4,length);
-            ps.setBoolean(5,is_extension);
-            ps.setInt(6,bonuses_used);
-            ps.executeUpdate();
-            ps.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+                PreparedStatement preparedStmt = con.prepareStatement(query);
+                preparedStmt.setInt(1, game_id);
+                ResultSet rs = preparedStmt.executeQuery();
+                if(rs.next()){
+                    return true;
+                }
+                return false;
+            } catch (SQLException se) {
+                se.printStackTrace();
+                return null;
+            }
         }
-    }
-    
+
+
+
+        /**
+         * Check if a word already exist in the valid_word_table
+         * @param word The word
+         * @return Boolean true if word already exist, false if not, null if error
+         */
+        public Boolean wordAlreadyExistsInValidWordTable(String word){
+            String query = "SELECT word FROM valid_word_table WHERE word=?";
+            try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+                PreparedStatement preparedStmt = con.prepareStatement(query);
+                preparedStmt.setString(1, word);
+                ResultSet rs = preparedStmt.executeQuery();
+                if(rs.next()){
+                    return true;
+                }
+                return false;
+            } catch (SQLException se) {
+                se.printStackTrace();
+                return null;
+            }
+        }
+        /**
+         * Check if a word_id already exist in the valid_word_table
+         * @param word_id The game id
+         * @return Boolean true if word_id taken, false if not, null if error
+         */
+        public Boolean wordIDAlreadyExistsInValidWordTable(int word_id){
+            String query = "SELECT word_id FROM valid_word_table WHERE word_id=?";
+
+            try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+                PreparedStatement preparedStmt = con.prepareStatement(query);
+                preparedStmt.setInt(1, word_id);
+                ResultSet rs = preparedStmt.executeQuery();
+                if(rs.next()){
+                    return true;
+                }
+                return false;
+            } catch (SQLException se) {
+                se.printStackTrace();
+                return null;
+            }
+        }
+        /**
+         * Add a new valid word to the database
+         * @param word_id word id as an integer
+         * @param word the word itself as a String
+         * @param value how much point the word worth in the game, as an integer
+         * @param length length of the word, as an integer
+         * @param is_extension whether the word has been used as an extension, as a boolean
+         * @param bonuses_used how many times the word has been used as a bonus word, as an integer
+         * @return Boolean indicates whether operation is successful. true if successful, false if word and/or word_id already exist, null if database error occur
+         */
+        public Boolean addNewToValidWordTable(int word_id, String word, int value, int length, boolean is_extension, int bonuses_used){
+
+            try{
+                Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
+                if( this.wordIDAlreadyExistsInValidWordTable(word_id) || this.wordAlreadyExistsInValidWordTable(word)) {
+                    return false;
+                }else{
+                    String sqlQuery = "INSERT INTO valid_word_table VALUES (?,?,?,?,?,?);";
+                    PreparedStatement ps = connection.prepareStatement(sqlQuery);
+
+                    ps.setInt(1, word_id);
+                    ps.setString(2, word);
+                    ps.setInt(3, value);
+                    ps.setInt(4, length);
+                    ps.setBoolean(5, is_extension);
+                    ps.setInt(6, bonuses_used);
+                    ps.executeUpdate();
+                    ps.close();
+                    return true;
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        /**
+         * updating bonuses_used for a word in the valid_word_table
+         * @param updateWord  the word that needs an update on its bonuses_used value
+         * @param newValue the new value needs to be updated
+         * @return true if operation is successful, false if word doesn't exist; null if database error
+         */
+        public Boolean updateValidWordBonusesUsed(String updateWord, int newValue){
+            try{
+                Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
+                if(!wordAlreadyExistsInValidWordTable(updateWord)){
+                    return false;
+                }else{
+                    String sqlQuery = "UPDATE valid_word_table SET bonuses_used = ? WHERE word = ?;";
+                    PreparedStatement ps = connection.prepareStatement(sqlQuery);
+                    ps.setInt(1,newValue);
+                    ps.setString(2,updateWord);
+                    ps.executeUpdate();
+                    ps.close();
+                    return true;
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        /**
+         *  updating whether a valid word is used as an extension
+         * @param updateWord the word that needs an update on its is_extension value
+         * @param newValue the new boolean that gets updated to the database
+         * @return true if successful; false if word doesn't exist in the valid_word_table; null if database error
+         */
+        public Boolean updateValidWordIsExtension(String updateWord, boolean newValue){
+            try{
+                Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
+                if(!wordAlreadyExistsInValidWordTable(updateWord)){
+                    return false;
+                }else{
+                    String sqlQuery = "UPDATE valid_word_table SET is_extension = ? WHERE word = ?;";
+                    PreparedStatement ps = connection.prepareStatement(sqlQuery);
+                    ps.setBoolean(1,newValue);
+                    ps.setString(2,updateWord);
+                    ps.executeUpdate();
+                    ps.close();
+                    return true;
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
     /**
      * get cumulative game score of a team
      * @return an integer indicating the cumulative score of specified team
