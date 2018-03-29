@@ -124,10 +124,16 @@ public class Session {
         return "Could not join game.";
     }
 
+    // Check if this is the first move
+    public boolean firstMove()
+    {
+        return playedMoves.isEmpty();
+    }
+
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
         // If first move check
-        if (playedMoves.isEmpty())
+        if (firstMove())
         {
             int boardCenter = GameConstants.BOARD_WIDTH/2;
             if ((horizontal ? startX : startY) > boardCenter

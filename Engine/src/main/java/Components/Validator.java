@@ -64,8 +64,7 @@ public class Validator {
     // Check if move connects to existing tiles
     private boolean connectsToTiles(Move move) {
         // Starts from center of board - valid
-        if (move.getStartX() == GameConstants.BOARD_WIDTH/2
-                && move.getStartY() == GameConstants.BOARD_WIDTH/2)
+        if (Session.getSession().firstMove())
             return true;
         else {
             int remaining = move.getWord().length();
