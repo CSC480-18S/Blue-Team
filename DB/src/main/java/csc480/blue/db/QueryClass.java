@@ -697,4 +697,199 @@ public class QueryClass {
             return 0;
         }
 	}
+	
+	/*
+	 * Updates cumulative_game_score for TEAM_TABLE
+	*/
+	public void updateTeamCumulative(String tname, int points){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
+		
+		try(Connection con = Driver.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.preparedStatement(query, ResultSet.TYPE_SCROLL_INSENTIVE, ResultSet.CONCUR_UPDATABLE);
+			preparedStmt.setString(1, tname);
+			ResultSet rs = preparedStmt.executeQuery();
+			if(rs.next()){
+				rs.updateInt("cumulative_game_score", (rs.getInt("cumulative_game_score")+points));
+				rs.updateRow();
+			}
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Checks if new score is better than old score
+	 * Updates as required
+	*/
+	public void updateHighestWordScore(String tname, int points){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
+		
+		try(Connection con = Driver.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.preparedStatement(query, ResultSet.TYPE_SCROLL_INSENTIVE, ResultSet.CONCUR_UPDATABLE);
+			preparedStmt.setString(1, tname);
+			ResultSet rs = preparedStmt.executeQuery();
+			if(rs.next()){
+				if (rs.getInt("highest_word_score") < points){
+					rs.updateInt("highest_word_score", points);
+					rs.updateRow();
+				} else {
+					break;
+				}
+			}
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Checks if new score is better than old score
+	 * Updates as required
+	*/
+	public void updateHighestGameSessionScore(String tname, int points){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
+		
+		try(Connection con = Driver.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.preparedStatement(query, ResultSet.TYPE_SCROLL_INSENTIVE, ResultSet.CONCUR_UPDATABLE);
+			preparedStmt.setString(1, tname);
+			ResultSet rs = preparedStmt.executeQuery();
+			if(rs.next()){
+				if (rs.getInt("highest_game_session_score") < points){
+					rs.updateInt("highest_game_session_score", points);
+					rs.updateRow();
+				} else {
+					break;
+				}
+			}
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Winning team itterate win count
+	 * tname = winning team
+	*/
+	public void updateWin(String tname){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
+		
+		try(Connection con = Driver.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.preparedStatement(query, ResultSet.TYPE_SCROLL_INSENTIVE, ResultSet.CONCUR_UPDATABLE);
+			preparedStmt.setString(1, tname);
+			ResultSet rs = preparedStmt.executeQuery();
+			if(rs.next()){
+				rs.updateInt("win_count", (rs.getInt("win_count")+1));
+				rs.updateRow();
+			}
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+	}
+	/*
+	 * losing team itterate lose count
+	 * tname = losing team
+	*/
+	public void updateLose(String tname){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
+		
+		try(Connection con = Driver.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.preparedStatement(query, ResultSet.TYPE_SCROLL_INSENTIVE, ResultSet.CONCUR_UPDATABLE);
+			preparedStmt.setString(1, tname);
+			ResultSet rs = preparedStmt.executeQuery();
+			if(rs.next()){
+				rs.updateInt("lose_count", (rs.getInt("lose_count")+1));
+				rs.updateRow();
+			}
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+	}
+	/*
+	 * Tie teams itterate tie count
+	 * tname = tie team 1
+	 * tnname = tie team 2
+	*/
+	public void updateTie(String tname, String tnname){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
+		
+		try(Connection con = Driver.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.preparedStatement(query, ResultSet.TYPE_SCROLL_INSENTIVE, ResultSet.CONCUR_UPDATABLE);
+			for (int i = 0; i < 2; i++) {
+				if ( i = 0) {
+					preparedStmt.setString(1, tname);
+					ResultSet rs = preparedStmt.executeQuery();
+					if(rs.next()){
+						rs.updateInt("tie_count", (rs.getInt("tie_count")+1));
+						rs.updateRow();
+					}
+				} else {
+					preparedStmt.setString(1, tnname);
+					ResultSet rs = preparedStmt.executeQuery();
+					if(rs.next()){
+						rs.updateInt("tie_count", (rs.getInt("tie_count")+1));
+						rs.updateRow();
+					}
+				}
+			}
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Longest Word Update Method for team
+	*/
+	
+	public void updateTeamLongestWord(String tname, String word) {
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid=?";
+		
+        try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+            PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            preparedStmt.setString(1, tname);
+            ResultSet rs = preparedStmt.executeQuery();
+            if(rs.next()){
+            	String currentLong = rs.getString("longest_word");
+            	if(currentLong.length() <= word.length()){
+	            	rs.updateString("longest_word", word);
+	            	rs.updateRow();
+            	}
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+	}
+	
+	public void updateTeamBonusCount(String tname, int bonus) {
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid=?";
+		
+        try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+            PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            preparedStmt.setString(1, tname);
+            ResultSet rs = preparedStmt.executeQuery();
+            if(rs.next()){
+            	rs.updateInt("bonuses", (rs.getInt("bonuses") + bonus));
+            	rs.updateRow();
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+	}
+	
+	/*
+	 *Call everytime a bad word is played or not I don't think we actually use this column
+	*/
+	public void updateDirtWordCount(String tname){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid=?";
+		
+        try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+            PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            preparedStmt.setString(1, tname);
+            ResultSet rs = preparedStmt.executeQuery();
+            if(rs.next()){
+            	rs.updateInt("dirty_word", (rs.getInt("dirty_word") + 1));
+            	rs.updateRow();
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+	}
 }
