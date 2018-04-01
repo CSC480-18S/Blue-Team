@@ -697,15 +697,14 @@ public class QueryClass {
             return 0;
         }
 	}
-	
 	/*
 	 * Updates cumulative_game_score for TEAM_TABLE
 	*/
 	public void updateTeamCumulative(String tname, int points){
 		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
 		
-		try(Connection con = Driver.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.preparedStatement(query, ResultSet.TYPE_SCROLL_INSENTIVE, ResultSet.CONCUR_UPDATABLE);
+		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			preparedStmt.setString(1, tname);
 			ResultSet rs = preparedStmt.executeQuery();
 			if(rs.next()){
@@ -724,8 +723,8 @@ public class QueryClass {
 	public void updateHighestWordScore(String tname, int points){
 		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
 		
-		try(Connection con = Driver.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.preparedStatement(query, ResultSet.TYPE_SCROLL_INSENTIVE, ResultSet.CONCUR_UPDATABLE);
+		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			preparedStmt.setString(1, tname);
 			ResultSet rs = preparedStmt.executeQuery();
 			if(rs.next()){
@@ -733,7 +732,7 @@ public class QueryClass {
 					rs.updateInt("highest_word_score", points);
 					rs.updateRow();
 				} else {
-					break;
+					
 				}
 			}
 		} catch (SQLException e) {
@@ -748,8 +747,8 @@ public class QueryClass {
 	public void updateHighestGameSessionScore(String tname, int points){
 		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
 		
-		try(Connection con = Driver.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.preparedStatement(query, ResultSet.TYPE_SCROLL_INSENTIVE, ResultSet.CONCUR_UPDATABLE);
+		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			preparedStmt.setString(1, tname);
 			ResultSet rs = preparedStmt.executeQuery();
 			if(rs.next()){
@@ -757,7 +756,7 @@ public class QueryClass {
 					rs.updateInt("highest_game_session_score", points);
 					rs.updateRow();
 				} else {
-					break;
+					
 				}
 			}
 		} catch (SQLException e) {
@@ -772,8 +771,8 @@ public class QueryClass {
 	public void updateWin(String tname){
 		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
 		
-		try(Connection con = Driver.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.preparedStatement(query, ResultSet.TYPE_SCROLL_INSENTIVE, ResultSet.CONCUR_UPDATABLE);
+		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			preparedStmt.setString(1, tname);
 			ResultSet rs = preparedStmt.executeQuery();
 			if(rs.next()){
@@ -791,8 +790,8 @@ public class QueryClass {
 	public void updateLose(String tname){
 		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
 		
-		try(Connection con = Driver.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.preparedStatement(query, ResultSet.TYPE_SCROLL_INSENTIVE, ResultSet.CONCUR_UPDATABLE);
+		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			preparedStmt.setString(1, tname);
 			ResultSet rs = preparedStmt.executeQuery();
 			if(rs.next()){
@@ -811,10 +810,10 @@ public class QueryClass {
 	public void updateTie(String tname, String tnname){
 		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
 		
-		try(Connection con = Driver.getConnection(dbAddress, dbUser, dbPass)){
-			PreparedStatement preparedStmt = con.preparedStatement(query, ResultSet.TYPE_SCROLL_INSENTIVE, ResultSet.CONCUR_UPDATABLE);
+		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			for (int i = 0; i < 2; i++) {
-				if ( i = 0) {
+				if (i == 0) {
 					preparedStmt.setString(1, tname);
 					ResultSet rs = preparedStmt.executeQuery();
 					if(rs.next()){
@@ -836,7 +835,7 @@ public class QueryClass {
 	}
 	
 	/*
-	 * Longest Word Update Method for team
+	 * Use if word played is new longest word
 	*/
 	
 	public void updateTeamLongestWord(String tname, String word) {
@@ -891,5 +890,4 @@ public class QueryClass {
         } catch (SQLException se) {
             se.printStackTrace();
         }
-	}
 }
