@@ -144,7 +144,11 @@ public class Session {
 
         }
 
-        Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, word, user));
+        Tile[] wordTiles = new Tile[word.length()];
+        for (int i = 0; i < word.length(); i++)
+            wordTiles[i] = TileGenerator.getTile(word.charAt(i));
+
+        Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, wordTiles, user));
 
         if ((int) result[0] == 1) {
             board.placeWord(startX, startY, horizontal, word);
