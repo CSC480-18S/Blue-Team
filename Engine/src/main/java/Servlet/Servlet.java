@@ -80,7 +80,7 @@ public class Servlet extends HttpServlet {
                     horizontal = false;
                 }
                 
-                String[] splitCoords = coords.split(",");
+                String[] splitCoords = coords.split("_");
                 int startX = Integer.parseInt(splitCoords[0]);
                 int startY = Integer.parseInt(splitCoords[1]);
                 String macAddress = getMACAddress(request.getRemoteAddr());

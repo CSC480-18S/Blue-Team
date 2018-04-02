@@ -38,9 +38,6 @@ $(".drop").click(function () {
 
 });
 
-//global stuff
-var currentHand = new Array();
-
 
 var letters = new Array();
 letters[0] = new Image();
@@ -149,17 +146,21 @@ function shuffleMe(array) {
     return array;
 }
 
+// Not used ?
 $(function setHand() {
     $(document).ready(function () {
-        var letters = new Array();
-        var randLet = Math.floor(Math.random() * 26);
-        $('#div0').prepend($(letters[randLet]));
-        $('#div1').prepend($(letters[randLet]));
-        $('#div2').prepend($(letters[randLet]));
-        $('#div3').prepend($(letters[randLet]));
-        $('#div4').prepend($(letters[randLet]));
-        $('#div5').prepend($(letters[randLet]));
-        $('#div6').prepend($(letters[randLet]));
+
+        if (letters != null)
+        {
+            var randLet = Math.floor(Math.random() * 26);
+            $('#div0').prepend($(letters[randLet]));
+            $('#div1').prepend($(letters[randLet]));
+            $('#div2').prepend($(letters[randLet]));
+            $('#div3').prepend($(letters[randLet]));
+            $('#div4').prepend($(letters[randLet]));
+            $('#div5').prepend($(letters[randLet]));
+            $('#div6').prepend($(letters[randLet]));
+        }
     });
 });
 
@@ -256,6 +257,7 @@ $(function exchange() {
                 letters[25] = new Image();
                 letters[25].src = 'imgs/Z.png';
 
+                // Set letter img dimenstions
                 for (var i = 0; i < letters.length; i++) {
                     $(letters[i]).width(55);
                     $(letters[i]).height(55);
@@ -263,11 +265,10 @@ $(function exchange() {
 
                 }
 
-                var randLet = Math.floor(Math.random() * 26);
+                // Unused but I will leave it incase we want this code
+                //var randLet = Math.floor(Math.random() * 26);
 
-                var shuffledLetters = shuffleMe(letters);
-
-                shuffled = shuffleMe(letters);
+                var shuffled = shuffleMe(letters);
                 $('#div0').empty().prepend($(shuffled[0]));
                 $('#div1').empty().prepend($(shuffled[1]));
                 $('#div2').empty().prepend($(shuffled[2]));
@@ -436,25 +437,23 @@ $(function place() {
 
 });
 
+
+Array.prototype.diff = function(a) {
+    return this.filter(function(i) {return a.indexOf(i) < 0;});
+};
 //change to buttons to click on for yes or no
+
+// ****
+// Global var holding board state
+var boardState =[];
 
 //cant just play one word
 $(function confirmed() {
     $("#confirmed").click(function () {
 
-        var xyCoord = [];
-        var xyHand = [];
-        i = 0;
-        var div;
-        var wordPlayed = new Array();
+/*  I don't think any of this gets used
 
-
-        //send these 3 to engine
-        var wordString;
-        var firstCoord;
-        var orientationWord;
-
-        //this get me every image that is on board
+        //this gets me every image that is on board
         $(".drop").find("img").length;
 
 
@@ -475,70 +474,68 @@ $(function confirmed() {
         var div4 = $(".drop:has(#img4)").attr('id');
         var div5 = $(".drop:has(#img5)").attr('id');
         var div6 = $(".drop:has(#img6)").attr('id');
+*/
+
+       // Instance variables
+        var xyCoord = [];
+        var xyHand = [];
+        var wordPlayed = new Array();
+        //send these to engine (not secondCoord though)
+        var wordString;
+        var firstCoord;
+        var secondCoord;
+        var orientationWord = true; //default to true incase only one letter is played
 
         //gets coordinate
         //loops through board and gets all the coordinates
+        var i = 0; //****
         $(".drop:has(img)").each(function () {
-            // alert($(this).attr("id"));
-
             xyCoord[i++] = $(this).attr('id');
-
-
         });
-        //gives me last
-        var firstCoord = xyCoord[0];
-        var secondCoord = xyCoord[1]
 
+        //gets difference between the state of board now and the previous state
+        var realDiff = xyCoord.diff(boardState);
+
+        firstCoord = realDiff[0];
+        secondCoord = realDiff[1];
+        // Get coordinate of first letter
         var xy1 = firstCoord.split("_");
-        //alert(xy1);
-        var x1 = xy1[0];
-        //alert(x1);
         var y1 = xy1[1];
-//		    alert(y1);
 
-        var xy2 = secondCoord.split("_");
-        // alert(xy2);
-        var x2 = xy2[0];
-        // alert(x2);
-        var y2 = xy2[1];
-        // alert(y2);
-        var y = y1 - y2;
-        if (y == 0) {
-            orientationWord = ("h");
-        } else {
-            orientationWord = ("v");
+        // secondCoord will be null if only one letter was played
+        if(secondCoord != null)
+        {
+            // If more than one letter played,
+            // get the second coord to determine orientation
+            var xy2 = secondCoord.split("_");
+            // alert(x2);
+            var y2 = xy2[1];
+            // alert(y2);
+            var y = y1 - y2;
+            if (y == 0) {
+                orientationWord = ("h");
+            } else {
+                orientationWord = ("v");
+            }
+        }
+
+        //goes through only letters played this turn
+        for (var n = 0; n < realDiff.length; n++) {
+            // get the file name (src) by the id (coordinate)
+            //may need to change this or change split
+            var file = document.getElementById(realDiff[n]).getElementsByTagName('img')[0].src;
+            // Get the start point of the file
+            var s = file.search(/.png/i);
+            // now we have the letter of just the latest word
+            wordPlayed[i++] = file.slice(s-1, -4);
 
         }
-        //alert(orientationWord);
 
-        //	alert(firstCoord + " " + secondCoord);
-
-        //change to get the whole state of the board so all coords and words then save it
-        //compare old state of board to new state of board
-        //subtract same elements and get only new ones (2d array)
-        $(".drop").find("img").each(function () {
-            // grab the src "attribute"
-            //this gets id of image
-            var id = $(this).attr("src");
-            var newId = id.slice(5, -4);
-            var b = "ball";
-            b.slice(0, 2);
-            // alert(newId);
-            wordPlayed[i++] = newId;
-            //send to engine
-            //this is the word that was played
-            //var wordPlayed = new Array();
-
-
-        });
-
-        var wordString = wordPlayed.join("");
+        wordString = wordPlayed.join("");
         alert("Word Played: " + wordString);
 
         //check each div in hand to see if they have
         $(".drag").not(":has(img)").each(function () {
-            //  $(".drag:not:has(img)").each(function () {
-
             //need to make new image clickable
             //need to add a state for the hand
             //every time play is pressed hand upadtes
@@ -546,9 +543,6 @@ $(function confirmed() {
             letters[0] = new Image();
             letters[0].src = 'imgs/A.png';
             $('#A').attr('src', 'imgs/A.png');
-
-            //$('letter_A.png').width(55);
-            //$('letter_A.png').height(55);
 
             letters[1] = new Image();
             letters[1].src = 'imgs/B.png';
@@ -674,64 +668,68 @@ $(function confirmed() {
             letters[25].src = 'imgs/Z.png';
             $('#imgZ').attr('src', 'imgs/Z.png');
 
+            letters[26] = new Image();
+            letters[0].src = 'imgs/A.png';
+            $('#A').attr('src', 'imgs/A.png');
+
+            letters[27] = new Image();
+            letters[0].src = 'imgs/A.png';
+            $('#A').attr('src', 'imgs/A.png');
+
+            letters[28] = new Image();
+            letters[8].src = 'imgs/I.png';
+            $('#I').attr('src', 'imgs/I.png');
+
+            letters[29] = new Image();
+            letters[8].src = 'imgs/I.png';
+            $('#I').attr('src', 'imgs/I.png');
+
+            letters[30] = new Image();
+            letters[8].src = 'imgs/I.png';
+            $('#I').attr('src', 'imgs/I.png');
+
+            letters[31] = new Image();
+            letters[4].src = 'imgs/E.png';
+            $('#E').attr('src', 'imgs/E.png');
+
+            letters[32] = new Image();
+            letters[4].src = 'imgs/E.png';
+            $('#E').attr('src', 'imgs/E.png');
+
+            letters[33] = new Image();
+            letters[4].src = 'imgs/E.png';
+            $('#E').attr('src', 'imgs/E.png');
 
             for (var i = 0; i < letters.length; i++) {
                 $(letters[i]).width(55);
                 $(letters[i]).height(55);
             }
 
-            var randLet = Math.floor(Math.random() * 26);
+            var randLet = Math.floor(Math.random() * 33);
 
             //fills in random letters after you play hand
+            //var shuffled = shuffleMe(letters);
             $(this).prepend(letters[randLet]);
             xyHand[i++] = $(this).attr('id');
 
-            $(letters[randLet]).attr('');
-
         });
-
-        var currentHand = new Array();
-
-        var i = 0;
-//		 		$(".drag:has(img)").each(function () {
-//		 			current[i++] = $(this).attr('id');
-
-//		         });
-        $(".drag").find("img").each(function () {
-            // grab the src "attribute"
-            //this gets id of image
-            var id = $(this).attr("id");
-            // alert(id);
-            //array full of srcs
-            currentHand[i++] = $(this).attr('src');
-
-            $(letters[i]).width(55);
-            $(letters[i]).height(55);
-
-        });
-        //alert(currentHand[0]);
-        //alert(currentHand[1]);
-        //alert(currentHand[2]);
-        //alert(currentHand[3]);
-        //alert(currentHand[4]);
-        //alert(currentHand[5]);
-        //alert(currentHand[6]);
-
 
         $('img').click(function () {
             $(this).addClass('borderClass');
             $img = $(this).get();
         });
 
-
-//This is the Play request
+        //This is the Play request
         $.post("Servlet", { //needs variables for word, coordinates and direction (h or v)
             request: "play",
             word: wordString,
-            coords: xy1[0] + "," + xy1[1],
+            coords: firstCoord,
             direction: orientationWord
         }, function (responsetext) {
             alert(responsetext); // response text.
         });
+
+        // Deep copy new board state global array
+        boardState = [...xyCoord];
     });
 });

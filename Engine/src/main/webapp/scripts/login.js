@@ -1,5 +1,3 @@
-// Update webpage board
-updateBoard();
 
 // Send post request when HTML is loaded incase user already has been added
 $.post("Servlet", {request:"join", username:"", team:""}, function(responsetext)
@@ -37,40 +35,6 @@ function join()
 
         }
     });
-}
-
-function updateBoard()
-{
-    // Get board as JSON from Servlet
-    // Note: this comes back as a javascript object so no need to parse it
-    $.get("Servlet", {request:"getboard"}, function (data)
-    {
-        var boardArr = $.parseJSON(data);
-        if (boardArr != null && boardArr != "")
-        {
-            // For each row in board 2d array
-            for (row = 0; row < boardArr.board.length; row++)
-            {
-                // For each column in row array
-                for (col = 0; col < boardArr.board[row].length; col++)
-                {
-
-                    // Check if there is a tile here
-                    if (boardArr.board[row][col].contents != null)
-                    {
-                        var letter = boardArr.board[row][col].contents.letter;
-                        // Add this tile to the webpage board
-                        var coord = row + "_" + col;
-                        var imgFile = "imgs/" + letter + ".png";
-
-                        $('#' + coord).append('<img src=' + imgFile + ' width="55" height="55"/>');
-                    }
-                }
-            }
-        }
-
-    });
-
 }
 
 // Join box and overlay visibility
