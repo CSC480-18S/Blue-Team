@@ -9,7 +9,7 @@ public class QueryClass {
     public QueryClass() {
         try {
             Class.forName(dbDriver);
-        } catch (ClassNotFoundException ce) {
+        } catch (ClassNotFoundExceptiondsdds ce) {
             throw new RuntimeException("JDBC driver not found, jar is probably missing or in wrong folder");
         }
     }
