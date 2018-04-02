@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 - language: java
+=======
+language: java
+>>>>>>> fdc5c63fea3ab74f5a2242fbdb64841eda26cd76
 jdk: oraclejdk8
 before_script:
     - cd DB\src\main\java\csc480\blue\db
