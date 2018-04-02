@@ -2,4 +2,4 @@ language: java
 jdk: oraclejdk8
 before_script:
     - ls
-    - cd DB\src\main\java\csc480\blue\db
+    - cd DB/src/main/java/csc480/blue/db
