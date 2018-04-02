@@ -131,6 +131,14 @@ public class Session {
   
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
+        // Check if word length is less than 11,
+        // it will cause errors if too big.
+        // This should never happen but just in case..
+        if (word.length() > 11)
+        {
+            return "Please play a shorter word?...";
+        }
+
         // If first move check
         if (firstMove())
         {
