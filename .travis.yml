@@ -5,3 +5,4 @@ before_script:
     - cd DB
     - mvn compile
     - mvn test
+    
