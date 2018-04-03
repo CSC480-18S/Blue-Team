@@ -38,87 +38,8 @@ $(".drop").click(function () {
 
 });
 
-
 var letters = new Array();
-letters[0] = new Image();
-letters[0].src = 'letter_A.png';
-//$('letter_A.png').width(55);
-//$('letter_A.png').height(55);
-
-letters[1] = new Image();
-letters[1].src = 'letter_B.png';
-
-letters[2] = new Image();
-letters[2].src = 'letter_C.png';
-
-letters[3] = new Image();
-letters[3].src = 'letter_D.png';
-
-letters[4] = new Image();
-letters[4].src = 'letter_E.png';
-
-letters[5] = new Image();
-letters[5].src = 'letter_F.png';
-
-letters[6] = new Image();
-letters[6].src = 'letter_G.png';
-
-letters[7] = new Image();
-letters[7].src = 'letter_H.png';
-
-letters[8] = new Image();
-letters[8].src = 'letter_I.png';
-
-letters[9] = new Image();
-letters[9].src = 'letter_J.png';
-
-letters[10] = new Image();
-letters[10].src = 'letter_K.png';
-
-letters[11] = new Image();
-letters[11].src = 'letter_L.png';
-
-letters[12] = new Image();
-letters[12].src = 'letter_M.png';
-
-letters[13] = new Image();
-letters[13].src = 'letter_N.png';
-
-letters[14] = new Image();
-letters[14].src = 'letter_O.png';
-
-letters[15] = new Image();
-letters[15].src = 'letter_P.png';
-
-letters[16] = new Image();
-letters[16].src = 'letter_Q.png';
-
-letters[17] = new Image();
-letters[17].src = 'letter_R.png';
-
-letters[18] = new Image();
-letters[18].src = 'letter_S.png';
-
-letters[19] = new Image();
-letters[19].src = 'letter_T.png';
-
-letters[20] = new Image();
-letters[20].src = 'letter_U.png';
-
-letters[21] = new Image();
-letters[21].src = 'letter_V.png';
-
-letters[22] = new Image();
-letters[22].src = 'letter_W.png';
-
-letters[23] = new Image();
-letters[23].src = 'letter_X.png';
-
-letters[24] = new Image();
-letters[24].src = 'letter_Y.png';
-
-letters[25] = new Image();
-letters[25].src = 'letter_Z.png';
+var currentHand = new Array();
 
 //random number for shuffle
 var numRand = Math.floor(Math.random() * 7);
@@ -278,7 +199,7 @@ $(function exchange() {
                 $('#div6').empty().prepend($(shuffled[6]));
 
 
-                $('img').click(function () {
+                $('#img0').click(function () {
                     $(this).addClass('borderClass');
                     $img = $(this).get();
                 });
@@ -350,7 +271,7 @@ $(function shuffle() {
 $(function recall() {
     $("#recall").click(function () {
         var i = 0;
-        var currentHand = new Array();
+        currentHand = new Array();
         $(".drag").find("img").each(function () {
             // grab the src "attribute"
             //this gets id of image
@@ -400,8 +321,6 @@ $(function getCurrentHand() {
         // alert(id);
         //array full of ids
         current[i++] = $(this).attr('id');
-
-
     });
 
 });
@@ -442,10 +361,6 @@ Array.prototype.diff = function(a) {
     return this.filter(function(i) {return a.indexOf(i) < 0;});
 };
 //change to buttons to click on for yes or no
-
-// ****
-// Global var holding board state
-var boardState =[];
 
 //cant just play one word
 $(function confirmed() {
