@@ -160,6 +160,8 @@ public class Session {
 
         if ((int) result[0] == 1) {
             board.placeWord(startX, startY, horizontal, word);
+            int score = calculateMovePoints((Move) result[1]);
+            System.out.println("Played move for " + score + " points");
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             return "success";
@@ -260,16 +262,32 @@ public class Session {
                         getMultiplier();
             }
                 switch (mult) {
-                    case NONE : letterMult = 1; break;
-                    case DOUBLE_LETTER : letterMult = 2; break;
-                    case DOUBLE_WORD : wordMult *= 2; break;
-                    case TRIPLE_LETTER : letterMult = 3; break;
-                    case TRIPLE_WORD : wordMult *=3; break;
+                    case NONE:
+                        letterMult = 1;
+                        break;
+                    case DOUBLE_LETTER:
+                        letterMult = 2;
+                        break;
+                    case DOUBLE_WORD:
+                        wordMult *= 2;
+                        break;
+                    case TRIPLE_LETTER:
+                        letterMult = 3;
+                        break;
+                    case TRIPLE_WORD:
+                        wordMult *= 3;
+                        break;
                 }
-            
             points += letterMult * move.getWord()[i].getValue();
         }
         points *= wordMult;
+        //calculating the total number of points from offshoot moves
+        ArrayList<Move> offshootMoves = move.getOffshootMoves();
+        if(offshootMoves != null)
+            for(Move aMove : offshootMoves){
+                if(aMove != null)
+                    points += calculateMovePoints(aMove);
+            }
         return points;
     }
 }
