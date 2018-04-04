@@ -24,6 +24,7 @@ public class Session {
     private User[] users;
     private ArrayList<Move> playedMoves;
     private QueryClass dbQueries;
+    private int currentTurn;
 
     private Session() {
         //Session.LogInfo("Initializing objects");
@@ -33,6 +34,7 @@ public class Session {
         users = new User[4];
         playedMoves = new ArrayList();
         dbQueries = new QueryClass();
+        currentTurn = -1;
     }
     public static Session getSession() {
         if (session == null) {
@@ -116,6 +118,10 @@ public class Session {
             if (users[i] == null) {
 
                 users[i] = newPlayer;
+                gui.setUserName(i, username);
+                if(currentTurn == -1){
+                    nextTurn();
+                }
                 return "JOINED";
             }
         }
@@ -164,11 +170,13 @@ public class Session {
             System.out.println("Played move for " + score + " points");
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
+            nextTurn();
             return "success";
         } else if ((int) result[0] == 2) {
             board.placeWord(startX, startY, horizontal, word);
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
+            nextTurn();
             return "success, bonus";
         } else if ((int) result[0] == -1) {
             return "profane word";
@@ -233,6 +241,7 @@ public class Session {
                         }
                     }
                     player.setHand(hand);
+                    nextTurn();
                     return "Exchanged: " + count + " tiles";
                 }
             }
@@ -289,5 +298,30 @@ public class Session {
                     points += calculateMovePoints(aMove);
             }
         return points;
+    }
+
+    /**
+     * Set's next player's turn
+     */
+    private void nextTurn(){
+
+        boolean done = false;
+        while (!done){
+            //increment player number
+            if(currentTurn == 3){
+                currentTurn = 0;
+            } else {
+                currentTurn++;
+            }
+            if(users[currentTurn] != null){
+                gui.setTurn(currentTurn);
+                done = true;
+            }
+        }
+
+    }
+
+    public int getCurrentTurn(){
+        return currentTurn;
     }
 }
