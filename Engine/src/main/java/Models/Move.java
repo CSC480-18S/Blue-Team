@@ -5,6 +5,8 @@
  */
 package Models;
 
+import java.util.ArrayList;
+
 /**
  * Its a record of a move played (Or attempted to be played)
  * @author wcook
@@ -14,16 +16,18 @@ public class Move {
     private int startX;
     private int startY;
     private boolean horizontal;
-    private String word;
+    private Tile[] word;
     private User user;
+    private ArrayList<Move> offshootMoves;
 
-    public Move(int startX, int startY, boolean horizontal, String word, User user) {
+    public Move(int startX, int startY, boolean horizontal, Tile[] word, User user) {
         this.user = user;
         this.startX = startX;
         this.startY = startY;
         this.horizontal = horizontal;
         this.word = word;
         this.user = user;
+        offshootMoves = null;
     }
 
     /**
@@ -48,9 +52,19 @@ public class Move {
     }
 
     /**
+     * @return the word as a String
+     */
+    public String getWordString() {
+        String wordString = "";
+        for (Tile t : word)
+            wordString += t.getLetter();
+        return wordString;
+    }
+    
+    /**
      * @return the word
      */
-    public String getWord() {
+    public Tile[] getWord() {
         return word;
     }
 
@@ -65,9 +79,23 @@ public class Move {
      * @param word the word to set
      * @param word that it is set to
      */
-    public String setWord(String word) {
+    public Tile[] setWord(Tile[] word) {
         this.word = word;
         return word;
+    }
+
+    /**
+     * @param offshootMoves the new words created off of the main word played
+     */
+    public void setOffshootMoves(ArrayList<Move> offshootMoves){
+        this.offshootMoves = offshootMoves;
+    }
+
+    /**
+     * @return offshootMoves the list of offshootMoves for the move
+     */
+    public ArrayList<Move> getOffshootMoves(){
+        return this.offshootMoves;
     }
 
 }

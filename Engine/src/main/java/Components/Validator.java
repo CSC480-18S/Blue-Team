@@ -1,8 +1,13 @@
 package Components;
 
+import Models.GameConstants;
 import Models.Move;
 import Models.Space;
+import Models.Tile;
+import Models.TileGenerator;
 import Session.Session;
+
+import java.util.ArrayList;
 
 import static Session.Session.LogWarning;
 
@@ -17,11 +22,6 @@ public class Validator {
     }
 
     /**
-     *
-     * @param startX
-     * @param startY
-     * @param horizontal
-     * @param word
      * @return An array containing an int:
      *      1 - Valid play, 0 - invalid, -1 - swear word, 2 - bonus word
      *         as well as the updated Move
@@ -30,9 +30,16 @@ public class Validator {
         int startX = move.getStartX();
         int startY = move.getStartY();
         boolean horizontal = move.isHorizontal();
+        
+        // Check that move connects to existing tiles
+        if (!connectsToTiles(move)) {
+            return new Object[] {0, move};
+        }
+        
         // Get full word, appending any characters on the ends due to placement
-        String word = move.setWord(getFullWord(startX, startY, horizontal, 
-                move.getWord()));
+        move.setWord(getFullWord(startX, startY, horizontal, 
+                move.getWordString()));
+        String word = move.getWordString();
 
         // Check if the user has entered a bad word
         int valid = isProfane(word);
@@ -51,7 +58,101 @@ public class Validator {
         if (valid <= 0 || checkPlacement(startX, startY, horizontal, word) == 0)
             return new Object[] {0, move};
 
+        //generating offshoot moves and adding them to the validated move
+        move.setOffshootMoves(getOffshootMoves(move));
+        if(move.getOffshootMoves().isEmpty())
+            System.out.println("No offshoots");
+        else {
+            System.out.println("Move creates auxiliary words of : ");
+            for(Move aMove : move.getOffshootMoves()){
+                System.out.print(aMove.getWordString() + " ");
+            }
+            System.out.println();
+        }
+
         return new Object[] {valid, move};
+    }
+
+    //generating all offshoot moves (auxiliary words created by the main word played) found in the validation process
+    private ArrayList<Move> getOffshootMoves(Move move){
+        ArrayList<Move> offshootMoves = new ArrayList();
+        int x = move.getStartX();
+        int y = move.getStartY();
+        int len = move.getWordString().length();
+        Space boardLocal[][] = Session.getSession().getBoardAsSpaces();
+        //handling if main word is horizontal
+        if(move.isHorizontal()) {
+            for (int i = 0; i < len; i++) {
+                //checking to see if current space is a newly played tile or already existing (if the tile was already in use then the vertical is not a new word
+                if (boardLocal[x+i][y].getTile() == null) {
+                    int y0 = y;
+                    while(0 < y0 && boardLocal[x+i][y0-1].getTile() != null) {
+                        y0--;
+                    }
+                    //getting full vertical offshoot word
+                    if(boardLocal[x+i][y0].getTile() != null) {
+                        Tile[] fullOffshootWord = getFullWord(x+i, y, false, String.valueOf(move.getWordString().charAt(i)));
+                        if (fullOffshootWord.length > 1)
+                            //creating move to add to list of offshoot moves
+                            offshootMoves.add(new Move(x+i, y0, false, fullOffshootWord, move.getUser()));
+                    }
+                }
+            }
+        }
+        //getting offshoot moves for a vertical word
+        else{
+            for(int i = 0; i < len; i++){
+                //checking to see if current space is a newly played tile or already existing
+                if(boardLocal[x][y+i].getTile() == null){
+                    int x0 = x;
+                    while(0 < x0 && boardLocal[x0-1][y+i].getTile() != null){
+                        x0--;
+                    }
+                    //getting full horizontal offshoot word
+                    if(boardLocal[x0][y+i].getTile() != null) {
+                        Tile[] fullOffshootWord = getFullWord(x, y+i, true, String.valueOf(move.getWordString().charAt(i)));
+                        if (fullOffshootWord.length > 1)
+                            //creating move and adding it to list of offshoot moves
+                            offshootMoves.add(new Move(x0, y+i, true, fullOffshootWord, move.getUser()));
+                    }
+                }
+            }
+        }
+        return offshootMoves;
+    }
+
+    // Check if move connects to existing tiles
+    private boolean connectsToTiles(Move move) {
+        // Starts from center of board - valid
+        if (Session.getSession().firstMove())
+            return true;
+        else {
+            int remaining = move.getWordString().length();
+            boolean hor = move.isHorizontal();
+            Space boardLocal[][] = Session.getSession().getBoardAsSpaces();
+            int x = move.getStartX();
+            int y = move.getStartY();
+            while (remaining > 0) {
+                if (boardLocal[x][y].getTile() != null
+                        || (x > 0 && boardLocal[x-1][y].getTile() != null)
+                        || (x < GameConstants.BOARD_WIDTH-1 
+                        && boardLocal[x+1][y].getTile() != null)
+                        || (y > 0 && boardLocal[x][y-1].getTile() != null)
+                        || (y < GameConstants.BOARD_WIDTH-1 
+                        && boardLocal[x][y+1].getTile() != null))
+                    return true;
+                else if (hor && x < GameConstants.BOARD_WIDTH)
+                    x++;
+                else if (!hor && y < GameConstants.BOARD_WIDTH)
+                    y++;
+                // Move extends off board
+                else
+                    return false;
+                remaining--;
+            }
+            // Move does not connect
+            return false;
+        }
     }
 
     /// Check if word is a dictionary word
@@ -99,7 +200,7 @@ public class Validator {
         been overlooked when submitting a word for validation
         -Bill Cook
      */
-    private String getFullWord(int startX, int startY, boolean horizontal,
+    private Tile[] getFullWord(int startX, int startY, boolean horizontal,
             String word) {
         String leftChars = "";
         String rightChars = "";
@@ -136,8 +237,11 @@ public class Validator {
             finished = true;
         }
         word = leftChars + word + rightChars;
-
-        return word;
+        Tile[] wordTiles = new Tile[word.length()];
+        for (int i = 0; i < word.length(); i++)
+            wordTiles[i] = TileGenerator.getTile(word.charAt(i));
+        
+        return wordTiles;
     }
 
     /*
