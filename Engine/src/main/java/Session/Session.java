@@ -158,9 +158,42 @@ public class Session {
 
         }
 
+        ArrayList<Character> chars = new ArrayList<>();
+        char[] arr = word.toCharArray();
+        for(int i =0; i < arr.length;i++){
+            chars.add(arr[i]);
+        }
+
+        word = "";
+
+        int count = 0;
+        StringBuilder wordBuilder = new StringBuilder(word);
+        //walk through the board and if tile is already placed - append it
+        while(!chars.isEmpty()){
+            if(horizontal){
+                if(board.getBoard()[startX + count][startY].getTile() != null){
+                    wordBuilder.append(board.getBoard()[startX + count][startY].getTile().getLetter());
+                } else {
+                    wordBuilder.append(chars.get(0));
+                    chars.remove(0);
+                }
+            } else {
+                if(board.getBoard()[startX][startY + count].getTile() != null){
+                    wordBuilder.append(board.getBoard()[startX][startY + count].getTile().getLetter());
+                } else {
+                    wordBuilder.append(chars.get(0));
+                    chars.remove(0);
+                }
+            }
+
+            count++;
+        }
+        word = wordBuilder.toString();
         Tile[] wordTiles = new Tile[word.length()];
-        for (int i = 0; i < word.length(); i++)
+
+        for (int i = 0; i < word.length(); i++) {
             wordTiles[i] = TileGenerator.getTile(word.charAt(i));
+        }
 
         Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, wordTiles, user));
 
