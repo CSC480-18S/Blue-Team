@@ -369,7 +369,7 @@ public class BoardGUI{
         }
         jt.repaint();
     }
-    
+
 
     public void setTurn(int id){
         player1Label.setForeground(Color.BLACK);
