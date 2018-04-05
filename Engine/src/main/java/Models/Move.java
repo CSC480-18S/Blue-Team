@@ -98,4 +98,9 @@ public class Move {
         return this.offshootMoves;
     }
 
+    public void updateStartCoordinate(int start[]){
+        this.startX = start[0];
+        this.startY = start[1];
+    }
+
 }

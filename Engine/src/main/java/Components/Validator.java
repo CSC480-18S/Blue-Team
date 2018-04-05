@@ -39,6 +39,9 @@ public class Validator {
         // Get full word, appending any characters on the ends due to placement
         move.setWord(getFullWord(startX, startY, horizontal, 
                 move.getWordString()));
+        move.updateStartCoordinate(getTrueStart(move.getStartX(), move.getStartY(),move.isHorizontal()));
+        startX = move.getStartX();
+        startY = move.getStartY();
         String word = move.getWordString();
 
         // Check if the user has entered a bad word
@@ -71,6 +74,27 @@ public class Validator {
         }
 
         return new Object[] {valid, move};
+    }
+
+    private int[] getTrueStart(int x0, int y0, boolean horiz){
+        Space boardLocal[][] = Session.getSession().getBoardAsSpaces();
+        if(horiz){
+            int x1 = x0;
+            while(boardLocal[x1-1][y0].getTile() != null){
+                x1--;
+            }
+            int startCoord[] = {x1, y0};
+            return startCoord;
+        }
+        else{
+            int y1 = y0;
+            while(boardLocal[x0][y1-1].getTile() != null){
+                y1--;
+            }
+            int startCoord[] = {x0, y1};
+            return startCoord;
+        }
+
     }
 
     //generating all offshoot moves (auxiliary words created by the main word played) found in the validation process
