@@ -80,7 +80,7 @@ public class Validator {
         Space boardLocal[][] = Session.getSession().getBoardAsSpaces();
         if(horiz){
             int x1 = x0;
-            while(boardLocal[x1-1][y0].getTile() != null){
+            while(x1 -1 > 0 && boardLocal[x1-1][y0].getTile() != null){
                 x1--;
             }
             int startCoord[] = {x1, y0};
@@ -88,7 +88,7 @@ public class Validator {
         }
         else{
             int y1 = y0;
-            while(boardLocal[x0][y1-1].getTile() != null){
+            while(y1 -1 > 0 && boardLocal[x0][y1-1].getTile() != null){
                 y1--;
             }
             int startCoord[] = {x0, y1};
@@ -240,7 +240,7 @@ public class Validator {
                 x--;
             }
             x = startX + word.length()-1;
-            while (x + 1< boardLocal.length
+            while (x < boardLocal.length
                     && boardLocal[x + 1][y].getTile() != null) {
                 rightChars += boardLocal[x + 1][y].getTile().getLetter();
                 x++;
