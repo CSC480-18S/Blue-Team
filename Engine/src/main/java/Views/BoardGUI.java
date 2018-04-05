@@ -35,6 +35,12 @@ public class BoardGUI{
     JTable user3;
     JTable user4;
 
+    JLabel player1Label;
+    JLabel player2Label;
+    JLabel player3Label;
+    JLabel player4Label;
+
+
     String column[]={"0","1","2","3","4","5","6","7","8","9","10"};
     String[][] data = new String[BOARD_WIDTH][BOARD_WIDTH];
 
@@ -303,38 +309,39 @@ public class BoardGUI{
         lc.gridx = 3;
         lc.gridy = 0;
         label.add(text2, lc);
-        JLabel label4 = new JLabel("Player 1:");
-        label4.setFont (label.getFont ().deriveFont (17.0f));
+        player1Label = new JLabel("Player 1:");
+        player1Label.setFont (label.getFont ().deriveFont (17.0f));
+
         lc.gridx = 0;
         lc.gridy = 2;
-        label.add(label4, lc);
+        label.add(player1Label, lc);
         JTextField text3 = new JTextField(player1, 10);
         lc.gridx = 1;
         lc.gridy = 2;
         label.add(text3, lc);
-        JLabel label5 = new JLabel("Player 2:");
-        label5.setFont (label.getFont ().deriveFont (17.0f));
+        player2Label = new JLabel("Player 2:");
+        player2Label.setFont (label.getFont ().deriveFont (17.0f));
         lc.gridx = 2;
         lc.gridy = 2;
-        label.add(label5, lc);
+        label.add(player2Label, lc);
         JTextField text4 = new JTextField(player2, 10);
         lc.gridx = 3;
         lc.gridy = 2;
         label.add(text4, lc);
-        JLabel label6 = new JLabel("Player 3:");
-        label6.setFont (label.getFont ().deriveFont (17.0f));
+        player3Label = new JLabel("Player 3:");
+        player3Label.setFont (label.getFont ().deriveFont (17.0f));
         lc.gridx = 0;
         lc.gridy = 4;
-        label.add(label6, lc);
+        label.add(player3Label, lc);
         JTextField text5 = new JTextField(player3, 10);
         lc.gridx = 1;
         lc.gridy = 4;
         label.add(text5, lc);
-        JLabel label7 = new JLabel("Player 4:");
-        label7.setFont (label.getFont ().deriveFont (17.0f));
+        player4Label = new JLabel("Player 4:");
+        player4Label.setFont (label.getFont ().deriveFont (17.0f));
         lc.gridx = 2;
         lc.gridy = 4;
-        label.add(label7, lc);
+        label.add(player4Label, lc);
         JTextField text6 = new JTextField(player4, 10);
         lc.gridx = 3;
         lc.gridy = 4;
@@ -361,6 +368,41 @@ public class BoardGUI{
             }
         }
         jt.repaint();
+    }
+
+
+    public void setTurn(int id){
+        player1Label.setForeground(Color.BLACK);
+        player2Label.setForeground(Color.BLACK);
+        player3Label.setForeground(Color.BLACK);
+        player4Label.setForeground(Color.BLACK);
+
+        if(id == 0){
+            player1Label.setForeground(Color.BLUE);
+        } else if (id == 1){
+            player2Label.setForeground(Color.BLUE);
+        } else if (id == 2){
+            player3Label.setForeground(Color.BLUE);
+        } else if (id == 3){
+            player4Label.setForeground(Color.BLUE);
+        }
+
+    }
+
+    public void updateUsers(User[] users){
+        for(int i =0; i < users.length; i++){
+            if(users[i] != null){
+                if(i == 0){
+                    player1Label.setText(users[i].getUsername() + "(" + users[i].getScore() + ")");
+                } else if (i == 1){
+                    player2Label.setText(users[i].getUsername() + "(" + users[i].getScore() + ")");
+                } else if (i == 2){
+                    player3Label.setText(users[i].getUsername() + "(" + users[i].getScore() + ")");
+                } else if (i == 3){
+                    player4Label.setText(users[i].getUsername() + "(" + users[i].getScore() + ")");
+                }
+            }
+        }
     }
 
 //    public void updateBoard (Space[][] board){

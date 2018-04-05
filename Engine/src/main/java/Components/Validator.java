@@ -39,6 +39,9 @@ public class Validator {
         // Get full word, appending any characters on the ends due to placement
         move.setWord(getFullWord(startX, startY, horizontal, 
                 move.getWordString()));
+        move.updateStartCoordinate(getTrueStart(move.getStartX(), move.getStartY(),move.isHorizontal()));
+        startX = move.getStartX();
+        startY = move.getStartY();
         String word = move.getWordString();
 
         // Check if the user has entered a bad word
@@ -71,6 +74,27 @@ public class Validator {
         }
 
         return new Object[] {valid, move};
+    }
+
+    private int[] getTrueStart(int x0, int y0, boolean horiz){
+        Space boardLocal[][] = Session.getSession().getBoardAsSpaces();
+        if(horiz){
+            int x1 = x0;
+            while(x1 > 0 && boardLocal[x1-1][y0].getTile() != null){
+                x1--;
+            }
+            int startCoord[] = {x1, y0};
+            return startCoord;
+        }
+        else{
+            int y1 = y0;
+            while(y1 > 0 && boardLocal[x0][y1-1].getTile() != null){
+                y1--;
+            }
+            int startCoord[] = {x0, y1};
+            return startCoord;
+        }
+
     }
 
     //generating all offshoot moves (auxiliary words created by the main word played) found in the validation process
@@ -216,7 +240,7 @@ public class Validator {
                 x--;
             }
             x = startX + word.length()-1;
-            while (x < boardLocal.length
+            while (x + 1< boardLocal.length
                     && boardLocal[x + 1][y].getTile() != null) {
                 rightChars += boardLocal[x + 1][y].getTile().getLetter();
                 x++;
@@ -229,7 +253,7 @@ public class Validator {
                 y--;
             }
             y = startY + word.length()-1;
-            while (y < boardLocal[0].length
+            while (y + 1 < boardLocal[0].length
                     && boardLocal[x][y + 1].getTile() != null) {
                 rightChars += boardLocal[x][y + 1].getTile().getLetter();
                 y++;
@@ -267,7 +291,7 @@ public class Validator {
                     y2--;
                 }
                 y2 = y;
-                while (y2 < boardLocal[0].length
+                while (y2 + 1< boardLocal[0].length
                         && boardLocal[x][y2 + 1].getTile() != null) {
                     rightChars += boardLocal[x][y2 + 1].getTile().getLetter();
                     y2++;
@@ -280,7 +304,7 @@ public class Validator {
                     x2--;
                 }
                 x2 = x;
-                while (x2 < boardLocal.length
+                while (x2 + 1< boardLocal.length
                         && boardLocal[x2 + 1][y].getTile() != null) {
                     rightChars += boardLocal[x2 + 1][y].getTile().getLetter();
                     x2++;

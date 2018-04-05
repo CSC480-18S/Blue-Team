@@ -35,11 +35,16 @@ public final class EventHandler {
         Session session = Session.getSession();
         String result = "unauthorized";
         User[]users = session.getUsers();
+        int currentTurn = session.getCurrentTurn();
         for(int i =0; i < users.length; i++){
             if(users[i] != null && users[i].getClass() == Player.class) {
                 Player player = (Player) users[i];
                 if (player.getMacAddress().equals(macAddress)) {
-                    result = Session.getSession().playWord(startX, startY, horizontal, word, users[i]);
+                    if(currentTurn == i) {
+                        result = Session.getSession().playWord(startX, startY, horizontal, word, users[i]);
+                    } else {
+                        result = "Not your turn";
+                    }
                     break;
                 }
             }
