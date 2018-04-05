@@ -240,7 +240,7 @@ public class Validator {
                 x--;
             }
             x = startX + word.length()-1;
-            while (x < boardLocal.length
+            while (x + 1< boardLocal.length
                     && boardLocal[x + 1][y].getTile() != null) {
                 rightChars += boardLocal[x + 1][y].getTile().getLetter();
                 x++;
@@ -291,7 +291,7 @@ public class Validator {
                     y2--;
                 }
                 y2 = y;
-                while (y2 < boardLocal[0].length
+                while (y2 + 1< boardLocal[0].length
                         && boardLocal[x][y2 + 1].getTile() != null) {
                     rightChars += boardLocal[x][y2 + 1].getTile().getLetter();
                     y2++;
@@ -304,7 +304,7 @@ public class Validator {
                     x2--;
                 }
                 x2 = x;
-                while (x2 < boardLocal.length
+                while (x2 + 1< boardLocal.length
                         && boardLocal[x2 + 1][y].getTile() != null) {
                     rightChars += boardLocal[x2 + 1][y].getTile().getLetter();
                     x2++;
