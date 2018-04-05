@@ -73,6 +73,12 @@ public abstract class User {
     {
         return score;
     }
+    public synchronized void setScore(int score)
+    {
+        this.score = score;
+    }
+
+
 
 
     public String getUsername(){

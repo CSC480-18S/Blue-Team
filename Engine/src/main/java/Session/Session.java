@@ -118,7 +118,7 @@ public class Session {
             if (users[i] == null) {
 
                 users[i] = newPlayer;
-                gui.setUserName(i, username);
+                gui.updateUsers(users);
                 if(currentTurn == -1){
                     nextTurn();
                 }
@@ -200,6 +200,7 @@ public class Session {
         if ((int) result[0] == 1) {
             board.placeWord(startX, startY, horizontal, word);
             int score = calculateMovePoints((Move) result[1]);
+            user.setScore(user.getScore() + score);
             System.out.println("Played move for " + score + " points");
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
@@ -348,6 +349,7 @@ public class Session {
             }
             if(users[currentTurn] != null){
                 gui.setTurn(currentTurn);
+                gui.updateUsers(users);
                 done = true;
             }
         }
