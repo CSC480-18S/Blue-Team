@@ -24,6 +24,7 @@ public class Session {
     private User[] users;
     private ArrayList<Move> playedMoves;
     private QueryClass dbQueries;
+    private int currentTurn;
 
     private Session() {
         //Session.LogInfo("Initializing objects");
@@ -33,6 +34,7 @@ public class Session {
         users = new User[4];
         playedMoves = new ArrayList();
         dbQueries = new QueryClass();
+        currentTurn = -1;
     }
     public static Session getSession() {
         if (session == null) {
@@ -116,6 +118,10 @@ public class Session {
             if (users[i] == null) {
 
                 users[i] = newPlayer;
+                gui.setUserName(i, username);
+                if(currentTurn == -1){
+                    nextTurn();
+                }
                 return "JOINED";
             }
         }
@@ -152,9 +158,42 @@ public class Session {
 
         }
 
+        ArrayList<Character> chars = new ArrayList<>();
+        char[] arr = word.toCharArray();
+        for(int i =0; i < arr.length;i++){
+            chars.add(arr[i]);
+        }
+
+        word = "";
+
+        int count = 0;
+        StringBuilder wordBuilder = new StringBuilder(word);
+        //walk through the board and if tile is already placed - append it
+        while(!chars.isEmpty()){
+            if(horizontal){
+                if(board.getBoard()[startX + count][startY].getTile() != null){
+                    wordBuilder.append(board.getBoard()[startX + count][startY].getTile().getLetter());
+                } else {
+                    wordBuilder.append(chars.get(0));
+                    chars.remove(0);
+                }
+            } else {
+                if(board.getBoard()[startX][startY + count].getTile() != null){
+                    wordBuilder.append(board.getBoard()[startX][startY + count].getTile().getLetter());
+                } else {
+                    wordBuilder.append(chars.get(0));
+                    chars.remove(0);
+                }
+            }
+
+            count++;
+        }
+        word = wordBuilder.toString();
         Tile[] wordTiles = new Tile[word.length()];
-        for (int i = 0; i < word.length(); i++)
+
+        for (int i = 0; i < word.length(); i++) {
             wordTiles[i] = TileGenerator.getTile(word.charAt(i));
+        }
 
         Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, wordTiles, user));
 
@@ -164,11 +203,13 @@ public class Session {
             System.out.println("Played move for " + score + " points");
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
+            nextTurn();
             return "success";
         } else if ((int) result[0] == 2) {
             board.placeWord(startX, startY, horizontal, word);
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
+            nextTurn();
             return "success, bonus";
         } else if ((int) result[0] == -1) {
             return "profane word";
@@ -233,6 +274,7 @@ public class Session {
                         }
                     }
                     player.setHand(hand);
+                    nextTurn();
                     return "Exchanged: " + count + " tiles";
                 }
             }
@@ -289,5 +331,30 @@ public class Session {
                     points += calculateMovePoints(aMove);
             }
         return points;
+    }
+
+    /**
+     * Set's next player's turn
+     */
+    private void nextTurn(){
+
+        boolean done = false;
+        while (!done){
+            //increment player number
+            if(currentTurn == 3){
+                currentTurn = 0;
+            } else {
+                currentTurn++;
+            }
+            if(users[currentTurn] != null){
+                gui.setTurn(currentTurn);
+                done = true;
+            }
+        }
+
+    }
+
+    public int getCurrentTurn(){
+        return currentTurn;
     }
 }
