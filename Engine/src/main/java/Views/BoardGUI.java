@@ -370,17 +370,17 @@ public class BoardGUI{
         jt.repaint();
     }
 
-    public void setUserName(int id, String username){
-        if(id == 0){
-            player1Label.setText(username);
-        } else if (id == 1){
-            player2Label.setText(username);
-        } else if (id == 2){
-            player3Label.setText(username);
-        } else if (id == 3){
-            player4Label.setText(username);
-        }
-    }
+//    public void setUserName(int id, String username){
+//        if(id == 0){
+//            player1Label.setText(username);
+//        } else if (id == 1){
+//            player2Label.setText(username);
+//        } else if (id == 2){
+//            player3Label.setText(username);
+//        } else if (id == 3){
+//            player4Label.setText(username);
+//        }
+//    }
 
     public void setTurn(int id){
         player1Label.setForeground(Color.BLACK);
@@ -398,6 +398,22 @@ public class BoardGUI{
             player4Label.setForeground(Color.BLUE);
         }
 
+    }
+
+    public void updateUsers(User[] users){
+        for(int i =0; i < users.length; i++){
+            if(users[i] != null){
+                if(i == 0){
+                    player1Label.setText(users[i].getUsername() + "(" + users[i].getScore() + ")");
+                } else if (i == 1){
+                    player2Label.setText(users[i].getUsername() + "(" + users[i].getScore() + ")");
+                } else if (i == 2){
+                    player3Label.setText(users[i].getUsername() + "(" + users[i].getScore() + ")");
+                } else if (i == 3){
+                    player4Label.setText(users[i].getUsername() + "(" + users[i].getScore() + ")");
+                }
+            }
+        }
     }
 
 //    public void updateBoard (Space[][] board){
