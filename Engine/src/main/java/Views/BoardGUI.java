@@ -369,18 +369,7 @@ public class BoardGUI{
         }
         jt.repaint();
     }
-
-//    public void setUserName(int id, String username){
-//        if(id == 0){
-//            player1Label.setText(username);
-//        } else if (id == 1){
-//            player2Label.setText(username);
-//        } else if (id == 2){
-//            player3Label.setText(username);
-//        } else if (id == 3){
-//            player4Label.setText(username);
-//        }
-//    }
+    
 
     public void setTurn(int id){
         player1Label.setForeground(Color.BLACK);
