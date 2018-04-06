@@ -230,6 +230,7 @@ public class Validator {
         String rightChars = "";
         boolean finished = false;
         Space[][] boardLocal = Session.getSession().getBoardAsSpaces();
+        TileGenerator tg = TileGenerator.getInstance();
 
         int x = startX;
         int y = startY;
@@ -263,7 +264,7 @@ public class Validator {
         word = leftChars + word + rightChars;
         Tile[] wordTiles = new Tile[word.length()];
         for (int i = 0; i < word.length(); i++)
-            wordTiles[i] = TileGenerator.getTile(word.charAt(i));
+            wordTiles[i] = tg.getTile(word.charAt(i));
         
         return wordTiles;
     }
