@@ -37,6 +37,13 @@ body{
 }
 
 .container {
+     width: 650px;
+     float: left;
+     border: none;
+     text-align: center;
+ }
+
+.handTiles {
     width: 650px;
     float: left;
     border: none;
@@ -68,6 +75,10 @@ img.avatar {
 }
 
 .container button {
+    display: inline-block;
+}
+
+.handTiles button {
     display: inline-block;
 }
 
