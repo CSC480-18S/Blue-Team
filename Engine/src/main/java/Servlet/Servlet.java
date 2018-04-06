@@ -118,10 +118,6 @@ public class Servlet extends HttpServlet {
             } else if (req.equals("getboard")) {
                 out.write(Session.getSession().getBoardJSON());
 
-            } else if (req.equals("getscore")) {
-                String mac = request.getParameter("macAddress");
-                out.write(EventHandler.scoreHandler(mac));
-
             }else {
                 // Unknown request
                 out.write(EventHandler.unknownHandler());
