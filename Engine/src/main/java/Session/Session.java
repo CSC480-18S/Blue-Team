@@ -205,15 +205,15 @@ public class Session {
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             nextTurn();
-            return "success";
+            return "VALID";
         } else if ((int) result[0] == 2) {
             board.placeWord(startX, startY, horizontal, word);
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             nextTurn();
-            return "success, bonus";
+            return "bonus";
         } else if ((int) result[0] == -1) {
-            return "profane word";
+            return "profane";
         }
         return "invalid";
 
