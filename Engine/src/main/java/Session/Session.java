@@ -137,6 +137,7 @@ public class Session {
   
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
+        String initialLetters = word;
         // Check if word length is less than 11,
         // it will cause errors if too big.
         // This should never happen but just in case..
@@ -201,13 +202,14 @@ public class Session {
             board.placeWord(startX, startY, horizontal, word);
             int score = calculateMovePoints((Move) result[1]);
             user.setScore(user.getScore() + score);
-            System.out.println("Played move for " + score + " points");
+            replaceTiles(user, initialLetters);
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             nextTurn();
             return "VALID";
         } else if ((int) result[0] == 2) {
             board.placeWord(startX, startY, horizontal, word);
+            replaceTiles(user, initialLetters);
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             nextTurn();
@@ -354,6 +356,29 @@ public class Session {
             }
         }
 
+    }
+
+    private void replaceTiles(User user, String letters){
+        TileGenerator tg = TileGenerator.getInstance();
+        Tile[] hand = user.getHand();
+        ArrayList<Character> replace = new ArrayList<>();
+        for (int i = 0; i < letters.length(); i++) {
+            replace.add(letters.charAt(i));
+        }
+
+        for (int i =0; i < users.length; i ++){
+            if (users[i] == user){
+                for (int k = 0; k < hand.length; k++) {
+                    if (replace.contains(hand[k].getLetter())) {
+                        //generate new tile instead
+                        replace.remove((Character) hand[k].getLetter());
+                        hand[k] = tg.getRandTile();
+                    }
+                }
+                users[i].setHand(hand);
+                break;
+            }
+        }
     }
 
     public int getCurrentTurn(){
