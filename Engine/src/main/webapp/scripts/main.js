@@ -27,177 +27,126 @@ function shuffleMe(array) {
     return array;
 }
 
-$(function exchange() {
-    //jquery remove?
-    $("#exchange").click(function () {
+function getSelectedTilesAsString() {
+    //var current = new Array();
+    var current = []; var file;
+    var i = 0; var s;
+    $(".drag").find("img").each(function (e) {
+        // only selecteds
+        var color = $(this).css("border-color");
+        if (color != null && color == "rgb(255, 0, 0)") // that is what red comes back as
+        {
+            file = $(this).attr('src');
+            // Get the start point of the file
+            s = file.search(/.png/i);
+            // now we have the letter of just the latest word
+            current[i++] = file.slice(s - 1, -4);
+            i++;
+        }
+    });
+    return current.join("");
+}
+function exchange()
+{
+    var output = prompt("Exchange selected tiles?", "Yes");
+    switch (output.toUpperCase()) {
+        case "YES":
+            // Unused but I will leave it incase we want this code
+            //var randLet = Math.floor(Math.random() * 26);
+            var exchangedTiles = getSelectedTilesAsString();
+            var i = 0;
 
-        var exit = prompt("Do you want to exchange some tiles?", "Yes");
-        switch (exit.toUpperCase()) {
-            case "NO":
-                alert("Continue playing");
-                break;
-            case "YES":
-                alert("Select how many tiles you want to exchange");
-
-                //var letters = new Array();
-
-                // Unused but I will leave it incase we want this code
-                //var randLet = Math.floor(Math.random() * 26);
-                var exchangedTiles = [];
-                var i = 0;
-
-                $('img').click(function () {
-                    $(this).addClass('borderClass');
-                    $img = $(this).get();
-                    alert($img);
-                    exchangedTiles[i++] = $img;
-
-                });
-
+            if (exchangedTiles.length > 0)
+            {
                 $.post("Servlet", {
                     request: "exchange",
-                    tiles: exchangedTiles, //sends the tiles to be exchanged, in a string named tiles
-                }, function (data, status) { // execute ajax get request on url of "someservlet" and execute the following function with                                                ajax response text...
-                    alert("Exchange - Data: " + data + "\nStatus: " + status); // response text.                var i = 0;
-                    var hand = [];
-                    var tiles = $.parseJSON(data);
-                    for (var tile in tiles) {
-                        hand[i++] = tile.letter;
-                    }
-
-                    $('#div0').empty().prepend($("imgs/" + hand[0] + ".png"));
-                    $('#div1').empty().prepend($("imgs/" + hand[1] + ".png"));
-                    $('#div2').empty().prepend($("imgs/" + hand[2] + ".png"));
-                    $('#div3').empty().prepend($("imgs/" + hand[3] + ".png"));
-                    $('#div4').empty().prepend($("imgs/" + hand[4] + ".png"));
-                    $('#div5').empty().prepend($("imgs/" + hand[5] + ".png"));
-                    $('#div6').empty().prepend($("imgs/" + hand[6] + ".png"));
-
+                    tiles: exchangedTiles, //tiles to be exchanged
+                }, function () {
+                    // Update the hand after server is done
+                    setHand();
                 });
 
-                $('img').click(function () {
-                    $(this).addClass('borderClass');
-                    $img = $(this).get();
-                });
-//                $("#img1").click(function () {
-//                    $(this).addClass('borderClass');
-//                    $img = $(this).get();
-//                });
-//                $("#img2").click(function () {
-//                    $(this).addClass('borderClass');
-//                    $img = $(this).get();
-//                });
-//                $("#img3").click(function () {
-//                    $(this).addClass('borderClass');
-//                    $img = $(this).get();
-//                });
-//                $("#img4").click(function () {
-//                    $(this).addClass('borderClass');
-//                    $img = $(this).get();
-//                });
-//                $("#img5").click(function () {
-//                    $(this).addClass('borderClass');
-//                    $img = $(this).get();
-//                });
-//                $("#img6").click(function () {
-//                    $(this).addClass('borderClass');
-//                    $img = $(this).get();
-//                });
-//                xyHand[i++] = $(this).attr('id');
+            }
+            break;
+    }
 
 
-                break;
-        }
+}
 
+function getCurrentHand() {
+    var hand = [];
+    hand[0] = document.getElementById('div0').getElementsByTagName('img')[0];
+    hand[1] = document.getElementById('div1').getElementsByTagName('img')[0];
+    hand[2] = document.getElementById('div2').getElementsByTagName('img')[0];
+    hand[3] = document.getElementById('div3').getElementsByTagName('img')[0];
+    hand[4] = document.getElementById('div4').getElementsByTagName('img')[0];
+    hand[5] = document.getElementById('div5').getElementsByTagName('img')[0];
+    hand[6] = document.getElementById('div6').getElementsByTagName('img')[0];
+    return hand;
+    // //var current = new Array();
+    // var current = new Array();
+    // var i = 0;
+    // $(".drag").find("img").each(function () {
+    //     current[i] = $(this).attr('src');
+    //     i++;
+    // });
+    // return current;
+}
 
+function getCurrentHandAsString() {
+    //var current = new Array();
+    var current = []; var file;
+    var i = 0; var s;
+    $(".drag").find("img").each(function () {
+        file = $(this).attr('src');
+        // Get the start point of the file
+        s = file.search(/.png/i);
+        // now we have the letter of just the latest word
+        current[i++] = file.slice(s - 1, -4);
+        i++;
     });
-});
+    return current.join("");
+}
+
 //only problem is if you have words in play it recalls all
 //the letters on the board
-$(function shuffle() {
-    $("#shuffle").click(function () {
+function shuffle()
+{
+    var hand = getCurrentHand();
 
-        var imgArray = new Array();
-        imgArray[0] = "#img0";
-        imgArray[1] = "#img1";
-        imgArray[2] = "#img2";
-        imgArray[3] = "#img3";
-        imgArray[4] = "#img4";
-        imgArray[5] = "#img5";
-        imgArray[6] = "#img6";
-        var shuffled = new Array();
-        shuffled = shuffleMe(imgArray);
-        $('#div0').prepend($(shuffled[0]));
-        $('#div1').prepend($(shuffled[1]));
-        $('#div2').prepend($(shuffled[2]));
-        $('#div3').prepend($(shuffled[3]));
-        $('#div4').prepend($(shuffled[4]));
-        $('#div5').prepend($(shuffled[5]));
-        $('#div6').prepend($(shuffled[6]));
-    });
-});
+    var shuffled = shuffleMe(hand);
 
-$(function recall() {
-    $("#recall").click(function () {
-        var i = 0;
-        currentHand = new Array();
-        $(".drag").find("img").each(function () {
-            // grab the src "attribute"
-            //this gets id of image
-            var id = $(this).attr("src");
-            // alert(id);
-            //array full of srcs
-            currentHand[i++] = $(this).attr('src');
+    $('#div0').empty().prepend($(shuffled[0]));
+    $('#div1').empty().prepend($(shuffled[1]));
+    $('#div2').empty().prepend($(shuffled[2]));
+    $('#div3').empty().prepend($(shuffled[3]));
+    $('#div4').empty().prepend($(shuffled[4]));
+    $('#div5').empty().prepend($(shuffled[5]));
+    $('#div6').empty().prepend($(shuffled[6]));
+}
 
-            //$(letters[i]).width(55);
-            //$(letters[i]).height(55);
-
-        });
-        var imArray = new Array();
-        imArray[0] = "#img0";
-        imArray[1] = "#img1";
-        imArray[2] = "#img2";
-        imArray[3] = "#img3";
-        imArray[4] = "#img4";
-        imArray[5] = "#img5";
-        imArray[6] = "#img6";
-
-        $('#div0').prepend($(imArray[0]));
-        $('#div1').prepend($(imArray[1]));
-        $('#div2').prepend($(imArray[2]));
-        $('#div3').prepend($(imArray[3]));
-        $('#div4').prepend($(imArray[4]));
-        $('#div5').prepend($(imArray[5]));
-        $('#div6').prepend($(imArray[6]));
-    });
-});
-
-//get array of current tile hand layout then
-//without this above then it unshuffles if you had shuffled
-$(function getCurrentHand() {
-    //var current = new Array();
-
-    var current = new Array();
+function recall() {
+    // Diff board
+    var xyCoord = [];
     var i = 0;
-// 		$(".drag:has(img)").each(function () {
-// 			current[i++] = $(this).attr('id');
-
-//         });
-    $(".drag").find("img").each(function () {
-        // grab the src "attribute"
-        //this gets id of image
-        var id = $(this).attr("id");
-        // alert(id);
-        //array full of ids
-        current[i++] = $(this).attr('id');
+    $(".drop:has(img)").each(function () {
+        xyCoord[i++] = $(this).attr('id');
     });
 
-});
+    var newPlay = xyCoord.diff(boardState);
+    // Remove tiles
+    for (var i = 0; i < newPlay.length; i++)
+    {
+        $('#' + newPlay[i] + " img").remove();
+    }
+    // Update hand
+    setHand();
+}
 
 
 //need to store tile placement and check if they are in valid spots
 //change to buttons to click on for yes or no
-$(function exit() {
+function exit() {
     $("#exit").click(function () {
         var text;
         var exit = prompt("Are you sure you want to exit?", "Yes");
@@ -223,7 +172,7 @@ $(function exit() {
         }
     });
 
-});
+}
 
 Array.prototype.diff = function (a) {
     return this.filter(function (i) {
@@ -233,7 +182,7 @@ Array.prototype.diff = function (a) {
 //change to buttons to click on for yes or no
 
 //cant just play one word
-$(function confirmed() {
+function confirmed() {
     $("#confirmed").click(function () {
 
         // Instance variables
@@ -294,33 +243,6 @@ $(function confirmed() {
         wordString = wordPlayed.join("");
         alert("Word Played: " + wordString);
 
-        // $(".drag").not(":has(img)").each(function () {
-        //     //need to make new image clickable
-        //     //need to add a state for the hand
-        //     //every time play is pressed hand upadtes
-        //     //var letters = new Array();
-        //
-        //     //fills in random letters after you play hand
-        //     //var shuffled = shuffleMe(letters);
-        //     $.post("Servlet", {
-        //         request: "gethand",
-        //     }, function (data, status) {
-        //         alert("Data: " + data + "\nStatus: " + status); // response text.
-        //         var i = 0;
-        //         var hand = [];
-        //         var tiles = $.parseJSON(data);
-        //         for (var tile in tiles) {
-        //             hand[i++] = tile.letter;
-        //         }
-        //         $(this).prepend("imgs/" + hand[i] + ".png");
-        //     });
-        // });
-
-        // $('img').click(function () {
-        //     $(this).addClass('borderClass');
-        //     $img = $(this).get();
-        // });
-
         //This is the Play request
         $.post("Servlet", { //needs variables for word, coordinates and direction (h or v)
             request: "play",
@@ -364,7 +286,7 @@ $(function confirmed() {
         // Deep copy new board state global array
         boardState = [...xyCoord];
     });
-});
+}
 
 // For when we want to have a dedicated message box
 // and we don't have alerts every where

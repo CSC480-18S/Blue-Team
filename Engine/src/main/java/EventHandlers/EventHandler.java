@@ -53,15 +53,13 @@ public final class EventHandler {
     }
 
     public static String getHandHandler(String macAddress){
-        User[] users = Session.getSession().getUsers();
-        for(User user : users){
-            if(user != null && user.getClass() == Player.class){
-                Player player = (Player) user;
-                Tile[] hand = player.getHand();
-                Gson gson = new Gson();
-                String jsonHand = gson.toJson(hand);
-                return jsonHand;
-            }
+        Player player = getThisPlayerByMac(macAddress);
+        if (player != null)
+        {
+            Tile[] hand = player.getHand();
+            Gson gson = new Gson();
+            String jsonHand = gson.toJson(hand);
+            return jsonHand;
         }
         return "Error: user not found";
     }
@@ -102,5 +100,28 @@ public final class EventHandler {
     public static String unknownHandler() {
         return "unknownHandler";
     }
-    
+
+    public static int scoreHandler(String mac) {
+        Player p = getThisPlayerByMac(mac);
+        if (p != null)
+            return p.getScore();
+        else
+            return 0;
+    }
+
+
+    public static Player getThisPlayerByMac(String mac)
+    {
+        User[] users = Session.getSession().getUsers();
+        for(User user : users){
+            if(user != null && user.getClass() == Player.class){
+                Player player = (Player) user;
+                if (player.getMacAddress() == mac)
+                {
+                    return player;
+                }
+            }
+        }
+        return null;
+    }
 }
