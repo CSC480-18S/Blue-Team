@@ -254,10 +254,10 @@ $(function confirmed() {
         });
 
         //gets difference between the state of board now and the previous state
-        var realDiff = xyCoord.diff(boardState);
+        var newPlay = xyCoord.diff(boardState);
 
-        firstCoord = realDiff[0];
-        secondCoord = realDiff[1];
+        firstCoord = newPlay[0];
+        secondCoord = newPlay[1];
         // Get coordinate of first letter
         if (firstCoord == null) return; // back out if no word available
         var xy1 = firstCoord.split("_");
@@ -280,10 +280,10 @@ $(function confirmed() {
         }
 
         //goes through only letters played this turn
-        for (var n = 0; n < realDiff.length; n++) {
+        for (var n = 0; n < newPlay.length; n++) {
             // get the file name (src) by the id (coordinate)
             //may need to change this or change split
-            var file = document.getElementById(realDiff[n]).getElementsByTagName('img')[0].src;
+            var file = document.getElementById(newPlay[n]).getElementsByTagName('img')[0].src;
             // Get the start point of the file
             var s = file.search(/.png/i);
             // now we have the letter of just the latest word
@@ -340,18 +340,18 @@ $(function confirmed() {
             else if (result == "PROFANE")
             {
                 // If play was invalid remove played tiles from board
-                for (var i = 0; i < xyCoord.length; i++)
+                for (var i = 0; i < newPlay.length; i++)
                 {
-                    $('#' + xyCoord[i] + " img").remove();
+                    $('#' + newPlay[i] + " img").remove();
                 }
                 showMessage("Profanity !");
             }
             else
             {
                 // If play was invalid remove played tiles from board
-                for (var i = 0; i < xyCoord.length; i++)
+                for (var i = 0; i < newPlay.length; i++)
                 {
-                    $('#' + xyCoord[i] + " img").remove();
+                    $('#' + newPlay[i] + " img").remove();
                 }
                 // Give user message
                 showMessage(responsetext);
