@@ -33,7 +33,7 @@ public final class EventHandler {
 
         //searching for user
         Session session = Session.getSession();
-        String result = "unauthorized";
+        String result = "User unauthorized";
         User[]users = session.getUsers();
         int currentTurn = session.getCurrentTurn();
         for(int i =0; i < users.length; i++){
@@ -49,8 +49,7 @@ public final class EventHandler {
                 }
             }
         }
-        return "playHandler startX: " + startX + " startY: " + startY + 
-                " horizontal: "+ horizontal + " word: " + word + "\nResult: " + result;
+        return result;
     }
 
     public static String getHandHandler(String macAddress){
