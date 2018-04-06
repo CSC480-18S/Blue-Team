@@ -1,50 +1,10 @@
-$('#img0').click(function () {
-    $(this).addClass('borderClass');
-    $img = $(this).get();
-});
-$("#img1").click(function () {
-    $(this).addClass('borderClass');
-    $img = $(this).get();
-});
-$("#img2").click(function () {
-    $(this).addClass('borderClass');
-    $img = $(this).get();
-});
-$("#img3").click(function () {
-    $(this).addClass('borderClass');
-    $img = $(this).get();
-});
-$("#img4").click(function () {
-    $(this).addClass('borderClass');
-    $img = $(this).get();
-});
-$("#img5").click(function () {
-    $(this).addClass('borderClass');
-    $img = $(this).get();
-});
-$("#img6").click(function () {
-    $(this).addClass('borderClass');
-    $img = $(this).get();
-});
-
-$(".drag").click(function () {
-    $(this).addClass('borderClass');
-    $(this).append($img);
-
-});
-$(".drop").click(function () {
-    $(this).append($img);
-    $($img).removeClass('borderClass');
-
-});
-
-var letters = new Array();
+//var letters = new Array();
 var currentHand = new Array();
+var joined = false;
 
 //random number for shuffle
-var numRand = Math.floor(Math.random() * 7);
-//array for images in tile hand
-var imgArray = new Array();
+//var numRand = Math.floor(Math.random() * 7);
+
 
 //method to shuffle array
 function shuffleMe(array) {
@@ -67,24 +27,6 @@ function shuffleMe(array) {
     return array;
 }
 
-// Not used ?
-$(function setHand() {
-    $(document).ready(function () {
-
-        if (letters != null)
-        {
-            var randLet = Math.floor(Math.random() * 26);
-            $('#div0').prepend($(letters[randLet]));
-            $('#div1').prepend($(letters[randLet]));
-            $('#div2').prepend($(letters[randLet]));
-            $('#div3').prepend($(letters[randLet]));
-            $('#div4').prepend($(letters[randLet]));
-            $('#div5').prepend($(letters[randLet]));
-            $('#div6').prepend($(letters[randLet]));
-        }
-    });
-});
-
 $(function exchange() {
     //jquery remove?
     $("#exchange").click(function () {
@@ -97,137 +39,71 @@ $(function exchange() {
             case "YES":
                 alert("Select how many tiles you want to exchange");
 
-                var letters = new Array();
-                letters[0] = new Image();
-                letters[0].src = 'imgs/A.png';
-                //$('letter_A.png').width(55);
-                //$('letter_A.png').height(55);
-
-                letters[1] = new Image();
-                letters[1].src = 'imgs/B.png';
-
-                letters[2] = new Image();
-                letters[2].src = 'imgs/C.png';
-
-                letters[3] = new Image();
-                letters[3].src = 'imgs/D.png';
-
-                letters[4] = new Image();
-                letters[4].src = 'imgs/E.png';
-
-                letters[5] = new Image();
-                letters[5].src = 'imgs/F.png';
-
-                letters[6] = new Image();
-                letters[6].src = 'imgs/G.png';
-
-                letters[7] = new Image();
-                letters[7].src = 'imgs/H.png';
-
-                letters[8] = new Image();
-                letters[8].src = 'imgs/I.png';
-
-                letters[9] = new Image();
-                letters[9].src = 'imgs/J.png';
-
-                letters[10] = new Image();
-                letters[10].src = 'imgs/K.png';
-
-                letters[11] = new Image();
-                letters[11].src = 'imgs/L.png';
-
-                letters[12] = new Image();
-                letters[12].src = 'imgs/M.png';
-
-                letters[13] = new Image();
-                letters[13].src = 'imgs/N.png';
-
-                letters[14] = new Image();
-                letters[14].src = 'imgs/O.png';
-
-                letters[15] = new Image();
-                letters[15].src = 'imgs/P.png';
-
-                letters[16] = new Image();
-                letters[16].src = 'imgs/Q.png';
-
-                letters[17] = new Image();
-                letters[17].src = 'imgs/R.png';
-
-                letters[18] = new Image();
-                letters[18].src = 'imgs/S.png';
-
-                letters[19] = new Image();
-                letters[19].src = 'imgs/T.png';
-
-                letters[20] = new Image();
-                letters[20].src = 'imgs/U.png';
-
-                letters[21] = new Image();
-                letters[21].src = 'imgs/V.png';
-
-                letters[22] = new Image();
-                letters[22].src = 'imgs/W.png';
-
-                letters[23] = new Image();
-                letters[23].src = 'imgs/X.png';
-
-                letters[24] = new Image();
-                letters[24].src = 'imgs/Y.png';
-
-                letters[25] = new Image();
-                letters[25].src = 'imgs/Z.png';
-
-                // Set letter img dimenstions
-                for (var i = 0; i < letters.length; i++) {
-                    $(letters[i]).width(55);
-                    $(letters[i]).height(55);
-                    //$(letters[i]).id("img"+i);
-
-                }
+                //var letters = new Array();
 
                 // Unused but I will leave it incase we want this code
                 //var randLet = Math.floor(Math.random() * 26);
+                var exchangedTiles = [];
+                var i = 0;
 
-                var shuffled = shuffleMe(letters);
-                $('#div0').empty().prepend($(shuffled[0]));
-                $('#div1').empty().prepend($(shuffled[1]));
-                $('#div2').empty().prepend($(shuffled[2]));
-                $('#div3').empty().prepend($(shuffled[3]));
-                $('#div4').empty().prepend($(shuffled[4]));
-                $('#div5').empty().prepend($(shuffled[5]));
-                $('#div6').empty().prepend($(shuffled[6]));
+                $('img').click(function () {
+                    $(this).addClass('borderClass');
+                    $img = $(this).get();
+                    alert($img);
+                    exchangedTiles[i++] = $img;
 
+                });
 
-                $('#img0').click(function () {
+                $.post("Servlet", {
+                    request: "exchange",
+                    tiles: exchangedTiles, //sends the tiles to be exchanged, in a string named tiles
+                }, function (data, status) { // execute ajax get request on url of "someservlet" and execute the following function with                                                ajax response text...
+                    alert("Exchange - Data: " + data + "\nStatus: " + status); // response text.                var i = 0;
+                    var hand = [];
+                    var tiles = $.parseJSON(data);
+                    for (var tile in tiles) {
+                        hand[i++] = tile.letter;
+                    }
+
+                    $('#div0').empty().prepend($("imgs/" + hand[0] + ".png"));
+                    $('#div1').empty().prepend($("imgs/" + hand[1] + ".png"));
+                    $('#div2').empty().prepend($("imgs/" + hand[2] + ".png"));
+                    $('#div3').empty().prepend($("imgs/" + hand[3] + ".png"));
+                    $('#div4').empty().prepend($("imgs/" + hand[4] + ".png"));
+                    $('#div5').empty().prepend($("imgs/" + hand[5] + ".png"));
+                    $('#div6').empty().prepend($("imgs/" + hand[6] + ".png"));
+
+                });
+
+                $('img').click(function () {
                     $(this).addClass('borderClass');
                     $img = $(this).get();
                 });
-                $("#img1").click(function () {
-                    $(this).addClass('borderClass');
-                    $img = $(this).get();
-                });
-                $("#img2").click(function () {
-                    $(this).addClass('borderClass');
-                    $img = $(this).get();
-                });
-                $("#img3").click(function () {
-                    $(this).addClass('borderClass');
-                    $img = $(this).get();
-                });
-                $("#img4").click(function () {
-                    $(this).addClass('borderClass');
-                    $img = $(this).get();
-                });
-                $("#img5").click(function () {
-                    $(this).addClass('borderClass');
-                    $img = $(this).get();
-                });
-                $("#img6").click(function () {
-                    $(this).addClass('borderClass');
-                    $img = $(this).get();
-                });
-                xyHand[i++] = $(this).attr('id');
+//                $("#img1").click(function () {
+//                    $(this).addClass('borderClass');
+//                    $img = $(this).get();
+//                });
+//                $("#img2").click(function () {
+//                    $(this).addClass('borderClass');
+//                    $img = $(this).get();
+//                });
+//                $("#img3").click(function () {
+//                    $(this).addClass('borderClass');
+//                    $img = $(this).get();
+//                });
+//                $("#img4").click(function () {
+//                    $(this).addClass('borderClass');
+//                    $img = $(this).get();
+//                });
+//                $("#img5").click(function () {
+//                    $(this).addClass('borderClass');
+//                    $img = $(this).get();
+//                });
+//                $("#img6").click(function () {
+//                    $(this).addClass('borderClass');
+//                    $img = $(this).get();
+//                });
+//                xyHand[i++] = $(this).attr('id');
 
 
                 break;
@@ -236,13 +112,6 @@ $(function exchange() {
 
     });
 });
-
-//grab new tiles from bag
-$(function switchTiles() {
-
-
-});
-
 //only problem is if you have words in play it recalls all
 //the letters on the board
 $(function shuffle() {
@@ -280,8 +149,8 @@ $(function recall() {
             //array full of srcs
             currentHand[i++] = $(this).attr('src');
 
-            $(letters[i]).width(55);
-            $(letters[i]).height(55);
+            //$(letters[i]).width(55);
+            //$(letters[i]).height(55);
 
         });
         var imArray = new Array();
@@ -338,6 +207,13 @@ $(function exit() {
                 break;
             case "YES":
                 alert("Bye!");
+
+                $.post("Servlet", {
+                    request: "leave",
+                    username: uname
+                }, function (data, status) {
+                    alert("Leave - Data: " + data + "\nStatus: " + status); // response text.
+                });
                 //leave page
                 //window.open('','_parent','');
                 var win = window.open("about:blank", "_self")
@@ -349,16 +225,10 @@ $(function exit() {
 
 });
 
-//need to store tile placement and check if they are in valid spots
-//place tiles
-//can be annoying to do this everytime
-$(function place() {
-
-});
-
-
-Array.prototype.diff = function(a) {
-    return this.filter(function(i) {return a.indexOf(i) < 0;});
+Array.prototype.diff = function (a) {
+    return this.filter(function (i) {
+        return a.indexOf(i) < 0;
+    });
 };
 //change to buttons to click on for yes or no
 
@@ -366,32 +236,7 @@ Array.prototype.diff = function(a) {
 $(function confirmed() {
     $("#confirmed").click(function () {
 
-/*  I don't think any of this gets used
-
-        //this gets me every image that is on board
-        $(".drop").find("img").length;
-
-
-        //checks to see where each image is placed
-        $(".drop").find("#img0");
-        $(".drop").find("#img1");
-        $(".drop").find("#img2");
-        $(".drop").find("#img3");
-        $(".drop").find("#img4");
-        $(".drop").find("#img5");
-        $(".drop").find("#img6");
-
-        //gets the coordinate id for the div containing an image
-        var div0 = $(".drop:has(#img0)").attr('id');
-        var div1 = $(".drop:has(#img1)").attr('id');
-        var div2 = $(".drop:has(#img2)").attr('id');
-        var div3 = $(".drop:has(#img3)").attr('id');
-        var div4 = $(".drop:has(#img4)").attr('id');
-        var div5 = $(".drop:has(#img5)").attr('id');
-        var div6 = $(".drop:has(#img6)").attr('id');
-*/
-
-       // Instance variables
+        // Instance variables
         var xyCoord = [];
         var xyHand = [];
         var wordPlayed = new Array();
@@ -414,12 +259,12 @@ $(function confirmed() {
         firstCoord = realDiff[0];
         secondCoord = realDiff[1];
         // Get coordinate of first letter
+        if (firstCoord == null) return; // back out if no word available
         var xy1 = firstCoord.split("_");
         var y1 = xy1[1];
 
         // secondCoord will be null if only one letter was played
-        if(secondCoord != null)
-        {
+        if (secondCoord != null) {
             // If more than one letter played,
             // get the second coord to determine orientation
             var xy2 = secondCoord.split("_");
@@ -442,197 +287,39 @@ $(function confirmed() {
             // Get the start point of the file
             var s = file.search(/.png/i);
             // now we have the letter of just the latest word
-            wordPlayed[i++] = file.slice(s-1, -4);
+            wordPlayed[i++] = file.slice(s - 1, -4);
 
         }
 
         wordString = wordPlayed.join("");
         alert("Word Played: " + wordString);
 
-        //check each div in hand to see if they have
-        $(".drag").not(":has(img)").each(function () {
-            //need to make new image clickable
-            //need to add a state for the hand
-            //every time play is pressed hand upadtes
-            var letters = new Array();
-            letters[0] = new Image();
-            letters[0].src = 'imgs/A.png';
-            $('#A').attr('src', 'imgs/A.png');
+        // $(".drag").not(":has(img)").each(function () {
+        //     //need to make new image clickable
+        //     //need to add a state for the hand
+        //     //every time play is pressed hand upadtes
+        //     //var letters = new Array();
+        //
+        //     //fills in random letters after you play hand
+        //     //var shuffled = shuffleMe(letters);
+        //     $.post("Servlet", {
+        //         request: "gethand",
+        //     }, function (data, status) {
+        //         alert("Data: " + data + "\nStatus: " + status); // response text.
+        //         var i = 0;
+        //         var hand = [];
+        //         var tiles = $.parseJSON(data);
+        //         for (var tile in tiles) {
+        //             hand[i++] = tile.letter;
+        //         }
+        //         $(this).prepend("imgs/" + hand[i] + ".png");
+        //     });
+        // });
 
-            letters[1] = new Image();
-            letters[1].src = 'imgs/B.png';
-            $('#B').attr('src', 'imgs/B.png');
-
-
-            letters[2] = new Image();
-            letters[2].src = 'imgs/C.png';
-            $('#C').attr('src', 'imgs/C.png');
-
-
-            letters[3] = new Image();
-            letters[3].src = 'imgs/D.png';
-            $('#D').attr('src', 'imgs/D.png');
-
-
-            letters[4] = new Image();
-            letters[4].src = 'imgs/E.png';
-            $('#E').attr('src', 'imgs/E.png');
-
-
-            letters[5] = new Image();
-            letters[5].src = 'imgs/F.png';
-            $('#F').attr('src', 'imgs/F.png');
-
-
-            letters[6] = new Image();
-            letters[6].src = 'imgs/G.png';
-            $('#G').attr('src', 'imgs/G.png');
-
-
-            letters[7] = new Image();
-            letters[7].src = 'imgs/H.png';
-            $('#H').attr('src', 'imgs/H.png');
-
-
-            letters[8] = new Image();
-            letters[8].src = 'imgs/I.png';
-            $('#I').attr('src', 'imgs/I.png');
-
-
-            letters[9] = new Image();
-            letters[9].src = 'imgs/J.png';
-            $('#imgJ').attr('src', 'imgs/J.png');
-
-
-            letters[10] = new Image();
-            letters[10].src = 'imgs/K.png';
-            $('#imgK').attr('src', 'imgs/K.png');
-
-
-            letters[11] = new Image();
-            letters[11].src = 'imgs/L.png';
-            $('#imgL').attr('src', 'imgs/L.png');
-
-
-            letters[12] = new Image();
-            letters[12].src = 'imgs/M.png';
-            $('#imgM').attr('src', 'imgs/M.png');
-
-
-            letters[13] = new Image();
-            letters[13].src = 'imgs/N.png';
-            $('#imgN').attr('src', 'imgs/N.png');
-
-
-            letters[14] = new Image();
-            letters[14].src = 'imgs/O.png';
-            $('#imgO').attr('src', 'imgs/O.png');
-
-
-            letters[15] = new Image();
-            letters[15].src = 'imgs/P.png';
-            $('#imgP').attr('src', 'imgs/P.png');
-
-
-            letters[16] = new Image();
-            letters[16].src = 'imgs/Q.png';
-            $('#imgQ').attr('src', 'imgs/Q.png');
-
-
-            letters[17] = new Image();
-            letters[17].src = 'imgs/R.png';
-            $('#imgR').attr('src', 'imgs/R.png');
-
-
-            letters[18] = new Image();
-            letters[18].src = 'imgs/S.png';
-            $('#imgS').attr('src', 'imgs/S.png');
-
-
-            letters[19] = new Image();
-            letters[19].src = 'imgs/T.png';
-            $('#imgT').attr('src', 'imgs/T.png');
-
-
-            letters[20] = new Image();
-            letters[20].src = 'imgs/U.png';
-            $('#imgU').attr('src', 'imgs/U.png');
-
-
-            letters[21] = new Image();
-            letters[21].src = 'imgs/V.png';
-            $('#imgV').attr('src', 'imgs/V.png');
-
-
-            letters[22] = new Image();
-            letters[22].src = 'imgs/W.png';
-            $('#imgW').attr('src', 'imgs/W.png');
-
-
-            letters[23] = new Image();
-            letters[23].src = 'imgs/X.png';
-            $('#imgX').attr('src', 'imgs/X.png');
-
-
-            letters[24] = new Image();
-            letters[24].src = 'imgs/Y.png';
-            $('#imgY').attr('src', 'imgs/Y.png');
-
-
-            letters[25] = new Image();
-            letters[25].src = 'imgs/Z.png';
-            $('#imgZ').attr('src', 'imgs/Z.png');
-
-            letters[26] = new Image();
-            letters[0].src = 'imgs/A.png';
-            $('#A').attr('src', 'imgs/A.png');
-
-            letters[27] = new Image();
-            letters[0].src = 'imgs/A.png';
-            $('#A').attr('src', 'imgs/A.png');
-
-            letters[28] = new Image();
-            letters[8].src = 'imgs/I.png';
-            $('#I').attr('src', 'imgs/I.png');
-
-            letters[29] = new Image();
-            letters[8].src = 'imgs/I.png';
-            $('#I').attr('src', 'imgs/I.png');
-
-            letters[30] = new Image();
-            letters[8].src = 'imgs/I.png';
-            $('#I').attr('src', 'imgs/I.png');
-
-            letters[31] = new Image();
-            letters[4].src = 'imgs/E.png';
-            $('#E').attr('src', 'imgs/E.png');
-
-            letters[32] = new Image();
-            letters[4].src = 'imgs/E.png';
-            $('#E').attr('src', 'imgs/E.png');
-
-            letters[33] = new Image();
-            letters[4].src = 'imgs/E.png';
-            $('#E').attr('src', 'imgs/E.png');
-
-            for (var i = 0; i < letters.length; i++) {
-                $(letters[i]).width(55);
-                $(letters[i]).height(55);
-            }
-
-            var randLet = Math.floor(Math.random() * 33);
-
-            //fills in random letters after you play hand
-            //var shuffled = shuffleMe(letters);
-            $(this).prepend(letters[randLet]);
-            xyHand[i++] = $(this).attr('id');
-
-        });
-
-        $('img').click(function () {
-            $(this).addClass('borderClass');
-            $img = $(this).get();
-        });
+        // $('img').click(function () {
+        //     $(this).addClass('borderClass');
+        //     $img = $(this).get();
+        // });
 
         //This is the Play request
         $.post("Servlet", { //needs variables for word, coordinates and direction (h or v)
@@ -641,10 +328,47 @@ $(function confirmed() {
             coords: firstCoord,
             direction: orientationWord
         }, function (responsetext) {
-            alert(responsetext); // response text.
+            var result = responsetext.toUpperCase();
+            if (result == "VALID")
+            {
+                showMessage("Success");
+            }
+            else if (result == "BONUS")
+            {
+                showMessage("Bonus word !");
+            }
+            else if (result == "PROFANE")
+            {
+                // If play was invalid remove played tiles from board
+                for (var i = 0; i < xyCoord.length; i++)
+                {
+                    $('#' + xyCoord[i] + " img").remove();
+                }
+                showMessage("Profanity !");
+            }
+            else
+            {
+                // If play was invalid remove played tiles from board
+                for (var i = 0; i < xyCoord.length; i++)
+                {
+                    $('#' + xyCoord[i] + " img").remove();
+                }
+                // Give user message
+                showMessage(responsetext);
+            }
+            // Update hand after play
+            setHand();
         });
-
+        // Reset current tile select
+        currentImg = null;
         // Deep copy new board state global array
         boardState = [...xyCoord];
     });
 });
+
+// For when we want to have a dedicated message box
+// and we don't have alerts every where
+function showMessage(str)
+{
+    alert(str);
+}
