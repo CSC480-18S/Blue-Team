@@ -891,4 +891,37 @@ public class QueryClass {
             se.printStackTrace();
         }
 	}
+	    /*
+* The test does not assume that the underlying popuation variances are equal and
+* it uses approximated degrees of freedom computed from the sample data to compute
+* the p-value. 
+     */
+    public Double tTestResults(){
+        String green = "SELECT green_team_score FROM GAME_TABLE";
+        String gold = "SELECT gold_team_score FROM GAME_TABLE";
+        try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+            PreparedStatement greenPS = con.prepareStatement(green);
+            PreparedStatement goldPS = con.prepareStatement(gold);
+            ResultSet greenRS = greenPS.executeQuery();
+            ResultSet goldRS = goldPS.executeQuery();
+            ArrayList<Double> greenAR = new ArrayList<>();
+            ArrayList<Double> goldAR = new ArrayList<>();
+            while (greenRS.next()) {
+                greenAR.add(greenRS.getDouble(1));
+            }
+            while (goldRS.next()) {
+                goldAR.add(goldRS.getDouble(1));
+            }
+
+            double[] greenARR = greenAR.stream().mapToDouble(Double::doubleValue).toArray();
+            double[] goldARR = goldAR.stream().mapToDouble(Double::doubleValue).toArray();
+
+            TTest tt = new TTest();
+            double pval = tt.tTest(greenARR, goldARR);
+            return 1.0 - pval;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
