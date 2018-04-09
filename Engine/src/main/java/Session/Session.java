@@ -138,12 +138,19 @@ public class Session {
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
         String initialLetters = word;
+        TileGenerator tg = TileGenerator.getInstance();
         // Check if word length is less than 11,
         // it will cause errors if too big.
         // This should never happen but just in case..
         if (word.length() > 11)
         {
             return "Please play a shorter word?...";
+        }
+
+        if(word.length() == 1){
+            if(board.getBoard()[startX + 1][startY].getTile() != null){
+                horizontal = true;
+            }
         }
 
         // If first move check
@@ -193,7 +200,8 @@ public class Session {
         Tile[] wordTiles = new Tile[word.length()];
 
         for (int i = 0; i < word.length(); i++) {
-            wordTiles[i] = TileGenerator.getTile(word.charAt(i));
+
+            wordTiles[i] = tg.getTile(word.charAt(i));
         }
 
         Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, wordTiles, user));
@@ -269,10 +277,11 @@ public class Session {
                     //check each tile in hand for match
                     for (int k = 0; k < hand.length; k++) {
                         if (replace.contains(hand[k].getLetter())) {
+                            Tile tileToExchange = tg.getTile(hand[k].getLetter());
                             //generate new tile instead
                             replace.remove((Character) hand[k].getLetter());
 
-                            hand[k] = tg.getRandTile();
+                            hand[k] = tg.exchangeTile(tileToExchange);
                             count++;
                         }
                     }
