@@ -147,6 +147,12 @@ public class Session {
             return "Please play a shorter word?...";
         }
 
+        if(word.length() == 1){
+            if(board.getBoard()[startX + 1][startY].getTile() != null){
+                horizontal = true;
+            }
+        }
+
         // If first move check
         if (firstMove())
         {
