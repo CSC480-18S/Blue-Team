@@ -11,6 +11,8 @@ import java.util.Scanner;
 public class TileGenerator {
     private static TileGenerator generator;
     private static ArrayList<Tile> bag;
+    private static ArrayList<Tile> sampleBag;
+
 
     private TileGenerator(){
         fillBag();
@@ -18,6 +20,7 @@ public class TileGenerator {
 
     private void fillBag(){
         bag = new ArrayList<>();
+        sampleBag = new ArrayList<>();
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream file = classloader.getResourceAsStream("tiles.txt");
         Scanner sc = new Scanner(file);
@@ -38,6 +41,9 @@ public class TileGenerator {
             int points = Integer.parseInt(line.substring(line.indexOf(',') + 1, line.indexOf(';')));
             for(int i =0; i < numOfTiles; i ++){
                 bag.add(new Tile(letter, points));
+            }
+            if(!sampleBag.contains(new Tile (letter, points))){
+                sampleBag.add(new Tile(letter, points));
             }
         }
         sc.close();
@@ -86,9 +92,10 @@ public class TileGenerator {
         }
         return generator;
     }
-    
+
+    //error - needs fix
     public Tile getTile(char letter) {
-        for (Tile tile : bag) {
+        for (Tile tile : sampleBag) {
             if (tile.getLetter() == letter) {
                 return tile;
             }
