@@ -1,4 +1,5 @@
 import java.sql.*;
+import org.apache.commons.math3.stat.inference.TTest;
 
 public class QueryClass {
     private String dbDriver = "com.mysql.jdbc.Driver";
@@ -891,4 +892,33 @@ public class QueryClass {
             se.printStackTrace();
         }
 	}
+	    public Double tTestResults(){
+        String green = "SELECT green_team_score FROM GAME_TABLE";
+        String gold = "SELECT gold_team_score FROM GAME_TABLE";
+        try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+            PreparedStatement greenPS = con.prepareStatement(green);
+            PreparedStatement goldPS = con.prepareStatement(gold);
+            ResultSet greenRS = greenPS.executeQuery();
+            ResultSet goldRS = goldPS.executeQuery();
+            ArrayList<Double> greenAR = new ArrayList<>();
+            ArrayList<Double> goldAR = new ArrayList<>();
+            while (greenRS.next()) {
+                greenAR.add(greenRS.getDouble(1));
+            }
+            while (goldRS.next()) {
+                goldAR.add(goldRS.getDouble(1));
+            }
+
+            //double[] arr = frameList.stream().mapToDouble(Double::doubleValue).toArray();
+            double[] greenARR = greenAR.stream().mapToDouble(Double::doubleValue).toArray();
+            double[] goldARR = goldAR.stream().mapToDouble(Double::doubleValue).toArray();
+
+            TTest tt = new TTest();
+            double pval = tt.tTest(greenARR, goldARR);
+            return 1.0 - pval;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
