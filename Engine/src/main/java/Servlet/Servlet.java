@@ -119,8 +119,8 @@ public class Servlet extends HttpServlet {
                 out.write(Session.getSession().getBoardJSON());
 
             } else if (req.equals("getscore")) {
-                String mac = request.getParameter("macAddress");
-                out.write(EventHandler.scoreHandler(mac));
+                String macAddress = getMACAddress(request.getRemoteAddr());
+                out.write(EventHandler.scoreHandler(macAddress));
 
             }else {
                 // Unknown request
