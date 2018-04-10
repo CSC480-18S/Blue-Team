@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import org.apache.commons.math3.stat.inference.TTest;
 
 public class QueryClass {
     private String dbDriver = "com.mysql.jdbc.Driver";
@@ -13,16 +15,46 @@ public class QueryClass {
             throw new RuntimeException("JDBC driver not found, jar is probably missing or in wrong folder");
         }
     }
+
+    /**
+     * Get the n highest word scores from players
+     * 
+     * @param num the number of top players/words to get
+     * @return String[][] where the first index is a player and the 
+     * second index is their uid, team, and associated high word score
+     */
+    public String[][] getHighestWordScoresAllPlayers(int num){
+    	String query = "SELECT PLAYER_TABLE.uid, PLAYER_TABLE.highest_word_score, teamid FROM PLAYER_TABLE "
+        		+ "INNER JOIN PLAYER_TEAM ON PLAYER_TABLE.uid = PLAYER_TEAM.uid ORDER BY highest_word_score DESC LIMIT ?";
+    	
+    	try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+    		PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setInt(1,num);
+            ResultSet rs = preparedStmt.executeQuery();
+            String[][] players = new String[num][3];
+            int i = 0;
+            while(rs.next()){
+            	players[i][0] = rs.getString("uid");
+            	players[i][1] = rs.getString("teamid");
+            	players[i][2] = String.valueOf(rs.getInt("highest_word_score"));
+            	i++;
+            }
+            return players;
+    	} catch (SQLException se){
+    		se.printStackTrace();
+    		return null;
+    	}
+    }
     
 	/**
      * Get the top player's names and cumulative scores by team
      * 
      * @param team gold or green for the top team members to get
+     * @param num the number of top players to get
      * @return String[][] where the first index is a player and the second
      * index is their uid, team, and cumulative score
      */
-    public String[][] getTopPlayersByTeam(String team) {
-        int num = 5; // Number of top players to retrieve
+    public String[][] getTopPlayersByTeam(int num, String team) {
         String query = "SELECT PLAYER_TABLE.uid, PLAYER_TABLE.cumulative_score, teamid FROM PLAYER_TABLE "
         		+ "INNER JOIN PLAYER_TEAM ON PLAYER_TABLE.uid = PLAYER_TEAM.uid WHERE PLAYER_TEAM.teamid=? "
         		+ "ORDER BY cumulative_score DESC LIMIT ?";
@@ -32,7 +64,7 @@ public class QueryClass {
             preparedStmt.setString(1, team);
             preparedStmt.setInt(2,num);
             ResultSet rs = preparedStmt.executeQuery();
-            String[][] players = new String[5][3];
+            String[][] players = new String[num][3];
             int i = 0;
             while(rs.next()){
             	players[i][0] = rs.getString("uid");
@@ -50,11 +82,11 @@ public class QueryClass {
     /**
      * Get the top player's names and cumulative scores
      *
+     * @param num the number of top players to get
      * @return String[][] where the first index is a player and the second
      * index is their uid, team, and cumulative score
      */
-    public String[][] getTopPlayers() {
-        int num = 5; // Number of top players to retrieve
+    public String[][] getTopPlayers(int num) {
         String query = "SELECT PLAYER_TABLE.uid, PLAYER_TABLE.cumulative_score, teamid FROM PLAYER_TABLE "
         		+ "INNER JOIN PLAYER_TEAM ON PLAYER_TABLE.uid = PLAYER_TEAM.uid ORDER BY cumulative_score DESC LIMIT ?";
 
@@ -63,7 +95,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setInt(1,num);
             ResultSet rs = preparedStmt.executeQuery();
-            String[][] players = new String[5][3];
+            String[][] players = new String[num][3];
             int i = 0;
             while(rs.next()){
             	players[i][0] = rs.getString("uid");
@@ -272,12 +304,14 @@ public class QueryClass {
 	
     /**
      * Checks to see if the word a player played is a new longest for them,
+     * or a new highest word score,
      * updates it if it is tied for longest or longer
      * 
      * @param uname the user to update
      * @param word the word played
+     * @param points the point value of that word
      */
-	public void updatePlayerLongestWord(String uname, String word) {
+	public void updatePlayerLongestWordAndHighestScore(String uname, String word, int points) {
 		String query = "SELECT * FROM PLAYER_TABLE WHERE uid=?";
 		
         try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
@@ -289,6 +323,11 @@ public class QueryClass {
             	if(currentLong.length() <= word.length()){
 	            	rs.updateString("longest_word", word);
 	            	rs.updateRow();
+            	}
+            	int currentHigh = rs.getInt("highest_word_score");
+            	if(currentHigh <= points){
+            		rs.updateInt("highest_word_score", points);
+            		rs.updateRow();
             	}
             }
         } catch (SQLException se) {
@@ -344,14 +383,15 @@ public class QueryClass {
 
     /**
      * Add a new game table to the database
-     * @param game_id The game id
      * @param gold_team_score final Gold team score as an integer
      * @param green_team_score  final Greem team score as an integer
      * @return true = operation successful ; false = operation failed because of game_id already exists;
      * @throws RuntimeException if database error
      */
-    public Boolean addNewToGameTable(int game_id, int gold_team_score, int green_team_score){
+    public Boolean addNewToGameTable(int gold_team_score, int green_team_score){
 
+    	int game_id = this.getGameTableCount();
+    	
         try{
             Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
             if(!this.gameIDAlreadyExists(game_id)){ //if game_id doesnt exist
@@ -374,7 +414,6 @@ public class QueryClass {
 
     /**
      * Add a new valid word to the database
-     * @param word_id word id as an integer
      * @param word the word itself as a String
      * @param value how much point the word worth in the game, as an integer
      * @param length length of the word, as an integer
@@ -382,8 +421,10 @@ public class QueryClass {
      * @param bonuses_used how many times the word has been used as a bonus word, as an integer
      * @return Boolean indicates whether operation is successful. true if successful, false if word and/or word_id already exist, null if database error occur
      */
-    public Boolean addNewToValidWordTable(int word_id, String word, int value, int length, boolean is_extension, int bonuses_used){
+    public Boolean addNewToValidWordTable(String word, int value, int length, boolean is_extension, int bonuses_used){
 
+    	int word_id = this.getValidWordTableCount();
+    	
         try{
             Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
             if( this.wordIDAlreadyExistsInValidWordTable(word_id) || this.wordAlreadyExistsInValidWordTable(word)) {
@@ -697,4 +738,231 @@ public class QueryClass {
             return 0;
         }
 	}
+	/*
+	 * Updates cumulative_game_score for TEAM_TABLE
+	*/
+	public void updateTeamCumulative(String tname, int points){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
+		
+		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			preparedStmt.setString(1, tname);
+			ResultSet rs = preparedStmt.executeQuery();
+			if(rs.next()){
+				rs.updateInt("cumulative_game_score", (rs.getInt("cumulative_game_score")+points));
+				rs.updateRow();
+			}
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Checks if new score is better than old score
+	 * Updates as required
+	*/
+	public void updateHighestWordScore(String tname, int points){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
+		
+		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			preparedStmt.setString(1, tname);
+			ResultSet rs = preparedStmt.executeQuery();
+			if(rs.next()){
+				if (rs.getInt("highest_word_score") < points){
+					rs.updateInt("highest_word_score", points);
+					rs.updateRow();
+				} else {
+					
+				}
+			}
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Checks if new score is better than old score
+	 * Updates as required
+	*/
+	public void updateHighestGameSessionScore(String tname, int points){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
+		
+		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			preparedStmt.setString(1, tname);
+			ResultSet rs = preparedStmt.executeQuery();
+			if(rs.next()){
+				if (rs.getInt("highest_game_session_score") < points){
+					rs.updateInt("highest_game_session_score", points);
+					rs.updateRow();
+				} else {
+					
+				}
+			}
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Winning team itterate win count
+	 * tname = winning team
+	*/
+	public void updateWin(String tname){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
+		
+		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			preparedStmt.setString(1, tname);
+			ResultSet rs = preparedStmt.executeQuery();
+			if(rs.next()){
+				rs.updateInt("win_count", (rs.getInt("win_count")+1));
+				rs.updateRow();
+			}
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+	}
+	/*
+	 * losing team itterate lose count
+	 * tname = losing team
+	*/
+	public void updateLose(String tname){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
+		
+		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			preparedStmt.setString(1, tname);
+			ResultSet rs = preparedStmt.executeQuery();
+			if(rs.next()){
+				rs.updateInt("lose_count", (rs.getInt("lose_count")+1));
+				rs.updateRow();
+			}
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+	}
+	/*
+	 * Tie teams itterate tie count
+	 * tname = tie team 1
+	 * tnname = tie team 2
+	*/
+	public void updateTie(String tname, String tnname){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid = ?";
+		
+		try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			for (int i = 0; i < 2; i++) {
+				if (i == 0) {
+					preparedStmt.setString(1, tname);
+					ResultSet rs = preparedStmt.executeQuery();
+					if(rs.next()){
+						rs.updateInt("tie_count", (rs.getInt("tie_count")+1));
+						rs.updateRow();
+					}
+				} else {
+					preparedStmt.setString(1, tnname);
+					ResultSet rs = preparedStmt.executeQuery();
+					if(rs.next()){
+						rs.updateInt("tie_count", (rs.getInt("tie_count")+1));
+						rs.updateRow();
+					}
+				}
+			}
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Use if word played is new longest word
+	*/
+	
+	public void updateTeamLongestWord(String tname, String word) {
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid=?";
+		
+        try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+            PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            preparedStmt.setString(1, tname);
+            ResultSet rs = preparedStmt.executeQuery();
+            if(rs.next()){
+            	String currentLong = rs.getString("longest_word");
+            	if(currentLong.length() <= word.length()){
+	            	rs.updateString("longest_word", word);
+	            	rs.updateRow();
+            	}
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+	}
+	
+	public void updateTeamBonusCount(String tname, int bonus) {
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid=?";
+		
+        try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+            PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            preparedStmt.setString(1, tname);
+            ResultSet rs = preparedStmt.executeQuery();
+            if(rs.next()){
+            	rs.updateInt("bonuses", (rs.getInt("bonuses") + bonus));
+            	rs.updateRow();
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+	}
+	
+	/*
+	 *Call everytime a bad word is played or not I don't think we actually use this column
+	*/
+	public void updateDirtWordCount(String tname){
+		String query = "SELECT * FROM TEAM_TABLE WHERE uid=?";
+		
+        try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
+            PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            preparedStmt.setString(1, tname);
+            ResultSet rs = preparedStmt.executeQuery();
+            if(rs.next()){
+            	rs.updateInt("dirty_word", (rs.getInt("dirty_word") + 1));
+            	rs.updateRow();
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+	}
+	    /*
+* The test does not assume that the underlying popuation variances are equal and
+* it uses approximated degrees of freedom computed from the sample data to compute
+* the p-value. 
+     */
+    public Double tTestResults(){
+        String green = "SELECT green_team_score FROM GAME_TABLE";
+        String gold = "SELECT gold_team_score FROM GAME_TABLE";
+        try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+            PreparedStatement greenPS = con.prepareStatement(green);
+            PreparedStatement goldPS = con.prepareStatement(gold);
+            ResultSet greenRS = greenPS.executeQuery();
+            ResultSet goldRS = goldPS.executeQuery();
+            ArrayList<Double> greenAR = new ArrayList<>();
+            ArrayList<Double> goldAR = new ArrayList<>();
+            while (greenRS.next()) {
+                greenAR.add(greenRS.getDouble(1));
+            }
+            while (goldRS.next()) {
+                goldAR.add(goldRS.getDouble(1));
+            }
+
+            double[] greenARR = greenAR.stream().mapToDouble(Double::doubleValue).toArray();
+            double[] goldARR = goldAR.stream().mapToDouble(Double::doubleValue).toArray();
+
+            TTest tt = new TTest();
+            double pval = tt.tTest(greenARR, goldARR);
+            return 1.0 - pval;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

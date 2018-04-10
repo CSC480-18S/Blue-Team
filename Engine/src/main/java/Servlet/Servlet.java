@@ -80,7 +80,7 @@ public class Servlet extends HttpServlet {
                     horizontal = false;
                 }
                 
-                String[] splitCoords = coords.split(",");
+                String[] splitCoords = coords.split("_");
                 int startX = Integer.parseInt(splitCoords[0]);
                 int startY = Integer.parseInt(splitCoords[1]);
                 String macAddress = getMACAddress(request.getRemoteAddr());
@@ -92,35 +92,39 @@ public class Servlet extends HttpServlet {
             }else if (req.equals("leave")) {
                 // Leave a Game request
                 String mac = getMACAddress(request.getRemoteAddr());
-                out.print(EventHandler.leaveHandler(mac));
+                out.write(EventHandler.leaveHandler(mac));
             } else if (req.equals("forfeit")) {
                 // Forfeit a Game request
                 String username = request.getParameter("username");
                 String mac = request.getParameter("macAddress");
-                out.print(EventHandler.forfeitHandler(username, mac));
+                out.write(EventHandler.forfeitHandler(username, mac));
             } else if (req.equals("login")) {
                 // Login request
                 String username = request.getParameter("username");
                 String password = request.getParameter("password");
-                out.print(EventHandler.loginHandler(username, password));
+                out.write(EventHandler.loginHandler(username, password));
             } else if (req.equals("exchange")) {
                 // Exchange Tiles request
                 String tiles = request.getParameter("tiles");
                 String mac = getMACAddress(request.getRemoteAddr());
-                out.print(EventHandler.exchangeHandler(mac, tiles));
+                out.write(EventHandler.exchangeHandler(mac, tiles));
             } else if (req.equals("pass")) {
                 // Pass to Next Player request
                 String username = request.getParameter("username");
-                out.print(EventHandler.passHandler(username));
+                out.write(EventHandler.passHandler(username));
             } else if (req.equals("stats")) {
                 // Open Stats request
-                out.print(EventHandler.statsHandler());
+                out.write(EventHandler.statsHandler());
             } else if (req.equals("getboard")) {
-                out.print(Session.getSession().getBoardJSON());
+                out.write(Session.getSession().getBoardJSON());
+
+            } else if (req.equals("getscore")) {
+                String macAddress = getMACAddress(request.getRemoteAddr());
+                out.write(EventHandler.scoreHandler(macAddress));
 
             }else {
                 // Unknown request
-                out.print(EventHandler.unknownHandler());
+                out.write(EventHandler.unknownHandler());
             }
         }
         catch (Exception e) {
@@ -147,11 +151,7 @@ public class Servlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String text = "Success message";
-
-        response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
-        response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
-        response.getWriter().write(text);       // Write response body.
+        processRequest(request, response);
     }
 
     /**

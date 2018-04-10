@@ -5,6 +5,8 @@
  */
 package Models;
 
+import java.util.ArrayList;
+
 /**
  * Its a record of a move played (Or attempted to be played)
  * @author wcook
@@ -16,6 +18,7 @@ public class Move {
     private boolean horizontal;
     private Tile[] word;
     private User user;
+    private ArrayList<Move> offshootMoves;
 
     public Move(int startX, int startY, boolean horizontal, Tile[] word, User user) {
         this.user = user;
@@ -24,6 +27,7 @@ public class Move {
         this.horizontal = horizontal;
         this.word = word;
         this.user = user;
+        offshootMoves = null;
     }
 
     /**
@@ -78,6 +82,25 @@ public class Move {
     public Tile[] setWord(Tile[] word) {
         this.word = word;
         return word;
+    }
+
+    /**
+     * @param offshootMoves the new words created off of the main word played
+     */
+    public void setOffshootMoves(ArrayList<Move> offshootMoves){
+        this.offshootMoves = offshootMoves;
+    }
+
+    /**
+     * @return offshootMoves the list of offshootMoves for the move
+     */
+    public ArrayList<Move> getOffshootMoves(){
+        return this.offshootMoves;
+    }
+
+    public void updateStartCoordinate(int start[]){
+        this.startX = start[0];
+        this.startY = start[1];
     }
 
 }

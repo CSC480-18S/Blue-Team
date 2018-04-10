@@ -33,31 +33,33 @@ public final class EventHandler {
 
         //searching for user
         Session session = Session.getSession();
-        String result = "unauthorized";
+        String result = "User unauthorized";
         User[]users = session.getUsers();
+        int currentTurn = session.getCurrentTurn();
         for(int i =0; i < users.length; i++){
             if(users[i] != null && users[i].getClass() == Player.class) {
                 Player player = (Player) users[i];
                 if (player.getMacAddress().equals(macAddress)) {
-                    result = Session.getSession().playWord(startX, startY, horizontal, word, users[i]);
+                    if(currentTurn == i) {
+                        result = Session.getSession().playWord(startX, startY, horizontal, word, users[i]);
+                    } else {
+                        result = "Not your turn";
+                    }
                     break;
                 }
             }
         }
-        return "playHandler startX: " + startX + " startY: " + startY + 
-                " horizontal: "+ horizontal + " word: " + word + "\nResult: " + result;
+        return result;
     }
 
     public static String getHandHandler(String macAddress){
-        User[] users = Session.getSession().getUsers();
-        for(User user : users){
-            if(user != null && user.getClass() == Player.class){
-                Player player = (Player) user;
-                Tile[] hand = player.getHand();
-                Gson gson = new Gson();
-                String jsonHand = gson.toJson(hand);
-                return jsonHand;
-            }
+        Player player = getThisPlayerByMac(macAddress);
+        if (player != null)
+        {
+            Tile[] hand = player.getHand();
+            Gson gson = new Gson();
+            String jsonHand = gson.toJson(hand);
+            return jsonHand;
         }
         return "Error: user not found";
     }
@@ -98,5 +100,28 @@ public final class EventHandler {
     public static String unknownHandler() {
         return "unknownHandler";
     }
-    
+
+    public static String scoreHandler(String mac) {
+        Player p = getThisPlayerByMac(mac);
+        if (p != null)
+            return Integer.toString(p.getScore());
+        else
+            return "username not found";
+    }
+
+
+    public static Player getThisPlayerByMac(String mac)
+    {
+        User[] users = Session.getSession().getUsers();
+        for(User user : users){
+            if(user != null && user.getClass() == Player.class){
+                Player player = (Player) user;
+                if (player.getMacAddress().equals(mac))
+                {
+                    return player;
+                }
+            }
+        }
+        return null;
+    }
 }

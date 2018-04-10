@@ -24,6 +24,9 @@ public class Session {
     private User[] users;
     private ArrayList<Move> playedMoves;
     private QueryClass dbQueries;
+    private int currentTurn;
+    private int greenScore;
+    private int goldScore;
 
     private Session() {
         //Session.LogInfo("Initializing objects");
@@ -33,6 +36,7 @@ public class Session {
         users = new User[4];
         playedMoves = new ArrayList();
         dbQueries = new QueryClass();
+        currentTurn = -1;
     }
     public static Session getSession() {
         if (session == null) {
@@ -116,6 +120,10 @@ public class Session {
             if (users[i] == null) {
 
                 users[i] = newPlayer;
+                gui.updateUsers(users);
+                if(currentTurn == -1){
+                    nextTurn();
+                }
                 return "JOINED";
             }
         }
@@ -123,14 +131,30 @@ public class Session {
         return "Could not join game.";
     }
 
-    // Check if first move
+    // Check if this is the first move
     public boolean firstMove()
     {
-      return playedMoves.isEmpty();
+        return playedMoves.isEmpty();
     }
   
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
+        String initialLetters = word;
+        TileGenerator tg = TileGenerator.getInstance();
+        // Check if word length is less than 11,
+        // it will cause errors if too big.
+        // This should never happen but just in case..
+        if (word.length() > 11)
+        {
+            return "Please play a shorter word?...";
+        }
+
+        if(word.length() == 1){
+            if(board.getBoard()[startX + 1][startY].getTile() != null){
+                horizontal = true;
+            }
+        }
+
         // If first move check
         if (firstMove())
         {
@@ -144,20 +168,74 @@ public class Session {
 
         }
 
-        Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, word, user));
+        ArrayList<Character> chars = new ArrayList<>();
+        char[] arr = word.toCharArray();
+        for(int i =0; i < arr.length;i++){
+            chars.add(arr[i]);
+        }
+
+        word = "";
+
+        int count = 0;
+        StringBuilder wordBuilder = new StringBuilder(word);
+        //walk through the board and if tile is already placed - append it
+        while(!chars.isEmpty()){
+            if(horizontal){
+                if(board.getBoard()[startX + count][startY].getTile() != null){
+                    wordBuilder.append(board.getBoard()[startX + count][startY].getTile().getLetter());
+                } else {
+                    wordBuilder.append(chars.get(0));
+                    chars.remove(0);
+                }
+            } else {
+                if(board.getBoard()[startX][startY + count].getTile() != null){
+                    wordBuilder.append(board.getBoard()[startX][startY + count].getTile().getLetter());
+                } else {
+                    wordBuilder.append(chars.get(0));
+                    chars.remove(0);
+                }
+            }
+
+            count++;
+        }
+        word = wordBuilder.toString();
+        Tile[] wordTiles = new Tile[word.length()];
+
+        for (int i = 0; i < word.length(); i++) {
+
+            wordTiles[i] = tg.getTile(word.charAt(i));
+        }
+
+        Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, wordTiles, user));
 
         if ((int) result[0] == 1) {
             board.placeWord(startX, startY, horizontal, word);
+            int score = calculateMovePoints((Move) result[1]);
+            user.setScore(user.getScore() + score);
+            if(user instanceof Player) {
+                Player temp = (Player) user;
+                updateTeamScore(score, temp.getTeam());
+            }
+            replaceTiles(user, initialLetters);
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
-            return "success";
+            nextTurn();
+            return "VALID";
         } else if ((int) result[0] == 2) {
             board.placeWord(startX, startY, horizontal, word);
+            int score = calculateMovePoints((Move) result[1]) * 2;
+            user.setScore(user.getScore() + score);
+            if(user instanceof Player) {
+                Player temp = (Player) user;
+                updateTeamScore(score, temp.getTeam());
+            }
+            replaceTiles(user, initialLetters);
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
-            return "success, bonus";
+            nextTurn();
+            return "bonus";
         } else if ((int) result[0] == -1) {
-            return "profane word";
+            return "profane";
         }
         return "invalid";
 
@@ -211,14 +289,16 @@ public class Session {
                     //check each tile in hand for match
                     for (int k = 0; k < hand.length; k++) {
                         if (replace.contains(hand[k].getLetter())) {
+                            Tile tileToExchange = tg.getTile(hand[k].getLetter());
                             //generate new tile instead
                             replace.remove((Character) hand[k].getLetter());
 
-                            hand[k] = tg.getRandTile();
+                            hand[k] = tg.exchangeTile(tileToExchange);
                             count++;
                         }
                     }
                     player.setHand(hand);
+                    nextTurn();
                     return "Exchanged: " + count + " tiles";
                 }
             }
@@ -235,29 +315,123 @@ public class Session {
     public int calculateMovePoints(Move move) {
         Space[][] boardLocal = board.getBoard();
         boolean horizontal = move.isHorizontal();
+        ArrayList<Space> usedSpaces = new ArrayList();
         int points = 0;
         int wordMult = 1;
         int letterMult = 1;
         Multiplier mult = Multiplier.NONE;
         for (int i = 0; i < move.getWordString().length(); i++) {
+            Space current;
             if (horizontal) {
                 mult = boardLocal[move.getStartX() + i][move.getStartY()].
                         getMultiplier();
+                current = boardLocal[move.getStartX() + i][move.getStartY()];
+                usedSpaces.add(current);
             } else {
-                mult = boardLocal[move.getStartX()][move.getStartY() + 1].
+                mult = boardLocal[move.getStartX()][move.getStartY() + i].
                         getMultiplier();
+                current = boardLocal[move.getStartX()][move.getStartY() + i];
+                usedSpaces.add(current);
             }
+            if(current.getUsed() == false){
                 switch (mult) {
-                    case NONE : letterMult = 1; break;
-                    case DOUBLE_LETTER : letterMult = 2; break;
-                    case DOUBLE_WORD : wordMult *= 2; break;
-                    case TRIPLE_LETTER : letterMult = 3; break;
-                    case TRIPLE_WORD : wordMult *=3; break;
+                    case NONE:
+                        letterMult = 1;
+                        break;
+                    case DOUBLE_LETTER:
+                        letterMult = 2;
+                        break;
+                    case DOUBLE_WORD:
+                        wordMult *= 2;
+                        break;
+                    case TRIPLE_LETTER:
+                        letterMult = 3;
+                        break;
+                    case TRIPLE_WORD:
+                        wordMult *= 3;
+                        break;
                 }
-            
+            }
             points += letterMult * move.getWord()[i].getValue();
         }
         points *= wordMult;
+        //calculating the total number of points from offshoot moves
+        ArrayList<Move> offshootMoves = move.getOffshootMoves();
+        if(offshootMoves != null && !offshootMoves.isEmpty()) {
+            for (Move aMove : offshootMoves) {
+                if (aMove != null)
+                    points += calculateMovePoints(aMove);
+            }
+            for(Space space : usedSpaces){
+                space.setUsed();
+            }
+
+        }
+        System.out.println("points: " + points);
         return points;
+    }
+
+    /**
+     * Set's next player's turn
+     */
+    private void nextTurn(){
+
+        boolean done = false;
+        while (!done){
+            //increment player number
+            if(currentTurn == 3){
+                currentTurn = 0;
+            } else {
+                currentTurn++;
+            }
+            if(users[currentTurn] != null){
+                gui.setTurn(currentTurn);
+                gui.updateUsers(users);
+                done = true;
+            }
+        }
+
+    }
+
+    private void replaceTiles(User user, String letters){
+        TileGenerator tg = TileGenerator.getInstance();
+        Tile[] hand = user.getHand();
+        ArrayList<Character> replace = new ArrayList<>();
+        for (int i = 0; i < letters.length(); i++) {
+            replace.add(letters.charAt(i));
+        }
+
+        for (int i =0; i < users.length; i ++){
+            if (users[i] == user){
+                for (int k = 0; k < hand.length; k++) {
+                    if (replace.contains(hand[k].getLetter())) {
+                        //generate new tile instead
+                        replace.remove((Character) hand[k].getLetter());
+                        hand[k] = tg.getRandTile();
+                    }
+                }
+                users[i].setHand(hand);
+                break;
+            }
+        }
+    }
+
+    public int getCurrentTurn(){
+        return currentTurn;
+    }
+
+    private void updateTeamScore(int score, String team){
+        switch(team){
+            case "GREEN": greenScore += score;
+            break;
+            case "GOLD": goldScore += score;
+            break;
+            default: break;
+        }
+    }
+
+    public int[] getTeamScores(){
+        int[] teamScores = { greenScore, goldScore};
+        return teamScores;
     }
 }
