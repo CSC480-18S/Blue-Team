@@ -101,12 +101,12 @@ public final class EventHandler {
         return "unknownHandler";
     }
 
-    public static int scoreHandler(String mac) {
+    public static String scoreHandler(String mac) {
         Player p = getThisPlayerByMac(mac);
         if (p != null)
-            return p.getScore();
+            return Integer.toString(p.getScore());
         else
-            return 0;
+            return "username not found";
     }
 
 
@@ -116,7 +116,7 @@ public final class EventHandler {
         for(User user : users){
             if(user != null && user.getClass() == Player.class){
                 Player player = (Player) user;
-                if (player.getMacAddress() == mac)
+                if (player.getMacAddress().equals(mac))
                 {
                     return player;
                 }
