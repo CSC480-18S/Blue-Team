@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
@@ -29,6 +30,7 @@ public class BoardGUI{
 
     JFrame frame;
 
+    DefaultTableModel model;
     JTable jt;
     JTable user1;
     JTable user2;
@@ -42,7 +44,7 @@ public class BoardGUI{
 
 
     String column[]={"0","1","2","3","4","5","6","7","8","9","10"};
-    String[][] data = new String[BOARD_WIDTH][BOARD_WIDTH];
+    Object[][] data = new Object[BOARD_WIDTH][BOARD_WIDTH];
 
     String usercolumn13[]= {"0","1","2","3","4","5","6"};
     String[][] user13 = new String[length24][length13];
@@ -55,7 +57,7 @@ public class BoardGUI{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         for (int r = 0; r < BOARD_WIDTH; r++) {
             for (int c = 0; c < BOARD_WIDTH; c++) {
-                data[r][c] = " ";
+                data[r][c] = new ImageIcon(classloader.getResource("letters/placeholder.png"));
             }
         }
 
@@ -211,21 +213,25 @@ public class BoardGUI{
             }
         };
 
-        jt = new JTable(data, column);
+        // Model to setup board with data, data will include images instead of strings now
+        model = new DefaultTableModel(data, column) {
+            //  Returning the Class of each column will allow different
+            //  renderers to be used based on Class
+            public Class getColumnClass(int column) {
+                return getValueAt(0, column).getClass();
+            }
+        };
+
+        jt = new JTable(model);
         jt.setOpaque(false);
         jt.setDefaultEditor(Object.class, null);
         jt.setRowHeight(50);
-        jt.getColumnModel().getColumn(0).setPreferredWidth(50);
-        jt.getColumnModel().getColumn(1).setPreferredWidth(50);
-        jt.getColumnModel().getColumn(2).setPreferredWidth(50);
-        jt.getColumnModel().getColumn(3).setPreferredWidth(50);
-        jt.getColumnModel().getColumn(4).setPreferredWidth(50);
-        jt.getColumnModel().getColumn(5).setPreferredWidth(50);
-        jt.getColumnModel().getColumn(6).setPreferredWidth(50);
-        jt.getColumnModel().getColumn(7).setPreferredWidth(50);
-        jt.getColumnModel().getColumn(8).setPreferredWidth(50);
-        jt.getColumnModel().getColumn(9).setPreferredWidth(50);
-        jt.getColumnModel().getColumn(10).setPreferredWidth(50);
+        // set columns width, set custom cell renderer
+        for(int i = 0; i < column.length; ++i) // ***
+        {
+            jt.getColumnModel().getColumn(i).setPreferredWidth(50);
+            jt.getColumnModel().getColumn(i).setCellRenderer(new BoardCellRenderer());
+        }
         jt.setGridColor(Color.BLACK);
         jt.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
         jt.setBackground(Color.WHITE);
@@ -363,24 +369,16 @@ public class BoardGUI{
             for (int y = 0; y < BOARD_WIDTH; y++) {
                 if(board[x][y].getTile() != null){
                     char letter = board[x][y].getTile().getLetter();
-                    data[y][x] = Character.toString(letter);
+                    try
+                    {
+                        model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), y, x);
+                    } catch (Exception e) {}
                 }
             }
         }
         jt.repaint();
     }
 
-    public void setUserName(int id, String username){
-        if(id == 0){
-            player1Label.setText(username);
-        } else if (id == 1){
-            player2Label.setText(username);
-        } else if (id == 2){
-            player3Label.setText(username);
-        } else if (id == 3){
-            player4Label.setText(username);
-        }
-    }
 
     public void setTurn(int id){
         player1Label.setForeground(Color.BLACK);
@@ -398,6 +396,22 @@ public class BoardGUI{
             player4Label.setForeground(Color.BLUE);
         }
 
+    }
+
+    public void updateUsers(User[] users){
+        for(int i =0; i < users.length; i++){
+            if(users[i] != null){
+                if(i == 0){
+                    player1Label.setText(users[i].getUsername() + "(" + users[i].getScore() + ")");
+                } else if (i == 1){
+                    player2Label.setText(users[i].getUsername() + "(" + users[i].getScore() + ")");
+                } else if (i == 2){
+                    player3Label.setText(users[i].getUsername() + "(" + users[i].getScore() + ")");
+                } else if (i == 3){
+                    player4Label.setText(users[i].getUsername() + "(" + users[i].getScore() + ")");
+                }
+            }
+        }
     }
 
 //    public void updateBoard (Space[][] board){

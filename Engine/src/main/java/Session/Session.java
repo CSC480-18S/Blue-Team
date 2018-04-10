@@ -118,7 +118,7 @@ public class Session {
             if (users[i] == null) {
 
                 users[i] = newPlayer;
-                gui.setUserName(i, username);
+                gui.updateUsers(users);
                 if(currentTurn == -1){
                     nextTurn();
                 }
@@ -137,12 +137,20 @@ public class Session {
   
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
+        String initialLetters = word;
+        TileGenerator tg = TileGenerator.getInstance();
         // Check if word length is less than 11,
         // it will cause errors if too big.
         // This should never happen but just in case..
         if (word.length() > 11)
         {
             return "Please play a shorter word?...";
+        }
+
+        if(word.length() == 1){
+            if(board.getBoard()[startX + 1][startY].getTile() != null){
+                horizontal = true;
+            }
         }
 
         // If first move check
@@ -192,7 +200,8 @@ public class Session {
         Tile[] wordTiles = new Tile[word.length()];
 
         for (int i = 0; i < word.length(); i++) {
-            wordTiles[i] = TileGenerator.getTile(word.charAt(i));
+
+            wordTiles[i] = tg.getTile(word.charAt(i));
         }
 
         Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, wordTiles, user));
@@ -200,19 +209,21 @@ public class Session {
         if ((int) result[0] == 1) {
             board.placeWord(startX, startY, horizontal, word);
             int score = calculateMovePoints((Move) result[1]);
-            System.out.println("Played move for " + score + " points");
+            user.setScore(user.getScore() + score);
+            replaceTiles(user, initialLetters);
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             nextTurn();
-            return "success";
+            return "VALID";
         } else if ((int) result[0] == 2) {
             board.placeWord(startX, startY, horizontal, word);
+            replaceTiles(user, initialLetters);
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             nextTurn();
-            return "success, bonus";
+            return "bonus";
         } else if ((int) result[0] == -1) {
-            return "profane word";
+            return "profane";
         }
         return "invalid";
 
@@ -266,10 +277,11 @@ public class Session {
                     //check each tile in hand for match
                     for (int k = 0; k < hand.length; k++) {
                         if (replace.contains(hand[k].getLetter())) {
+                            Tile tileToExchange = tg.getTile(hand[k].getLetter());
                             //generate new tile instead
                             replace.remove((Character) hand[k].getLetter());
 
-                            hand[k] = tg.getRandTile();
+                            hand[k] = tg.exchangeTile(tileToExchange);
                             count++;
                         }
                     }
@@ -348,10 +360,34 @@ public class Session {
             }
             if(users[currentTurn] != null){
                 gui.setTurn(currentTurn);
+                gui.updateUsers(users);
                 done = true;
             }
         }
 
+    }
+
+    private void replaceTiles(User user, String letters){
+        TileGenerator tg = TileGenerator.getInstance();
+        Tile[] hand = user.getHand();
+        ArrayList<Character> replace = new ArrayList<>();
+        for (int i = 0; i < letters.length(); i++) {
+            replace.add(letters.charAt(i));
+        }
+
+        for (int i =0; i < users.length; i ++){
+            if (users[i] == user){
+                for (int k = 0; k < hand.length; k++) {
+                    if (replace.contains(hand[k].getLetter())) {
+                        //generate new tile instead
+                        replace.remove((Character) hand[k].getLetter());
+                        hand[k] = tg.getRandTile();
+                    }
+                }
+                users[i].setHand(hand);
+                break;
+            }
+        }
     }
 
     public int getCurrentTurn(){
