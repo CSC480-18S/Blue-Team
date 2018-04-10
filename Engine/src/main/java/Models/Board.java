@@ -30,6 +30,7 @@ public class Board implements GameConstants {
         // Initialize board
         int multIndex = 0;
         for (int r = 0; r < BOARD_WIDTH; r++) {
+            System.out.print("\nRow: " + r + " ");
             for (int c = 0; c < BOARD_WIDTH; c++) {
                 Multiplier mult = Multiplier.NONE;
                 // If Space in layout has a multiplier THIS IF STATEMENT LOGIC IS NOT CORRECT
@@ -46,6 +47,15 @@ public class Board implements GameConstants {
 //                    }
 //                    multIndex++;
 //                }
+                int mulType = layout[r][c];
+                System.out.print(mulType + " ");
+                switch(mulType){
+                    case 0: break;
+                    case 1: mult = Multiplier.DOUBLE_LETTER; break;
+                    case 2: mult = Multiplier.TRIPLE_LETTER; break;
+                    case 3: mult = Multiplier.DOUBLE_WORD; break;
+                    case 4: mult = Multiplier.TRIPLE_WORD; break;
+                }
                 board[r][c] = new Space(mult);
             }
         }
