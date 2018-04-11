@@ -106,7 +106,20 @@ public final class EventHandler {
         if (p != null)
             return Integer.toString(p.getScore());
         else
-            return "username not found";
+            return "0";
+    }
+
+    // Take mac address, check if it is this players turn
+    // If it is this players turn return 1, else 0
+    public static String turnHandler(String mac) {
+        String output = "";
+        try
+        {
+            output = Session.getSession().isMyTurn(mac);
+        }
+        catch (Exception e) {}
+
+        return output;
     }
 
 

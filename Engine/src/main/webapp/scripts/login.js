@@ -77,15 +77,18 @@ function setHand() {
 
         $.post("Servlet", {request: "gethand",}, function (data, status) {
             var hand = [];
-            var tiles = $.parseJSON(data);
+            try
+            {
+                var tiles = $.parseJSON(data);
 
-            var imgFile = "";
-            // just replace all tiles in the hand instead of worrying about which ones are empty
-            for (var i = 0; i < tiles.length; i++) {
-                imgFile = "imgs/" + tiles[i].letter + ".png";
-                $("#div" + i).empty().prepend('<img img="img"' + i + ' src=' + imgFile + ' width="55" height="55"/>');
-            }
+                var imgFile = "";
+                // just replace all tiles in the hand instead of worrying about which ones are empty
+                for (var i = 0; i < tiles.length; i++) {
+                    imgFile = "imgs/" + tiles[i].letter + ".png";
+                    $("#div" + i).empty().prepend('<img img="img"' + i + ' src=' + imgFile + ' width="55" height="55"/>');
+                }
 
+            } catch (e) {}
         });
     });
 }

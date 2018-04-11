@@ -46,8 +46,21 @@ function getSelectedTilesAsString() {
     });
     return current.join("");
 }
-function exchange()
+function exchange(el)
 {
+    // // If no border add one and return
+    // if (el.style.border == "")
+    // {
+    //     el.style.border = "5px solid red";
+    //     return;
+    // }
+    // else
+    // {
+    //     el.style.border = "";
+    //     // check if hand tiles have a border
+    //     // if none do return
+    // }
+
     var output = prompt("Exchange selected tiles?", "Yes");
     switch (output.toUpperCase()) {
         case "YES":
@@ -183,7 +196,10 @@ Array.prototype.diff = function (a) {
 
 //cant just play one word
 function confirmed() {
-    $("#confirmed").click(function () {
+    try
+    {
+        // Switch flag to pause updates
+        isPlaying = true;
 
         // Instance variables
         var xyCoord = [];
@@ -241,7 +257,7 @@ function confirmed() {
         }
 
         wordString = wordPlayed.join("");
-        alert("Word Played: " + wordString);
+        //alert("Word Played: " + wordString);
 
         //This is the Play request
         $.post("Servlet", { //needs variables for word, coordinates and direction (h or v)
@@ -257,7 +273,7 @@ function confirmed() {
             }
             else if (result == "BONUS")
             {
-                showMessage("Bonus word !");
+                showMessage("Bonus word !!");
             }
             else if (result == "PROFANE")
             {
@@ -285,7 +301,10 @@ function confirmed() {
         currentImg = null;
         // Deep copy new board state global array
         boardState = [...xyCoord];
-    });
+
+    } catch (e) {}
+    // reset flag always
+    finally {isPlaying = false}
 }
 
 // For when we want to have a dedicated message box
