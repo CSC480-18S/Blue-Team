@@ -15,16 +15,46 @@ public class QueryClass {
             throw new RuntimeException("JDBC driver not found, jar is probably missing or in wrong folder");
         }
     }
+
+    /**
+     * Get the n highest word scores from players
+     * 
+     * @param num the number of top players/words to get
+     * @return String[][] where the first index is a player and the 
+     * second index is their uid, team, and associated high word score
+     */
+    public String[][] getHighestWordScoresAllPlayers(int num){
+    	String query = "SELECT PLAYER_TABLE.uid, PLAYER_TABLE.highest_word_score, teamid FROM PLAYER_TABLE "
+        		+ "INNER JOIN PLAYER_TEAM ON PLAYER_TABLE.uid = PLAYER_TEAM.uid ORDER BY highest_word_score DESC LIMIT ?";
+    	
+    	try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+    		PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setInt(1,num);
+            ResultSet rs = preparedStmt.executeQuery();
+            String[][] players = new String[num][3];
+            int i = 0;
+            while(rs.next()){
+            	players[i][0] = rs.getString("uid");
+            	players[i][1] = rs.getString("teamid");
+            	players[i][2] = String.valueOf(rs.getInt("highest_word_score"));
+            	i++;
+            }
+            return players;
+    	} catch (SQLException se){
+    		se.printStackTrace();
+    		return null;
+    	}
+    }
     
 	/**
      * Get the top player's names and cumulative scores by team
      * 
      * @param team gold or green for the top team members to get
+     * @param num the number of top players to get
      * @return String[][] where the first index is a player and the second
      * index is their uid, team, and cumulative score
      */
-    public String[][] getTopPlayersByTeam(String team) {
-        int num = 5; // Number of top players to retrieve
+    public String[][] getTopPlayersByTeam(int num, String team) {
         String query = "SELECT PLAYER_TABLE.uid, PLAYER_TABLE.cumulative_score, teamid FROM PLAYER_TABLE "
         		+ "INNER JOIN PLAYER_TEAM ON PLAYER_TABLE.uid = PLAYER_TEAM.uid WHERE PLAYER_TEAM.teamid=? "
         		+ "ORDER BY cumulative_score DESC LIMIT ?";
@@ -34,7 +64,7 @@ public class QueryClass {
             preparedStmt.setString(1, team);
             preparedStmt.setInt(2,num);
             ResultSet rs = preparedStmt.executeQuery();
-            String[][] players = new String[5][3];
+            String[][] players = new String[num][3];
             int i = 0;
             while(rs.next()){
             	players[i][0] = rs.getString("uid");
@@ -52,11 +82,11 @@ public class QueryClass {
     /**
      * Get the top player's names and cumulative scores
      *
+     * @param num the number of top players to get
      * @return String[][] where the first index is a player and the second
      * index is their uid, team, and cumulative score
      */
-    public String[][] getTopPlayers() {
-        int num = 5; // Number of top players to retrieve
+    public String[][] getTopPlayers(int num) {
         String query = "SELECT PLAYER_TABLE.uid, PLAYER_TABLE.cumulative_score, teamid FROM PLAYER_TABLE "
         		+ "INNER JOIN PLAYER_TEAM ON PLAYER_TABLE.uid = PLAYER_TEAM.uid ORDER BY cumulative_score DESC LIMIT ?";
 
@@ -65,7 +95,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setInt(1,num);
             ResultSet rs = preparedStmt.executeQuery();
-            String[][] players = new String[5][3];
+            String[][] players = new String[num][3];
             int i = 0;
             while(rs.next()){
             	players[i][0] = rs.getString("uid");
@@ -274,12 +304,14 @@ public class QueryClass {
 	
     /**
      * Checks to see if the word a player played is a new longest for them,
+     * or a new highest word score,
      * updates it if it is tied for longest or longer
      * 
      * @param uname the user to update
      * @param word the word played
+     * @param points the point value of that word
      */
-	public void updatePlayerLongestWord(String uname, String word) {
+	public void updatePlayerLongestWordAndHighestScore(String uname, String word, int points) {
 		String query = "SELECT * FROM PLAYER_TABLE WHERE uid=?";
 		
         try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)){
@@ -291,6 +323,11 @@ public class QueryClass {
             	if(currentLong.length() <= word.length()){
 	            	rs.updateString("longest_word", word);
 	            	rs.updateRow();
+            	}
+            	int currentHigh = rs.getInt("highest_word_score");
+            	if(currentHigh <= points){
+            		rs.updateInt("highest_word_score", points);
+            		rs.updateRow();
             	}
             }
         } catch (SQLException se) {
@@ -346,15 +383,14 @@ public class QueryClass {
 
     /**
      * Add a new game table to the database
-     * @param game_id The game id
      * @param gold_team_score final Gold team score as an integer
      * @param green_team_score  final Greem team score as an integer
      * @return true = operation successful ; false = operation failed because of game_id already exists;
      * @throws RuntimeException if database error
      */
-    public Boolean addNewToGameTable(int game_id, int gold_team_score, int green_team_score){
-
+    public Boolean addNewToGameTable(int gold_team_score, int green_team_score){
         try{
+	    int game_id = this.getGameTableCount();
             Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
             if(!this.gameIDAlreadyExists(game_id)){ //if game_id doesnt exist
                 String sqlQuery = "INSERT INTO game_table VALUES (?,?,?);";
@@ -376,7 +412,6 @@ public class QueryClass {
 
     /**
      * Add a new valid word to the database
-     * @param word_id word id as an integer
      * @param word the word itself as a String
      * @param value how much point the word worth in the game, as an integer
      * @param length length of the word, as an integer
@@ -384,9 +419,11 @@ public class QueryClass {
      * @param bonuses_used how many times the word has been used as a bonus word, as an integer
      * @return Boolean indicates whether operation is successful. true if successful, false if word and/or word_id already exist, null if database error occur
      */
-    public Boolean addNewToValidWordTable(int word_id, String word, int value, int length, boolean is_extension, int bonuses_used){
+    public Boolean addNewToValidWordTable(String word, int value, int length, boolean is_extension, int bonuses_used){
 
+    	
         try{
+	    int word_id = this.getValidWordTableCount();
             Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
             if( this.wordIDAlreadyExistsInValidWordTable(word_id) || this.wordAlreadyExistsInValidWordTable(word)) {
                 return false;
@@ -528,7 +565,37 @@ public class QueryClass {
             return null;
         }
     }
-    
+    /**
+         * Get average game score of all games played throughout the history by a specified team
+         * @param teamname a String indicates the teamname, either "green" or "gold"
+         * @return Double indicates the average game score; null if teamname is neither "green" nor "gold"
+         */
+        public Double getTotalGameScoreAverageForTeam(String teamname){
+            try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+                String query = null;
+                if (teamname.equalsIgnoreCase("green")) {
+                    query = "SELECT SUM(green_team_score) FROM game_table;";
+                } else if (teamname.equalsIgnoreCase("gold")) {
+                    query = "SELECT SUM(gold_team_score) FROM game_table;";
+                } else {
+                    return null;
+                }
+                PreparedStatement statement = con.prepareStatement(query);
+                ResultSet result = statement.executeQuery();
+                result.next();
+                Double sum = result.getDouble(1);
+                int gameCount = this.getGameTableCount();
+                return sum/gameCount;
+
+            }catch (SQLException se) {
+                se.printStackTrace();
+                return null;
+            }
+
+        }
+	
+	
+	
     /**
      * get cumulative game score of a team
      * @return an integer indicating the cumulative score of specified team
