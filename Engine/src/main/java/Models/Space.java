@@ -14,13 +14,14 @@ public class Space {
     
     private Tile contents;
     private Multiplier multi;
-    
+    private boolean used;
     /*
         Creates a new Space given a Multiplier.
     */
     public Space(Multiplier m) {
         multi = m;
         contents = null;
+        used = false;
     }
     
     /*
@@ -57,7 +58,20 @@ public class Space {
     public synchronized void setTile(Tile t) {
         contents = t;
     }
-    
+
+    /*
+        setting the used flag for the multiplier
+     */
+    public synchronized void setUsed(){
+        if(used == false)
+            used = true;
+    }
+
+    /*
+        Getting the the used flag for the spaces multiplier
+     */
+    public synchronized boolean getUsed(){return this.used;}
+
     /*
         Returns space's Multiplier.
     */

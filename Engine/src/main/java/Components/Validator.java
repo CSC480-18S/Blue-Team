@@ -113,6 +113,11 @@ public class Validator {
                     while(0 < y0 && boardLocal[x+i][y0-1].getTile() != null) {
                         y0--;
                     }
+                    if(y0 == y) {
+                        while (y0 + 1 < boardLocal.length && boardLocal[x + i][y0 + 1].getTile() != null) {
+                            y0++;
+                        }
+                    }
                     //getting full vertical offshoot word
                     if(boardLocal[x+i][y0].getTile() != null) {
                         Tile[] fullOffshootWord = getFullWord(x+i, y, false, String.valueOf(move.getWordString().charAt(i)));
@@ -131,6 +136,11 @@ public class Validator {
                     int x0 = x;
                     while(0 < x0 && boardLocal[x0-1][y+i].getTile() != null){
                         x0--;
+                    }
+                    if(x0 == x) {
+                        while (x0 + 1 < boardLocal.length && boardLocal[x0 + 1][y+i].getTile() != null) {
+                            x0++;
+                        }
                     }
                     //getting full horizontal offshoot word
                     if(boardLocal[x0][y+i].getTile() != null) {
