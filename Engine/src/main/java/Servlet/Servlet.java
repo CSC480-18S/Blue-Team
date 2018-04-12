@@ -121,8 +121,12 @@ public class Servlet extends HttpServlet {
             } else if (req.equals("getscore")) {
                 String macAddress = getMACAddress(request.getRemoteAddr());
                 out.write(EventHandler.scoreHandler(macAddress));
-
-            }else {
+            } else if (req.equals("getupdates")) {
+                String macAddress = getMACAddress(request.getRemoteAddr());
+                String score = EventHandler.scoreHandler(macAddress);
+                String turn = EventHandler.turnHandler(macAddress);
+                out.write(score + "_" + turn);
+            } else {
                 // Unknown request
                 out.write(EventHandler.unknownHandler());
             }

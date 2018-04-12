@@ -38,6 +38,7 @@ public class Session {
         dbQueries = new QueryClass();
         currentTurn = -1;
     }
+
     public static Session getSession() {
         if (session == null) {
             session = new Session();
@@ -96,8 +97,9 @@ public class Session {
         username stored in index 0 and team stored in index 1*/
         String[] userInfo = dbQueries.findUser(macAddress);
 
+        // Use entered username
         if (userInfo != null) {
-            newPlayer = new Player(userInfo[0], macAddress, userInfo[1]);
+            newPlayer = new Player(username, macAddress, userInfo[1]);
 
         } //creating a new user profile in the database if the mac address is not already registered
         else {
@@ -121,7 +123,7 @@ public class Session {
 
                 users[i] = newPlayer;
                 gui.updateUsers(users);
-                if(currentTurn == -1){
+                if (currentTurn == -1) {
                     nextTurn();
                 }
                 return "JOINED";
@@ -132,11 +134,10 @@ public class Session {
     }
 
     // Check if this is the first move
-    public boolean firstMove()
-    {
+    public boolean firstMove() {
         return playedMoves.isEmpty();
     }
-  
+
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
         String initialLetters = word;
@@ -144,25 +145,22 @@ public class Session {
         // Check if word length is less than 11,
         // it will cause errors if too big.
         // This should never happen but just in case..
-        if (word.length() > 11)
-        {
+        if (word.length() > 11) {
             return "Please play a shorter word?...";
         }
 
-        if(word.length() == 1){
-            if(board.getBoard()[startX + 1][startY].getTile() != null){
+        if (word.length() == 1) {
+            if (board.getBoard()[startX + 1][startY].getTile() != null) {
                 horizontal = true;
             }
         }
 
         // If first move check
-        if (firstMove())
-        {
-            int boardCenter = GameConstants.BOARD_WIDTH/2;
+        if (firstMove()) {
+            int boardCenter = GameConstants.BOARD_WIDTH / 2;
             if ((horizontal ? startX : startY) > boardCenter
                     || ((horizontal ? startX : startY) + word.length() - 1) < boardCenter
-                    || (horizontal ? startY : startX) != boardCenter)
-            {
+                    || (horizontal ? startY : startX) != boardCenter) {
                 return "Please start in the center of the board.";
             }
 
@@ -170,7 +168,7 @@ public class Session {
 
         ArrayList<Character> chars = new ArrayList<>();
         char[] arr = word.toCharArray();
-        for(int i =0; i < arr.length;i++){
+        for (int i = 0; i < arr.length; i++) {
             chars.add(arr[i]);
         }
 
@@ -179,16 +177,16 @@ public class Session {
         int count = 0;
         StringBuilder wordBuilder = new StringBuilder(word);
         //walk through the board and if tile is already placed - append it
-        while(!chars.isEmpty()){
-            if(horizontal){
-                if(board.getBoard()[startX + count][startY].getTile() != null){
+        while (!chars.isEmpty()) {
+            if (horizontal) {
+                if (board.getBoard()[startX + count][startY].getTile() != null) {
                     wordBuilder.append(board.getBoard()[startX + count][startY].getTile().getLetter());
                 } else {
                     wordBuilder.append(chars.get(0));
                     chars.remove(0);
                 }
             } else {
-                if(board.getBoard()[startX][startY + count].getTile() != null){
+                if (board.getBoard()[startX][startY + count].getTile() != null) {
                     wordBuilder.append(board.getBoard()[startX][startY + count].getTile().getLetter());
                 } else {
                     wordBuilder.append(chars.get(0));
@@ -212,7 +210,7 @@ public class Session {
             board.placeWord(startX, startY, horizontal, word);
             int score = calculateMovePoints((Move) result[1]);
             user.setScore(user.getScore() + score);
-            if(user instanceof Player) {
+            if (user instanceof Player) {
                 Player temp = (Player) user;
                 updateTeamScore(score, temp.getTeam());
             }
@@ -225,7 +223,7 @@ public class Session {
             board.placeWord(startX, startY, horizontal, word);
             int score = calculateMovePoints((Move) result[1]) * 2;
             user.setScore(user.getScore() + score);
-            if(user instanceof Player) {
+            if (user instanceof Player) {
                 Player temp = (Player) user;
                 updateTeamScore(score, temp.getTeam());
             }
@@ -237,7 +235,7 @@ public class Session {
         } else if ((int) result[0] == -1) {
             return "profane";
         }
-        return "invalid";
+        return "Invalid";
 
     }
 
@@ -333,7 +331,7 @@ public class Session {
                 current = boardLocal[move.getStartX()][move.getStartY() + i];
                 usedSpaces.add(current);
             }
-            if(current.getUsed() == false){
+            if (current.getUsed() == false) {
                 switch (mult) {
                     case NONE:
                         letterMult = 1;
@@ -357,12 +355,12 @@ public class Session {
         points *= wordMult;
         //calculating the total number of points from offshoot moves
         ArrayList<Move> offshootMoves = move.getOffshootMoves();
-        if(offshootMoves != null && !offshootMoves.isEmpty()) {
+        if (offshootMoves != null && !offshootMoves.isEmpty()) {
             for (Move aMove : offshootMoves) {
                 if (aMove != null)
                     points += calculateMovePoints(aMove);
             }
-            for(Space space : usedSpaces){
+            for (Space space : usedSpaces) {
                 space.setUsed();
             }
 
@@ -374,17 +372,17 @@ public class Session {
     /**
      * Set's next player's turn
      */
-    private void nextTurn(){
+    private void nextTurn() {
 
         boolean done = false;
-        while (!done){
+        while (!done) {
             //increment player number
-            if(currentTurn == 3){
+            if (currentTurn == 3) {
                 currentTurn = 0;
             } else {
                 currentTurn++;
             }
-            if(users[currentTurn] != null){
+            if (users[currentTurn] != null) {
                 gui.setTurn(currentTurn);
                 gui.updateUsers(users);
                 done = true;
@@ -393,7 +391,7 @@ public class Session {
 
     }
 
-    private void replaceTiles(User user, String letters){
+    private void replaceTiles(User user, String letters) {
         TileGenerator tg = TileGenerator.getInstance();
         Tile[] hand = user.getHand();
         ArrayList<Character> replace = new ArrayList<>();
@@ -401,8 +399,8 @@ public class Session {
             replace.add(letters.charAt(i));
         }
 
-        for (int i =0; i < users.length; i ++){
-            if (users[i] == user){
+        for (int i = 0; i < users.length; i++) {
+            if (users[i] == user) {
                 for (int k = 0; k < hand.length; k++) {
                     if (replace.contains(hand[k].getLetter())) {
                         //generate new tile instead
@@ -416,22 +414,56 @@ public class Session {
         }
     }
 
-    public int getCurrentTurn(){
+    public int getCurrentTurn() {
         return currentTurn;
     }
 
-    private void updateTeamScore(int score, String team){
-        switch(team){
-            case "GREEN": greenScore += score;
-            break;
-            case "GOLD": goldScore += score;
-            break;
-            default: break;
+    // Check whos turn it is and return their username
+    public String isMyTurn(String mac)
+    {
+        try
+        {
+            // make sure users length lines up with current turn
+            int turn = getCurrentTurn();
+            if (users.length >= turn)
+            {
+                // Check if real live player
+                if (users[turn].getClass() == Player.class)
+                {
+                    // Check if its this players turn
+                    if (((Player)users[turn]).getMacAddress().equals(mac)) {
+                        return "You!";
+                    }
+                    // Must be another player, give their username
+                    return users[turn].getUsername();
+
+                }
+                // Its Skycat's turn
+                else
+                {
+                    return "Skycat";
+                }
+            }
+        } catch (Exception e) {}
+        // Default to AI's turn
+        return "Skycat";
+    }
+
+    private void updateTeamScore(int score, String team) {
+        switch (team) {
+            case "GREEN":
+                greenScore += score;
+                break;
+            case "GOLD":
+                goldScore += score;
+                break;
+            default:
+                break;
         }
     }
 
-    public int[] getTeamScores(){
-        int[] teamScores = { greenScore, goldScore};
+    public int[] getTeamScores() {
+        int[] teamScores = {greenScore, goldScore};
         return teamScores;
     }
 }
