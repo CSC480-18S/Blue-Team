@@ -389,10 +389,8 @@ public class QueryClass {
      * @throws RuntimeException if database error
      */
     public Boolean addNewToGameTable(int gold_team_score, int green_team_score){
-
-    	int game_id = this.getGameTableCount();
-    	
         try{
+	    int game_id = this.getGameTableCount();
             Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
             if(!this.gameIDAlreadyExists(game_id)){ //if game_id doesnt exist
                 String sqlQuery = "INSERT INTO game_table VALUES (?,?,?);";
@@ -423,9 +421,9 @@ public class QueryClass {
      */
     public Boolean addNewToValidWordTable(String word, int value, int length, boolean is_extension, int bonuses_used){
 
-    	int word_id = this.getValidWordTableCount();
     	
         try{
+	    int word_id = this.getValidWordTableCount();
             Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
             if( this.wordIDAlreadyExistsInValidWordTable(word_id) || this.wordAlreadyExistsInValidWordTable(word)) {
                 return false;
@@ -567,7 +565,37 @@ public class QueryClass {
             return null;
         }
     }
-    
+    /**
+         * Get average game score of all games played throughout the history by a specified team
+         * @param teamname a String indicates the teamname, either "green" or "gold"
+         * @return Double indicates the average game score; null if teamname is neither "green" nor "gold"
+         */
+        public Double getTotalGameScoreAverageForTeam(String teamname){
+            try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+                String query = null;
+                if (teamname.equalsIgnoreCase("green")) {
+                    query = "SELECT SUM(green_team_score) FROM game_table;";
+                } else if (teamname.equalsIgnoreCase("gold")) {
+                    query = "SELECT SUM(gold_team_score) FROM game_table;";
+                } else {
+                    return null;
+                }
+                PreparedStatement statement = con.prepareStatement(query);
+                ResultSet result = statement.executeQuery();
+                result.next();
+                Double sum = result.getDouble(1);
+                int gameCount = this.getGameTableCount();
+                return sum/gameCount;
+
+            }catch (SQLException se) {
+                se.printStackTrace();
+                return null;
+            }
+
+        }
+	
+	
+	
     /**
      * get cumulative game score of a team
      * @return an integer indicating the cumulative score of specified team
