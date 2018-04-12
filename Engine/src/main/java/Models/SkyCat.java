@@ -236,7 +236,7 @@ public class SkyCat extends User {
                                 }
                                 if (inHand == true) {
                                     Tile[] wordTiles = stringToTiles(w);
-                                    Move move = new Move(x, y - remainingStart.length(), true, wordTiles, this);
+                                    Move move = new Move(x, y - remainingStart.length(), false, wordTiles, this);
                                     Object[] result = validator.isValidPlay(move);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
@@ -318,7 +318,7 @@ public class SkyCat extends User {
                                 }
                                 if (inHand == true) {
                                     Tile[] wordTiles = stringToTiles(w);
-                                    Move move = new Move(x, y - remainingStart.length(), true, wordTiles, this);
+                                    Move move = new Move(x, y - remainingStart.length(), false, wordTiles, this);
                                     Object[] result = validator.isValidPlay(move);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
