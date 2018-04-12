@@ -31,6 +31,16 @@ public class Validator {
         int startY = move.getStartY();
         boolean horizontal = move.isHorizontal();
         
+        // Ensure move does not extend off board
+        if (horizontal && startX + move.getWordString().length() >= 
+                Session.getSession().getBoardAsSpaces().length) {
+            return new Object[] {0, move};
+        } else if (!horizontal && startY + move.getWordString().length() >= 
+                Session.getSession().getBoardAsSpaces()[0].length) {
+            return new Object[] {0, move};
+        } else if (startX < 0 || startY < 0)
+            return new Object[] {0, move};
+        
         // Check that move connects to existing tiles
         if (!connectsToTiles(move)) {
             return new Object[] {0, move};
