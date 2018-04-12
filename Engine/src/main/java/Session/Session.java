@@ -228,7 +228,7 @@ public class Session {
             board.placeWord(startX, startY, horizontal, word);
             String scoringWord = wordForScoring.toString();
             Tile[] tilesForScoring = new Tile[scoringWord.length()];
-            for(int i = 0; i < word.length(); i++){
+            for(int i = 0; i < scoringWord.length(); i++){
                 tilesForScoring[i] = tg.getTile(scoringWord.charAt(i));
             }
             Move scoringMove = (Move) result[1];
@@ -248,7 +248,7 @@ public class Session {
             board.placeWord(startX, startY, horizontal, word);
             String scoringWord = wordForScoring.toString();
             Tile[] tilesForScoring = new Tile[scoringWord.length()];
-            for(int i = 0; i < word.length(); i++){
+            for(int i = 0; i < scoringWord.length(); i++){
                 tilesForScoring[i] = tg.getTile(scoringWord.charAt(i));
             }
             Move scoringMove = (Move) result[1];
