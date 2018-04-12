@@ -9,6 +9,7 @@ import Components.Dictionaries;
 import Components.Validator;
 import Session.Session;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
@@ -38,6 +39,16 @@ public class SkyCat extends User {
         return "AI";
     }
 
+    /*
+        Chooses a move to play randomly
+        @return the coshosen Move
+     */
+    public Move chooseMove() {
+        Move[] possibleMoves = getAllMoves();
+        int indx = ThreadLocalRandom.current().nextInt(0, possibleMoves.length);
+        return possibleMoves[indx];
+    }
+
     private enum Direction {
         FORWARD, BACKWARD, UPWARD, DOWNWARD
     }
@@ -54,7 +65,70 @@ public class SkyCat extends User {
         String[] engWords = (String[]) dictionary.getEnglishWords().toArray();
         String[] specWords = (String[]) dictionary.getSpecialWords().toArray();
         Validator validator = new Validator();
-        for (int x = 0; x < boardLocal.length; x++) {
+        // Check if first move
+        if (boardLocal[boardLocal.length / 2][boardLocal[0].length / 2].getTile()
+                == null) {
+            for (String w : engWords) {
+                boolean inHand = false;
+                Tile[] handCopy = hand.clone();
+                for (char c : w.toCharArray()) {
+                    for (int i = 0; i < handCopy.length; i++) {
+                        if (handCopy[i] != null
+                                && handCopy[i].getLetter() == c) {
+                            inHand = true;
+                            handCopy[i] = null;
+                            break;
+                        }
+                    }
+                    if (inHand == false) {
+                        break;
+                    }
+                }
+                if (inHand == true) {
+                    Tile[] wordTiles = stringToTiles(w);
+                    Move move = new Move(boardLocal.length / 2, boardLocal[0].length / 2, true, wordTiles, this);
+                    Object[] result = validator.isValidPlay(move);
+                    if ((int) result[0] == 1
+                            || (int) result[0] == 2) {
+                        possibleMoves.add((Move) result[1]);
+                    }
+                }
+            }
+            for (String w : specWords) {
+                boolean inHand = false;
+                Tile[] handCopy = hand.clone();
+                for (char c : w.toCharArray()) {
+                    for (int i = 0; i < handCopy.length; i++) {
+                        if (handCopy[i] != null
+                                && handCopy[i].getLetter() == c) {
+                            inHand = true;
+                            handCopy[i] = null;
+                            break;
+                        }
+                    }
+                    if (inHand == false) {
+                        break;
+                    }
+                }
+                if (inHand == true) {
+                    Tile[] wordTiles = stringToTiles(w);
+                    Move move = new Move(boardLocal.length / 2, boardLocal[0].length / 2, true, wordTiles, this);
+                    Object[] result = validator.isValidPlay(move);
+                    if ((int) result[0] == 1
+                            || (int) result[0] == 2) {
+                        possibleMoves.add((Move) result[1]);
+                    }
+                }
+            }
+            Move toReturn[] = new Move[possibleMoves.size()];
+            possibleMoves.toArray(toReturn);
+            return toReturn;
+        }
+        
+        // Not the first move
+        for (int x = 0;
+                x < boardLocal.length;
+                x++) {
             for (int y = 0; y < boardLocal[0].length; y++) {
                 if (boardLocal[x][y].getTile() != null) {
                     int clearForward = countClearSpaces(Direction.FORWARD,
@@ -242,6 +316,7 @@ public class SkyCat extends User {
         }
 
         Move toReturn[] = new Move[possibleMoves.size()];
+
         possibleMoves.toArray(toReturn);
         return toReturn;
     }
