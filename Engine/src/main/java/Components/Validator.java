@@ -38,7 +38,8 @@ public class Validator {
         } else if (!horizontal && startY + move.getWordString().length() >= 
                 Session.getSession().getBoardAsSpaces()[0].length) {
             return new Object[] {0, move};
-        }
+        } else if (startX < 0 || startY < 0)
+            return new Object[] {0, move};
         
         // Check that move connects to existing tiles
         if (!connectsToTiles(move)) {

@@ -124,7 +124,7 @@ public class SkyCat extends User {
                         if ((boardLocal.length / 2) - i <= 0) {
                             break;
                         }
-                        Move move = new Move(boardLocal.length / 2, (boardLocal[0].length / 2) - i, true, wordTiles, this);
+                        Move move = new Move(boardLocal.length / 2 - i, (boardLocal[0].length / 2), true, wordTiles, this);
                         Object[] result = validator.isValidPlay(move);
                         if ((int) result[0] == 1
                                 || (int) result[0] == 2) {
@@ -139,9 +139,7 @@ public class SkyCat extends User {
         }
 
         // Not the first move
-        for (int x = 0;
-                x < boardLocal.length;
-                x++) {
+        for (int x = 0;  x < boardLocal.length; x++) {
             for (int y = 0; y < boardLocal[0].length; y++) {
                 if (boardLocal[x][y].getTile() != null) {
                     int clearForward = countClearSpaces(Direction.FORWARD,
@@ -206,7 +204,8 @@ public class SkyCat extends User {
                                     }
                                 }
                             }
-                        } else if (w.contains(verticalString)) {
+                        }
+                        if (w.contains(verticalString)) {
                             int index = w.indexOf(verticalString);
                             String remainingStart = "";
                             String remainingEnd = "";
@@ -287,7 +286,8 @@ public class SkyCat extends User {
                                     }
                                 }
                             }
-                        } else if (w.contains(verticalString)) {
+                        }
+                        if (w.contains(verticalString)) {
                             int index = w.indexOf(verticalString);
                             String remainingStart = "";
                             String remainingEnd = "";
