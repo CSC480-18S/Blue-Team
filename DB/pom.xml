@@ -74,6 +74,11 @@
 			<version>${junit.vintage.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+        	    	<groupId>org.apache.commons</groupId>
+            		<artifactId>commons-math3</artifactId>
+            		<version>3.6.1</version>
+        	</dependency>	
 		<!-- Only required to run tests in an IDE that bundles an older version -->
 		<dependency>
 			<groupId>org.junit.platform</groupId>
@@ -81,6 +86,7 @@
 			<version>${junit.platform.version}</version>
 			<scope>test</scope>
 		</dependency>
+		
 	</dependencies>
 
 </project>

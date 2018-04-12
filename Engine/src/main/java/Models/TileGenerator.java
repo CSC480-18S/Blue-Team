@@ -10,16 +10,20 @@ import java.util.Scanner;
  */
 public class TileGenerator {
     private static TileGenerator generator;
-    private int totalPoints;
-    ArrayList<Entry> entries;
+    private static ArrayList<Tile> bag;
+    private static ArrayList<Tile> sampleBag;
+
 
     private TileGenerator(){
+        fillBag();
+    }
+
+    private void fillBag(){
+        bag = new ArrayList<>();
+        sampleBag = new ArrayList<>();
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream file = classloader.getResourceAsStream("tiles.txt");
         Scanner sc = new Scanner(file);
-        entries = new ArrayList<>();
-        totalPoints = 0;
-
         while(sc.hasNextLine()){
             String line = sc.nextLine();
             //skip comments
@@ -35,33 +39,45 @@ public class TileGenerator {
             char letter = line.charAt(0);
             int numOfTiles = Integer.parseInt(line.substring(line.indexOf(':') + 1, line.indexOf(',')));
             int points = Integer.parseInt(line.substring(line.indexOf(',') + 1, line.indexOf(';')));
-            totalPoints += points;
-            entries.add(new Entry(letter, numOfTiles, points));
+            for(int i =0; i < numOfTiles; i ++){
+                bag.add(new Tile(letter, points));
+            }
+            if(!sampleBag.contains(new Tile (letter, points))){
+                sampleBag.add(new Tile(letter, points));
+            }
         }
         sc.close();
-
-        int range = 0;
-        for(Entry entry : entries){
-            entry.startRange = range;
-            entry.endRange = range + entry.numOfTiles - 1;
-            range += entry.numOfTiles;
-        }
-
     }
 
     public Tile getRandTile(){
         Tile tile = null;
         Random rand = new Random();
-        int num = rand.nextInt(totalPoints + 1);
-        for(Entry entry : entries){
-            if(entry.startRange <= num && entry.endRange >= num){
-                tile = new Tile(entry.letter, entry.points);
-                break;
-            }
+        int num = rand.nextInt(bag.size());
+        tile = bag.get(num);
+        bag.remove(num);
+
+        //check if bag is empty
+        if (bag.size() == 0){
+            fillBag();
         }
 
-
         return tile;
+    }
+
+    public Tile exchangeTile(Tile tile){
+        bag.add(tile);
+        Tile newTile = null;
+        Random rand = new Random();
+        int num = rand.nextInt(bag.size());
+        newTile = bag.get(num);
+        bag.remove(num);
+
+        //check if bag is empty
+        if (bag.size() == 0){
+            fillBag();
+        }
+
+        return newTile;
     }
 
 
@@ -77,19 +93,14 @@ public class TileGenerator {
         return generator;
     }
 
-    private class Entry{
-        char letter;
-        int numOfTiles;
-        int points;
-        int startRange;
-        int endRange;
-
-        private Entry(char letter, int numOfTiles, int points){
-            this.letter = letter;
-            this.numOfTiles = numOfTiles;
-            this.points = points;
-            startRange = 0;
-            endRange = 0;
+    //error - needs fix
+    public Tile getTile(char letter) {
+        for (Tile tile : sampleBag) {
+            if (tile.getLetter() == letter) {
+                return tile;
+            }
         }
+        return null;
     }
+
 }

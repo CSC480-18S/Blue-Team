@@ -1,5 +1,7 @@
 package Models;
 
+import Session.Session;
+
 /**
  * @author Bohdan
  * This class represents human player
@@ -13,10 +15,6 @@ public class Player extends User {
         super(username);
         this.macAddress = macAddress;
         this.team = team;
-    }
-    @Override
-    int playWord(String word, int startX, int startY, int endX, int endY, Board board) {
-        return 0;
     }
 
     @Override
