@@ -140,6 +140,24 @@ public class Session {
 
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
+        StringBuilder wordForScoring = new StringBuilder("");
+        StringBuilder wordForValidating = new StringBuilder("");
+        boolean wildCard = false;
+        for(char c : word.toCharArray()){
+            if(c == '*') {
+                wordForScoring.append("-");
+                wildCard = true;
+            }
+            else if(wildCard){
+                wildCard = false;
+                wordForValidating.append(c);
+            }
+            else{
+                wordForValidating.append(c);
+                wordForScoring.append(c);
+            }
+        }
+        word = wordForValidating.toString();
         String initialLetters = word;
         TileGenerator tg = TileGenerator.getInstance();
         // Check if word length is less than 11,
@@ -208,7 +226,14 @@ public class Session {
 
         if ((int) result[0] == 1) {
             board.placeWord(startX, startY, horizontal, word);
-            int score = calculateMovePoints((Move) result[1]);
+            String scoringWord = wordForScoring.toString();
+            Tile[] tilesForScoring = new Tile[scoringWord.length()];
+            for(int i = 0; i < scoringWord.length(); i++){
+                tilesForScoring[i] = tg.getTile(scoringWord.charAt(i));
+            }
+            Move scoringMove = (Move) result[1];
+            scoringMove.setWord(tilesForScoring);
+            int score = calculateMovePoints(scoringMove);
             user.setScore(user.getScore() + score);
             if (user instanceof Player) {
                 Player temp = (Player) user;
@@ -221,7 +246,14 @@ public class Session {
             return "VALID";
         } else if ((int) result[0] == 2) {
             board.placeWord(startX, startY, horizontal, word);
-            int score = calculateMovePoints((Move) result[1]) * 2;
+            String scoringWord = wordForScoring.toString();
+            Tile[] tilesForScoring = new Tile[scoringWord.length()];
+            for(int i = 0; i < scoringWord.length(); i++){
+                tilesForScoring[i] = tg.getTile(scoringWord.charAt(i));
+            }
+            Move scoringMove = (Move) result[1];
+            scoringMove.setWord(tilesForScoring);
+            int score = calculateMovePoints(scoringMove) * 2;
             user.setScore(user.getScore() + score);
             if (user instanceof Player) {
                 Player temp = (Player) user;

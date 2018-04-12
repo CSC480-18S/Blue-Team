@@ -9,6 +9,7 @@ import Components.Dictionaries;
 import Components.Validator;
 import Session.Session;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -62,8 +63,8 @@ public class SkyCat extends User {
         boardLocal = Session.getSession().getBoardAsSpaces();
         Tile[] hand = this.getHand();
         Dictionaries dictionary = Dictionaries.getDictionaries();
-        String[] engWords = (String[]) dictionary.getEnglishWords().toArray();
-        String[] specWords = (String[]) dictionary.getSpecialWords().toArray();
+        HashSet<String> engWords = dictionary.getEnglishWords();
+        HashSet<String> specWords = dictionary.getSpecialWords();
         Validator validator = new Validator();
         // Check if first move
         if (boardLocal[boardLocal.length / 2][boardLocal[0].length / 2].getTile()
