@@ -32,7 +32,7 @@ public class Session {
     private int greenScore;
     private int goldScore;
     private Timer timer;
-    private static final boolean waitForPlayer = false;
+    private static final boolean waitForPlayer = true;
     private static final int turnTimeSec = 60;
 
     private Session() {
