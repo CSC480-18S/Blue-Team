@@ -36,7 +36,7 @@ public class Servlet extends HttpServlet {
         }
         catch (Exception e)
         {
-
+            e.printStackTrace();
         }
     }
 
@@ -92,6 +92,7 @@ public class Servlet extends HttpServlet {
             }else if (req.equals("leave")) {
                 // Leave a Game request
                 String mac = getMACAddress(request.getRemoteAddr());
+                System.out.println("leave");
                 out.write(EventHandler.leaveHandler(mac));
             } else if (req.equals("forfeit")) {
                 // Forfeit a Game request
