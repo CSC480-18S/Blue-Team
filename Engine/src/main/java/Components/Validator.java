@@ -32,10 +32,10 @@ public class Validator {
         boolean horizontal = move.isHorizontal();
         
         // Ensure move does not extend off board
-        if (horizontal && startX + move.getWordString().length() >= 
+        if (horizontal && startX + move.getWordString().length() >
                 Session.getSession().getBoardAsSpaces().length) {
             return new Object[] {0, move};
-        } else if (!horizontal && startY + move.getWordString().length() >= 
+        } else if (!horizontal && startY + move.getWordString().length() >
                 Session.getSession().getBoardAsSpaces()[0].length) {
             return new Object[] {0, move};
         } else if (startX < 0 || startY < 0)
