@@ -46,6 +46,9 @@ public class SkyCat extends User {
      */
     public Move chooseMove() {
         Move[] possibleMoves = getAllMoves();
+        if(possibleMoves.length == 0){
+            return null;
+        }
         int indx = ThreadLocalRandom.current().nextInt(0, possibleMoves.length);
         return possibleMoves[indx];
     }

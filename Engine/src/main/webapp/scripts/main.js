@@ -171,8 +171,7 @@ function exit() {
                 alert("Bye!");
 
                 $.post("Servlet", {
-                    request: "leave",
-                    username: uname
+                    request: "leave"
                 }, function (data, status) {
                     alert("Leave - Data: " + data + "\nStatus: " + status); // response text.
                 });
