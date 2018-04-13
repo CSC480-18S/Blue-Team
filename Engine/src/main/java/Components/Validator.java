@@ -73,16 +73,6 @@ public class Validator {
 
         //generating offshoot moves and adding them to the validated move
         move.setOffshootMoves(getOffshootMoves(move));
-        if(move.getOffshootMoves().isEmpty())
-            System.out.println("No offshoots");
-        else {
-            System.out.println("Move creates auxiliary words of : ");
-            for(Move aMove : move.getOffshootMoves()){
-                System.out.print(aMove.getWordString() + " ");
-            }
-            System.out.println();
-        }
-
         return new Object[] {valid, move};
     }
 
