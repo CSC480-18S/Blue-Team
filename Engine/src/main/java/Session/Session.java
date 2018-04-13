@@ -6,8 +6,11 @@ import Components.*;
 import Components.Log;
 import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -32,9 +35,9 @@ public class Session {
     private int goldScore;
     private Timer timer;
     private Timer aiTimer;
-    private static final boolean waitForPlayer = false;
-    private static final int turnTimeSec = 60;
-    private static final int aiWaitSec = 3;
+    private boolean waitForPlayer = false;
+    private int turnTimeSec;
+    private  int aiWaitSec;
 
     private Session() {
         //Session.LogInfo("Initializing objects");
@@ -47,6 +50,33 @@ public class Session {
         currentTurn = 0;
         timer = new Timer();
         aiTimer = new Timer();
+        waitForPlayer = false;
+        turnTimeSec = 60;
+        aiWaitSec = 3;
+        try{
+            ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+            InputStream file = classloader.getResourceAsStream("settings.txt");
+            Scanner sc = new Scanner(file);
+            while (sc.hasNextLine()){
+                String line = sc.nextLine();
+                line = line.replace(" ", "");
+                String [] param = line.split("=");
+                if(param[0].equals("waitForPlayer")){
+                    if(param[1].equals("true")){
+                        waitForPlayer = true;
+                    } else if (param[1].equals("false")){
+                        waitForPlayer = false;
+                    }
+                } else if(param[0].equals("turnTimeSec")){
+                    turnTimeSec = Integer.parseInt(param[1]);
+                } else if(param[0].equals("aiWaitSec")){
+                    aiWaitSec = Integer.parseInt(param[1]);
+                }
+            }
+        } catch (Exception e ){
+            e.printStackTrace();
+        }
+
     }
 
     public static Session getSession() {
@@ -59,7 +89,7 @@ public class Session {
             session.gui.updateUsers(session.users);
             session.gui.setTurn(session.currentTurn);
             //play first move to start the game
-            if(!waitForPlayer) {
+            if(!session.waitForPlayer) {
                 SkyCat skyCat1 = (SkyCat) session.users[0];
                session.aiPlayWord(skyCat1);
             }
