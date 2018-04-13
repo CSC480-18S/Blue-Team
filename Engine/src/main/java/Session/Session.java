@@ -160,14 +160,27 @@ public class Session {
         return playedMoves.isEmpty();
     }
 
-    private boolean aiPlayWord(SkyCat skyCat) {
-        Move move = skyCat.chooseMove();
+    private void displayMoveStats(Move move, int points) {
         if (move != null) {
+            System.out.println(move.getUser().getUsername());
             System.out.println("x: " + move.getStartX());
             System.out.println("y: " + move.getStartY());
             System.out.println("horizontal: " + move.isHorizontal());
             System.out.println("word: " + move.getWordString());
+            if (!move.getOffshootMoves().isEmpty()) {
+                System.out.println("Move creates auxiliary words of : ");
+                for (Move aMove : move.getOffshootMoves()) {
+                    System.out.print(aMove.getWordString() + " ");
+                }
+                System.out.println();
+            }
+            System.out.println("points: " + points);
+        }
+    }
 
+    private boolean aiPlayWord(SkyCat skyCat) {
+        Move move = skyCat.chooseMove();
+        if (move != null) {
             session.playWord(move.getStartX(), move.getStartY(), move.isHorizontal(), move.getWordString(), skyCat);
             return true;
         } else {
@@ -274,6 +287,7 @@ public class Session {
             Move scoringMove = (Move) result[1];
             scoringMove.setWord(tilesForScoring);
             int score = calculateMovePoints(scoringMove);
+            displayMoveStats((Move) result[1], score);
             user.setScore(user.getScore() + score);
             if (user instanceof Player) {
                 Player temp = (Player) user;
@@ -294,6 +308,7 @@ public class Session {
             Move scoringMove = (Move) result[1];
             scoringMove.setWord(tilesForScoring);
             int score = calculateMovePoints(scoringMove) * 2;
+            displayMoveStats((Move) result[1], score);
             user.setScore(user.getScore() + score);
             if (user instanceof Player) {
                 Player temp = (Player) user;
@@ -413,19 +428,20 @@ public class Session {
         int letterMult = 1;
         Multiplier mult = Multiplier.NONE;
         for (int i = 0; i < move.getWordString().length(); i++) {
-            Space current;
-            if (horizontal) {
+
+            Space current = null;
+            if (horizontal && (move.getStartX() + i) < boardLocal.length) {
                 mult = boardLocal[move.getStartX() + i][move.getStartY()].
                         getMultiplier();
                 current = boardLocal[move.getStartX() + i][move.getStartY()];
                 usedSpaces.add(current);
-            } else {
+            } else if(move.getStartY() + i < boardLocal.length){
                 mult = boardLocal[move.getStartX()][move.getStartY() + i].
                         getMultiplier();
                 current = boardLocal[move.getStartX()][move.getStartY() + i];
                 usedSpaces.add(current);
             }
-            if (current.getUsed() == false) {
+            if (current != null && current.getUsed() == false) {
                 switch (mult) {
                     case NONE:
                         letterMult = 1;
@@ -459,7 +475,6 @@ public class Session {
             }
 
         }
-        System.out.println("points: " + points);
         return points;
     }
 
