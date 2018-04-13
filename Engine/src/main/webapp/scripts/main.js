@@ -46,20 +46,22 @@ function getSelectedTilesAsString() {
     });
     return current.join("");
 }
+
 function exchange(el)
 {
-    // // If no border add one and return
-    // if (el.style.border == "")
-    // {
-    //     el.style.border = "5px solid red";
-    //     return;
-    // }
-    // else
-    // {
-    //     el.style.border = "";
-    //     // check if hand tiles have a border
-    //     // if none do return
-    // }
+    // If no border add one and return
+    if (el.style.border != "5px solid red")
+    {
+        el.style.border = "5px solid red";
+        return;
+    }
+    else
+    {
+        el.style.border = "5px solid transparent";
+        // check if hand tiles have a border
+        if (!handTilesSelected())
+            return // if none do return
+    }
 
     var output = prompt("Exchange selected tiles?", "Yes");
     switch (output.toUpperCase()) {
@@ -121,6 +123,18 @@ function getCurrentHandAsString() {
     return current.join("");
 }
 
+function handTilesSelected()
+{
+    // Check each hand tile for a border
+    // If there is a border return true to begin exchange
+    for (var i = 0; i < 7; i++)
+    {
+        if (document.getElementById('div'+i).getElementsByTagName('img')[0].style.border == "5px solid red")
+            return true;
+    }
+    return false;
+}
+
 //only problem is if you have words in play it recalls all
 //the letters on the board
 function shuffle()
@@ -171,7 +185,7 @@ function exit() {
                 alert("Bye!");
 
                 $.post("Servlet", {
-                    request: "leave"
+                    request: "leave",
                 }, function (data, status) {
                     alert("Leave - Data: " + data + "\nStatus: " + status); // response text.
                 });
@@ -302,7 +316,7 @@ function confirmed() {
         boardState = [...xyCoord];
 
     } catch (e) {}
-    // reset flag always
+        // reset flag always
     finally {isPlaying = false}
 }
 
