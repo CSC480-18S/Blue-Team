@@ -111,7 +111,7 @@ img.avatar {
     padding: 14px 20px;
     margin: 8px 0;
     font-size: 14pt;
-    border: none;
+    border: 5px solid transparent;
     cursor: pointer;
     width: 30%;
     border-radius: 8px;
@@ -123,7 +123,7 @@ img.avatar {
     padding: 14px 20px;
     margin: 8px 0;
     font-size: 14pt;
-    border: none;
+    border: 5px solid transparent;
     cursor: pointer;
     width: 30%;
     border-radius: 8px;
@@ -135,7 +135,7 @@ img.avatar {
     padding: 14px 20px;
     margin: 8px 0;
     font-size: 14pt;
-    border: none;
+    border: 5px solid transparent;
     cursor: pointer;
     width: 15%;
     border-radius: 8px;
@@ -147,7 +147,7 @@ img.avatar {
     padding: 14px 20px;
     margin: 8px 0;
     font-size: 14pt;
-    border: none;
+    border: 5px solid transparent;
     cursor: pointer;
     width: 15%;
     border-radius: 8px;
@@ -224,3 +224,80 @@ input:focus {
     border-radius: 8px;
 
 }
+
+
+.black_overlay {
+    display: none;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 200%;
+    height: 200%;
+    background-color: black;
+    -moz-opacity: 0.8;
+    opacity: .80;
+    filter: alpha(opacity=80);
+}
+.white_content {
+    display: none;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width:100%;
+    height: 50%;
+    padding: 16px;
+    border: 6px solid green;
+    background-color: white;
+    z-index: 1002;
+    overflow: auto;
+}
+
+.containers{
+    width: 3300px;
+    float: left;
+    border: none;
+    text-align: center;
+
+}
+
+.special
+{
+    height:55px;
+    width: 55px;
+    border: 2px solid black;
+    float: left;
+    margin-top:20px;
+    margin-left: 20px;
+    data-attribute: window.location = $(this).data("location");
+}
+
+#specialOverlay {
+    position: fixed; /* Sit on top of the page content */
+    z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+.specialBox {
+    position: absolute;
+    z-index: 0;
+    width: 420px;
+    height: 420px;
+    background: white;
+    border: 6px solid green;
+    color: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    padding: 70px 30px;
+    z-index: 1002;
+    overflow: auto;
+}
+
