@@ -21,12 +21,11 @@ function submitBlank()
           && blankReplacement.style.border !== "")
     {
         // place in hand with red border
-        if (document.getElementById('div0a').getElementsByTagName('img')[0]
+        if (document.getElementById('div0').getElementsByTagName('img')[0]
             === currentImg)
         {
-            $('#div0a').empty().append(blankReplacement);
+            $('#div0').empty().append(blankReplacement);
             currentImg = blankReplacement;
-            //currentImg = document.getElementById('div0a').getElementsByTagName('img')[0];
         }
         // for (var i = 0; i < 7; i++)
         // {
