@@ -224,7 +224,7 @@ public class Session {
         StringBuilder wordForValidating = new StringBuilder("");
         boolean wildCard = false;
         for(char c : word.toCharArray()){
-            if(c == '*') {
+            if(c == '_') {
                 wordForScoring.append("-");
                 wildCard = true;
             }
