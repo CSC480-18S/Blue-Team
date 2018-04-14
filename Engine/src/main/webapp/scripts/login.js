@@ -21,24 +21,16 @@ function submitBlank()
           && blankReplacement.style.border !== "")
     {
         // place in hand with red border
-        if (document.getElementById('div0').getElementsByTagName('img')[0]
-            === currentImg)
+        for (var i = 0; i < 7; i++)
         {
-            $('#div0').empty().append(blankReplacement);
-            currentImg = blankReplacement;
+            if (document.getElementById('div'+i).getElementsByTagName('img')[0]
+                  === currentImg)
+            {
+                $('#div'+i).empty().append(blankReplacement);
+                currentImg = blankReplacement;
+                break;
+            }
         }
-        // for (var i = 0; i < 7; i++)
-        // {
-        //     if (document.getElementById('div'+i).getElementsByTagName('img')[0]
-        //           === currentImg)
-        //     {
-        //         document.getElementById('div'+i).empty();
-        //         //blankReplacementEl.style.border = "5px solid red";
-        //         document.getElementById('div'+i).append(blankReplacement);
-        //         currentImg = document.getElementById('div'+i).getElementsByTagName('img')[0];
-        //         break;
-        //     }
-        // }
     }
 
     // close popup
