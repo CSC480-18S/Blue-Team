@@ -174,29 +174,25 @@ function recall() {
 //need to store tile placement and check if they are in valid spots
 //change to buttons to click on for yes or no
 function exit() {
-    $("#exit").click(function () {
         var text;
         var exit = prompt("Are you sure you want to exit?", "Yes");
-        switch (exit.toUpperCase()) {
-            case "NO":
-                alert("Continue playing");
-                break;
-            case "YES":
-                alert("Bye!");
+        if ("YES" == exit.toUpperCase()) {
+            alert("Left Game.");
 
-                $.post("Servlet", {
-                    request: "leave",
-                }, function (data, status) {
-                    alert("Leave - Data: " + data + "\nStatus: " + status); // response text.
-                });
-                //leave page
-                //window.open('','_parent','');
-                var win = window.open("about:blank", "_self")
+            $.post("Servlet", {
+                request: "leave",
+            }, function (data, status) {
+                alert("Leave - Data: " + data + "\nStatus: " + status); // response text.
+            });
 
-                win.close()
-                break;
+            var win = window.open("about:blank", "_self");
+            win.close();
+
         }
-    });
+        else
+        {
+            alert("Continue Playing");
+        }
 
 }
 

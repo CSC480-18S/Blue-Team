@@ -582,7 +582,7 @@ public class BoardGUI implements Runnable {
                     char letter = board[x][y].getTile().getLetter();
                     try {
                         // *** Gets the tile equivalence of the letter
-                        model.setValueAt(new ImageIcon(classloader.getResource("letter/" + letter + ".png")), y, x);
+                        model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), y, x);
                     } catch (Exception e) {
                     }
                 }
