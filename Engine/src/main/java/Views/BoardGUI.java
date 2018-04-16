@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Views;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
@@ -15,14 +16,29 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-
 
 /**
  * @author mide_
  */
-public class BoardGUI implements Runnable{
+public class BoardGUI implements Runnable {
+
     public final ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
+    private javax.swing.JTable jTable4;
+    private javax.swing.JTable jTable5;
 
     int length13 = 7;
     int length24 = 1;
@@ -58,30 +74,16 @@ public class BoardGUI implements Runnable{
     Object[][] user2_2 = new Object[length13][length24];
     Object[][] user4_4 = new Object[length13][length24];
 
-    // This is the Table for Stats
-    JTable statTable1;
-    JTable statTable2;
-    JTable statTable3;
-    JTable statTable4;
-    JTable statTable5;
-
-
-    String column1[] = {"Name", "Score"};
-    Object[][] row1 = new Object[5][5];
-
-    String column2[] = {"Name", "Score"};
-    Object[][] row2 = new Object[5][5];
-
-    String column3[] = {"Rank", "Player", "Word", "Score"};
-    Object[][] row3 = new Object[10][10];
-
-    String column4[] = {"0", "1"};
-    Object[][] row4 = new Object[2][2];
-
-    String column5[] = {"0", "1"};
-    Object[][] row5 = new Object[2][2];
-
     public BoardGUI() {
+        gui();
+        addRowToTable1();
+        addRowToTable2();
+        addRowToTable3();
+        addRowToTable4();
+        addRowToTable5();
+    }
+
+    public void gui() {
         frame = new JFrame("OSWEBBLE");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         for (int r = 0; r < BOARD_WIDTH; r++) {
@@ -118,35 +120,6 @@ public class BoardGUI implements Runnable{
 
         frame2 = new JFrame("Leaderboard & Statistics");
         frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        for (int r = 0; r < 5; r++) {
-            for (int c = 0; c < 5; c++) {
-                row1[r][c] = " ";
-            }
-        }
-
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                row2[i][j] = " ";
-            }
-        }
-
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                row3[i][j] = " ";
-            }
-        }
-
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                row4[i][j] = " ";
-            }
-        }
-
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                row5[i][j] = " ";
-            }
-        }
 
         final ImageIcon icon_main = new ImageIcon(classloader.getResource("background.jpg"));
         JPanel background_main = new JPanel(new BorderLayout()) {
@@ -226,7 +199,7 @@ public class BoardGUI implements Runnable{
         user3 = new JTable(user3_model);
         user3.setDefaultEditor(Object.class, null);
         user3.setRowHeight(50);
-        for(int i = 0; i < userColumn13.length; ++i) // *** For loop to make the table column 50px
+        for (int i = 0; i < userColumn13.length; ++i) // *** For loop to make the table column 50px
         {
             user3.getColumnModel().getColumn(i).setPreferredWidth(50);
             user3.getColumnModel().getColumn(i).setCellRenderer(new BoardCellRenderer());
@@ -269,7 +242,7 @@ public class BoardGUI implements Runnable{
         user1 = new JTable(user1_model);
         user1.setDefaultEditor(Object.class, null);
         user1.setRowHeight(50);
-        for(int i = 0; i < userColumn13.length; ++i) // *** For loop to make the table column 50px
+        for (int i = 0; i < userColumn13.length; ++i) // *** For loop to make the table column 50px
         {
             user1.getColumnModel().getColumn(i).setPreferredWidth(50);
             user1.getColumnModel().getColumn(i).setCellRenderer(new BoardCellRenderer());
@@ -290,7 +263,6 @@ public class BoardGUI implements Runnable{
         c.gridy = 10;
         c.anchor = GridBagConstraints.PAGE_END;
         panel.add(background3, c);
-
 
         final ImageIcon icon = new ImageIcon(classloader.getResource("gameboard.png"));
         JPanel background = new JPanel(new BorderLayout()) {
@@ -315,7 +287,7 @@ public class BoardGUI implements Runnable{
         jt.setOpaque(false);
         jt.setDefaultEditor(Object.class, null);
         jt.setRowHeight(50);
-        for(int i = 0; i < column.length; ++i) // *** For loop to make the table column 50px
+        for (int i = 0; i < column.length; ++i) // *** For loop to make the table column 50px
         {
             jt.getColumnModel().getColumn(i).setPreferredWidth(50);
             jt.getColumnModel().getColumn(i).setCellRenderer(new BoardCellRenderer());
@@ -378,12 +350,11 @@ public class BoardGUI implements Runnable{
         c.anchor = GridBagConstraints.LINE_END;
         panel.add(background2, c);
 
-
         JPanel label = new JPanel(new GridBagLayout());
         GridBagConstraints lc = new GridBagConstraints();
 
         JLabel label2 = new JLabel("Team Green");
-        label2.setFont (new Font("Serif", Font.BOLD, 17));
+        label2.setFont(new Font("Serif", Font.BOLD, 17));
         label2.setForeground(new Color(47, 86, 63));
         lc.gridx = 0;
         lc.gridy = 0;
@@ -391,36 +362,35 @@ public class BoardGUI implements Runnable{
         label.add(label2, lc);
 
         JLabel label3 = new JLabel("Team Gold");
-        label3.setFont (new Font("Serif", Font.BOLD, 17));
+        label3.setFont(new Font("Serif", Font.BOLD, 17));
         label3.setForeground(new Color(191, 156, 70));
         lc.gridx = 2;
         lc.gridy = 0;
         label.add(label3, lc);
 
         player1Label = new JLabel("Player 1");
-        player1Label.setFont (new Font("Serif", Font.BOLD, 17));
+        player1Label.setFont(new Font("Serif", Font.BOLD, 17));
         lc.gridx = 0;
         lc.gridy = 2;
         label.add(player1Label, lc);
 
         player2Label = new JLabel("Player 2");
-        player2Label.setFont (new Font("Serif", Font.BOLD, 17));
+        player2Label.setFont(new Font("Serif", Font.BOLD, 17));
         lc.gridx = 2;
         lc.gridy = 2;
         label.add(player2Label, lc);
 
         player3Label = new JLabel("Player 3");
-        player3Label.setFont (new Font("Serif", Font.BOLD, 17));
+        player3Label.setFont(new Font("Serif", Font.BOLD, 17));
         lc.gridx = 0;
         lc.gridy = 4;
         label.add(player3Label, lc);
 
         player4Label = new JLabel("Player 4");
-        player4Label.setFont (new Font("Serif", Font.BOLD, 17));
+        player4Label.setFont(new Font("Serif", Font.BOLD, 17));
         lc.gridx = 2;
         lc.gridy = 4;
         label.add(player4Label, lc);
-
 
         label.setBackground(Color.WHITE);
         label.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -429,266 +399,171 @@ public class BoardGUI implements Runnable{
         c.gridy = 5;
         panel.add(label, c);
 
-        frame.setSize(2000, 1076);
+        frame.setSize(1500, 1076);
         frame.setVisible(true);
 
         // *********************************This is the start of Stats frame*********************************** //
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable5 = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTable4 = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
-        JPanel statsPanel = new JPanel(new GridBagLayout());
-        frame2.getContentPane().add(statsPanel, BorderLayout.LINE_START);
-        GridBagConstraints statsC = new GridBagConstraints();
+        frame2.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTable2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
 
-        // // All Time scores label for team Green start
-        JLabel statLabel1 = new JLabel("Green");
-        statLabel1.setFont (new Font("Serif", Font.BOLD, 20));
-        statLabel1.setForeground(Color.BLACK);
-        statsC.gridx = 0;
-        statsC.gridy = 0;
-        statsC.anchor = GridBagConstraints.CENTER;
-        statsC.insets = new Insets(10, 10, 10, 10);
-        statsPanel.add(statLabel1, statsC);
-        // All Time scores label for team Green start
+                },
+                new String [] {
+                        "Name", "Score"
+                }
+        ));
+        jTable2.setRowHeight(35);
+        jScrollPane2.setViewportView(jTable2);
 
-        //table 1 start
-        statTable1 = new JTable(row1, column1);
-        statTable1.setDefaultEditor(Object.class, null);
-        statTable1.setRowHeight(40);
-        statTable1.getColumnModel().getColumn(0).setPreferredWidth(100);
-        statTable1.getColumnModel().getColumn(1).setPreferredWidth(100);
-        statTable1.setGridColor(Color.BLACK);
-        statTable1.setFont(new Font("Serif", Font.BOLD, 20));
+        jTable3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
 
-        DefaultTableCellRenderer statsRenderer1 = new DefaultTableCellRenderer();
-        statTable1.getTableHeader().setDefaultRenderer(statsRenderer1);
+                },
+                new String [] {
+                        "Rank", "Player", "Score"
+                }
+        ));
+        jTable3.setRowHeight(35);
+        jScrollPane3.setViewportView(jTable3);
 
-        for(int x = 0; x < 2; x++){
-            statTable1.getColumnModel().getColumn(x).setCellRenderer(statsRenderer1);
-        }
+        jTable5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTable5.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
 
-        //dummy data
-        String a[][] = {{ "r0c0", "r0c1" },
-                { "r1c0", "r1c1" },
-                { "r2c0", "r2c1" },
-                { "r3c0", "r3c1" },
-                { "r4c0", "r4c1" }
-        };
+                },
+                new String [] {
+                        "Team", "Stats"
+                }
+        ));
+        jTable5.setRowHeight(35);
+        jScrollPane4.setViewportView(jTable5);
 
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 2; j++) {
-                row1[i][j] = a[i][j];
-            }
-        }
+        jTable4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
 
+                },
+                new String [] {
+                        "Team", "Stats"
+                }
+        ));
+        jTable4.setRowHeight(35);
+        jScrollPane5.setViewportView(jTable4);
 
-        statsC.gridx = 0;
-        statsC.gridy = 1;
-        statsC.anchor = GridBagConstraints.CENTER;
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel1.setText("Green");
 
-//        JScrollPane statSp1 = new JScrollPane(statTable1,
-//                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-//                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        statsPanel.add(statTable1, statsC);
-        // table 1 end
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel3.setText("Top Ten Players");
 
-        // All Time scores label for team Gold start
-        JLabel statLabel2 = new JLabel("Gold");
-        statLabel2.setFont (new Font("Serif", Font.BOLD, 20));
-        statLabel2.setForeground(Color.BLACK);
-        statsC.gridx = 1;
-        statsC.gridy = 0;
-        statsC.anchor = GridBagConstraints.CENTER;
-        statsPanel.add(statLabel2, statsC);
-        // All Time scores label for team Gold end
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel5.setText("Average Score");
 
-        //table 2 start
-        statTable2 = new JTable(row2, column2);
-        statTable2.setDefaultEditor(Object.class, null);
-        statTable2.setRowHeight(40);
-        statTable2.getColumnModel().getColumn(0).setPreferredWidth(100);
-        statTable2.getColumnModel().getColumn(1).setPreferredWidth(100);
-        statTable2.setGridColor(Color.BLACK);
-        statTable2.setFont(new Font("Serif", Font.BOLD, 20));
+        jTable1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
 
-        DefaultTableCellRenderer statsRenderer2 = new DefaultTableCellRenderer();
-        statTable2.getTableHeader().setDefaultRenderer(statsRenderer2);
+                },
+                new String [] {
+                        "Name", "Score"
+                }
+        ));
+        jTable1.setRequestFocusEnabled(false);
+        jTable1.setRowHeight(35);
+        jScrollPane6.setViewportView(jTable1);
 
-        for(int x = 0; x < 2; x++){
-            statTable2.getColumnModel().getColumn(x).setCellRenderer(statsRenderer2);
-        }
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel4.setText("T Test");
 
-        //dummy data
-        String b[][] = {{ "r0c0", "r0c1" },
-                { "r1c0", "r1c1" },
-                { "r2c0", "r2c1" },
-                { "r3c0", "r3c1" },
-                { "r4c0", "r4c1" }
-        };
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel2.setText("Gold");
 
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 2; j++) {
-                row2[i][j] = a[i][j];
-            }
-        }
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(frame2.getContentPane());
+        frame2.getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(53, 53, 53)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel4)
+                                .addGap(210, 210, 210))
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(741, 741, 741)
+                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                        .addGap(836, 836, 836)
+                                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(layout.createSequentialGroup()
+                                                        .addGap(74, 74, 74)
+                                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 762, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(layout.createSequentialGroup()
+                                                                        .addGap(139, 139, 139)
+                                                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addGroup(layout.createSequentialGroup()
+                                                                        .addGap(208, 208, 208)
+                                                                        .addComponent(jLabel5))))))
+                                .addContainerGap(70, Short.MAX_VALUE))
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(275, 275, 275)
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addGap(348, 348, 348))
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap(24, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addGap(45, 45, 45)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel3)
+                                        .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(63, 63, 63)
+                                                .addComponent(jLabel5)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(36, Short.MAX_VALUE))
+        );
 
-        statsC.gridx = 1;
-        statsC.gridy = 1;
-        statsC.anchor = GridBagConstraints.CENTER;
-
-//        JScrollPane statSp2 = new JScrollPane(statTable2,
-//                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-//                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        statsPanel.add(statTable2, statsC);
-        //table 2 end
-
-        // T Test label start
-        JLabel statLabel4 = new JLabel("T Test");
-        statLabel4.setFont (new Font("Serif", Font.BOLD, 20));
-        statLabel4.setForeground(Color.BLACK);
-
-        statsC.gridx = 2;
-        statsC.gridy = 0;
-        statsC.anchor = GridBagConstraints.FIRST_LINE_END;
-        statsPanel.add(statLabel4, statsC);
-        // T Test label end
-
-        //table 4 start
-        statTable4 = new JTable(row4, column4);
-        statTable4.setDefaultEditor(Object.class, null);
-        statTable4.setRowHeight(40);
-        statTable4.getColumnModel().getColumn(0).setPreferredWidth(100);
-        statTable4.getColumnModel().getColumn(1).setPreferredWidth(100);
-        statTable4.setGridColor(Color.BLACK);
-        statTable4.setFont(new Font("Serif", Font.BOLD, 20));
-
-        DefaultTableCellRenderer statsRenderer4 = new DefaultTableCellRenderer();
-        statTable4.getTableHeader().setDefaultRenderer(statsRenderer4);
-
-        for(int x = 0; x < 2; x++){
-            statTable4.getColumnModel().getColumn(x).setCellRenderer(statsRenderer4);
-        }
-
-        //dummy data
-        String tTest[][] = {{ "Green", "tVal" },
-                { "Gold", "tVal" }
-        };
-
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                row4[i][j] = tTest[i][j];
-            }
-        }
-
-
-        statsC.gridx = 2;
-        statsC.gridy = 1;
-        statsC.anchor = GridBagConstraints.FIRST_LINE_END;
-
-        statsPanel.add(statTable4, statsC);
-        //table 4 end
-
-        // Average Score label start
-        JLabel statLabel5 = new JLabel("Average Score");
-        statLabel5.setFont (new Font("Serif", Font.BOLD, 20));
-        statLabel5.setForeground(Color.BLACK);
-        statsC.gridx = 2;
-        statsC.gridy = 2;
-        statsC.anchor = GridBagConstraints.FIRST_LINE_END;
-        statsPanel.add(statLabel5, statsC);
-        // Average Score label end
-
-        //table 5 start
-        statTable5 = new JTable(row5, column5);
-        statTable5.setDefaultEditor(Object.class, null);
-        statTable5.setRowHeight(40);
-        statTable5.getColumnModel().getColumn(0).setPreferredWidth(100);
-        statTable5.getColumnModel().getColumn(1).setPreferredWidth(100);
-        statTable5.setGridColor(Color.BLACK);
-        statTable5.setFont(new Font("Serif", Font.BOLD, 20));
-
-        DefaultTableCellRenderer statsRenderer5 = new DefaultTableCellRenderer();
-        statTable5.getTableHeader().setDefaultRenderer(statsRenderer5);
-
-        for(int x = 0; x < 2; x++){
-            statTable5.getColumnModel().getColumn(x).setCellRenderer(statsRenderer5);
-        }
-
-        //dummy data
-        String avg[][] = {{ "Green", "avgVal" },
-                { "Gold", "avgVal" }
-        };
-
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                row5[i][j] = avg[i][j];
-            }
-        }
-
-        statsC.gridx = 2;
-        statsC.gridy = 3;
-        statsC.anchor = GridBagConstraints.FIRST_LINE_END;
-
-        statsPanel.add(statTable5, statsC);
-        //table 4 end
-
-        // Top 10 Word Played label start
-        JLabel statLabel3 = new JLabel("Top 10 Words Played");
-        statLabel3.setFont (new Font("Serif", Font.BOLD, 20));
-        statLabel3.setForeground(Color.BLACK);
-        statsC.gridx = 1;
-        statsC.gridy = 3;
-        statsC.anchor = GridBagConstraints.FIRST_LINE_START;
-        statsPanel.add(statLabel3, statsC);
-        // Top 10 Word Played label end
-
-        //table 3 start
-        statTable3 = new JTable(row3, column3);
-        statTable3.setDefaultEditor(Object.class, null);
-        statTable3.setRowHeight(40);
-        statTable3.getColumnModel().getColumn(0).setPreferredWidth(100);
-        statTable3.getColumnModel().getColumn(1).setPreferredWidth(100);
-        statTable3.getColumnModel().getColumn(2).setPreferredWidth(100);
-        statTable3.getColumnModel().getColumn(3).setPreferredWidth(100);
-        statTable3.setGridColor(Color.BLACK);
-        statTable3.setFont(new Font("Serif", Font.BOLD, 20));
-
-        DefaultTableCellRenderer statsRenderer3 = new DefaultTableCellRenderer();
-        statTable3.getTableHeader().setDefaultRenderer(statsRenderer3);
-
-        for(int x = 0; x < 4; x++){
-            statTable3.getColumnModel().getColumn(x).setCellRenderer(statsRenderer3);
-        }
-
-        //dummy data
-        String wordscores[][] ={{ "r0", "p0", "w0", "score0" },
-                { "r1", "p1", "w1", "score1" },
-                { "r2", "p2", "w2", "score2" },
-                { "r3", "p3", "w3", "score3" },
-                { "r4", "p4", "w4", "score4" },
-                { "r5", "p5", "w5", "score5" },
-                { "r6", "p6", "w6", "score6" },
-                { "r7", "p7", "w7", "score7" },
-                { "r8", "p8", "w8", "score8" },
-                { "r9", "p9", "w9", "score9" },
-        };
-
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 4; j++) {
-                row3[i][j] = wordscores[i][j];
-            }
-        }
-
-        statsC.gridx = 1;
-        statsC.gridy = 4;
-        statsC.anchor = GridBagConstraints.FIRST_LINE_START;
-
-        JScrollPane statSp3 = new JScrollPane(statTable3,
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        statsPanel.add(statSp3, statsC);
-        //table 3 end
-
-        frame2.setSize(2000, 1076);
+        frame2.pack();
         frame2.setVisible(true);
 
     }
@@ -706,79 +581,175 @@ public class BoardGUI implements Runnable{
                     char letter = board[x][y].getTile().getLetter();
                     try {
                         // *** Gets the tile equivalence of the letter
-                        model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), y, x);
-                    } catch (Exception e) {}
+                        model.setValueAt(new ImageIcon(classloader.getResource("letter/" + letter + ".png")), y, x);
+                    } catch (Exception e) {
+                    }
                 }
             }
         }
         jt.repaint();
     }
 
-    public void setTurn(int id){
+    public void setTurn(int id) {
         player1Label.setForeground(Color.BLACK);
         player2Label.setForeground(Color.BLACK);
         player3Label.setForeground(Color.BLACK);
         player4Label.setForeground(Color.BLACK);
 
-        if(id == 0){
-            player1Label.setForeground( new Color(47, 86, 63));
-        } else if (id == 1){
+        if (id == 0) {
+            player1Label.setForeground(new Color(47, 86, 63));
+        } else if (id == 1) {
             player2Label.setForeground(new Color(244, 212, 108));
-        } else if (id == 2){
+        } else if (id == 2) {
             player3Label.setForeground(new Color(53, 226, 40));
-        } else if (id == 3){
+        } else if (id == 3) {
             player4Label.setForeground(new Color(191, 156, 70));
         }
 
     }
 
-    public void updateUsers(User[] users){
-        for(int i =0; i < users.length; i++){
-            if(users[i] != null){
-                if(i == 0){
+    public void updateUsers(User[] users) {
+        for (int i = 0; i < users.length; i++) {
+            if (users[i] != null) {
+                if (i == 0) {
                     player1Label.setText(users[i].getUsername() + "      [ " + users[i].getScore() + " ]");
-                } else if (i == 1){
+                } else if (i == 1) {
                     player2Label.setText(users[i].getUsername() + "      [ " + users[i].getScore() + " ]");
-                } else if (i == 2){
+                } else if (i == 2) {
                     player3Label.setText(users[i].getUsername() + "      [ " + users[i].getScore() + " ]");
-                } else if (i == 3){
+                } else if (i == 3) {
                     player4Label.setText(users[i].getUsername() + "      [ " + users[i].getScore() + " ]");
                 }
             }
         }
     }
 
-    public void updateHand(User[] users){
-        for (int x = 0; x < length24; x++) {
-            for (int y = 0; y < length13; y++) {
-                String letters= " ";
-                TileGenerator tg = TileGenerator.getInstance();
-                ArrayList<Character> userhand = new ArrayList<>();
-                for (int j = 0; j < letters.length(); j++) {
-                    userhand.add(letters.charAt(j));
-                }
-                for (int i = 0; i < users.length; i++) {
-                    if (users[i] != null) {
-                        if (i == 0) {
-                            Tile[] hand = users[i].getHand();
-                            users[i].setHand(hand);
-                            for (int k =0; k < hand.length; ++k)
-                                if (userhand.contains(hand[k].getLetter())) {
-                                    //generate new tile instead
-                                    userhand.remove((Character) hand[k].getLetter());
-                                    hand[k] = tg.getRandTile();
-                                }
-                            try {
-                                // *** Gets the tile equivalence of the letter
-                                user1_model.setValueAt(new ImageIcon(classloader.getResource("tiles/" + hand + ".png")), y, x);
-                            } catch (Exception e) {}
-                        }
-                    }
-                }
-            }
+
+//    //**************************** This is a test class*************************//
+//    public class testUser {
+//
+//        String name;
+//        int score;
+//        String team;
+//        int rank;
+//        String stat;
+//
+//        public testUser(String n, int s) {
+//            name = n;
+//            score = s;
+//        }
+//
+//        public testUser(int r, String n, int s) {
+//            rank = r;
+//            name = n;
+//            score = s;
+//        }
+//
+//        public testUser(String t, String s) {
+//            team = t;
+//            stat = s;
+//        }
+//    }
+//
+//    public ArrayList ListUser() {
+//        ArrayList<testUser> list = new ArrayList<>();
+//        testUser t1 = new testUser("Ayo", 9453);
+//        testUser t2 = new testUser("Brandon", 5763);
+//        testUser t3 = new testUser("Baradan", 2424);
+//        testUser t4 = new testUser("Jason", 1453);
+//        testUser t5 = new testUser("Jason 2.0", 1353);
+//
+//        list.add(t1);
+//        list.add(t2);
+//        list.add(t3);
+//        list.add(t4);
+//        list.add(t5);
+//        return list;
+//
+//    }
+//
+//    public ArrayList TopPlayer() {
+//        ArrayList<testUser> list = new ArrayList<>();
+//        testUser t1 = new testUser(1, "Ayo", 9453);
+//        testUser t2 = new testUser(2, "Brandon", 5763);
+//        testUser t3 = new testUser(3, "Baradan", 2424);
+//        testUser t4 = new testUser(4, "Jason", 1453);
+//        testUser t5 = new testUser(5, "Jason 2.0", 1353);
+//
+//        list.add(t1);
+//        list.add(t2);
+//        list.add(t3);
+//        list.add(t4);
+//        list.add(t5);
+//        return list;
+//    }
+//
+//    public ArrayList AvrAndTTest() {
+//        ArrayList<testUser> list = new ArrayList<>();
+//        testUser t1 = new testUser("Gold", "23213");
+//        testUser t2 = new testUser("Green", "13425");
+//
+//        list.add(t1);
+//        list.add(t2);
+//        return list;
+//    }
+
+    //*******************This are the methods to edit each table*********************//
+
+    public void addRowToTable1() {
+        DefaultTableModel modelTest = (DefaultTableModel) jTable1.getModel();
+        ArrayList<testUser> list = ListUser();
+        Object rowData[] = new Object[2];
+        for (int i = 0; i < list.size(); i++) {
+            //**rowData[0] = list.get(i).methodName;
+            rowData[0] = list.get(i).name;
+            rowData[1] = list.get(i).score;
+            modelTest.addRow(rowData);
         }
     }
 
+    public void addRowToTable2() {
+        DefaultTableModel modelTest = (DefaultTableModel) jTable2.getModel();
+        ArrayList<testUser> list = ListUser();
+        Object rowData[] = new Object[2];
+        for (int i = 0; i < list.size(); i++) {
+            rowData[0] = list.get(i).name;
+            rowData[1] = list.get(i).score;
+            modelTest.addRow(rowData);
+        }
+    }
 
+    public void addRowToTable3() {
+        DefaultTableModel modelTest = (DefaultTableModel) jTable3.getModel();
+        ArrayList<testUser> list = TopPlayer();
+        Object rowData[] = new Object[3];
+        for (int i = 0; i < list.size(); i++) {
+            rowData[0] = list.get(i).rank;
+            rowData[1] = list.get(i).name;
+            rowData[2] = list.get(i).score;
+            modelTest.addRow(rowData);
+        }
+    }
 
+    public void addRowToTable4() {
+        DefaultTableModel modelTest = (DefaultTableModel) jTable4.getModel();
+        ArrayList<testUser> list = AvrAndTTest();
+        Object rowData[] = new Object[2];
+        for (int i = 0; i < list.size(); i++) {
+            rowData[0] = list.get(i).team;
+            rowData[1] = list.get(i).stat;
+            modelTest.addRow(rowData);
+        }
+    }
+
+    public void addRowToTable5() {
+        DefaultTableModel modelTest = (DefaultTableModel) jTable5.getModel();
+        ArrayList<testUser> list = AvrAndTTest();
+        Object rowData[] = new Object[2];
+        for (int i = 0; i < list.size(); i++) {
+            rowData[0] = list.get(i).team;
+            rowData[1] = list.get(i).stat;
+            modelTest.addRow(rowData);
+        }
+    }
 }
