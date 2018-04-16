@@ -44,11 +44,41 @@
                 Skycat
             </div>
         </div>
-        <button id="menu"><img src="imgs/hamburgermenu.svg" alt="menu button" height="55px" width="100%"></button>
+       <a href="javascript:void(0)" onclick="document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'"> <button id="confirmed" ><img id=btnimg src="help.svg" height="55px" width="55px"></button></a>
+ 
+		<div id="light" class="white_content">
+<!-- 		<br>Help Screen<br />  -->
+<!-- 		<br>hjdf<br /> -->
+<!-- 		<br>dfkj<br /> -->
+<!-- 		<br>dfkj<br /> -->
+<!-- 		<br>dkfj<br /> -->
+<p>
+<a href="javascript:void(0)" onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">Close</a>
+<p><b>Help Screen</b></p>	
+	<p>	<b>Rules</b></p>
+	<p>To move a tile simply click on it then click on the spot you wish to move it to </p>
+	<p>The first tile must be placed on the center red square </p>
+	<p>Make words with your tiles to score points </p>
+	<p>Words can be played horizontally and vertically </p>
+	<p>When playing a new word it must be connected to a previously played word </p>
+	<p>Use the colored squared multipliers to get a higher score </p>
+	<p>Try and use words that are specific to Oswego for even more points </p>
 
-        <br>
-        <br>
+	<p>	<b>Buttons</b></p>
+	
+		<div><img src="exit.svg" height="40px" width="40px"> <b>Exit:</b> Click on button to leave the game</div> 
+		<div><img src="recall.svg" height="40px" width="40px"> <b>Recall:</b> Click on button to return tiles that have been placed on board back to your hand</div> 
+		<div><img src="exchange.svg" height="40px" width="40px"> <b>Exchange:</b> Click on button to select the tiles that you wish to replace</div> 
+		<div><img src="shuffle.svg" height="40px" width="40px"> <b>Shuffle:</b> Click on button to randomly distribute your hand</div> 
+		<div><img src="confirm.svg" height="40px" width="40px"> <b>Play:</b> Click on button to play your tiles after they have been placed</div> 
 
+	<a href="javascript:void(0)" onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">Close</a>
+	
+  		</div>
+  		<div id="fade" class="black_overlay"></div>
+			<br>
+			<br>
+	
         <div class="container">
 
             <div class="drop" id="0_0" ondragover="allowDrop(event)"
