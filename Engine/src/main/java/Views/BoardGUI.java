@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
+import Components.QueryClass;
 import Models.*;
 import static Models.GameConstants.*;
 import java.awt.Color;
@@ -625,80 +626,83 @@ public class BoardGUI implements Runnable {
     }
 
 
-//    //**************************** This is a test class*************************//
-//    public class testUser {
-//
-//        String name;
-//        int score;
-//        String team;
-//        int rank;
-//        String stat;
-//
-//        public testUser(String n, int s) {
-//            name = n;
-//            score = s;
-//        }
-//
-//        public testUser(int r, String n, int s) {
-//            rank = r;
-//            name = n;
-//            score = s;
-//        }
-//
-//        public testUser(String t, String s) {
-//            team = t;
-//            stat = s;
-//        }
-//    }
-//
-//    public ArrayList ListUser() {
-//        ArrayList<testUser> list = new ArrayList<>();
-//        testUser t1 = new testUser("Ayo", 9453);
-//        testUser t2 = new testUser("Brandon", 5763);
-//        testUser t3 = new testUser("Baradan", 2424);
-//        testUser t4 = new testUser("Jason", 1453);
-//        testUser t5 = new testUser("Jason 2.0", 1353);
-//
-//        list.add(t1);
-//        list.add(t2);
-//        list.add(t3);
-//        list.add(t4);
-//        list.add(t5);
-//        return list;
-//
-//    }
-//
-//    public ArrayList TopPlayer() {
-//        ArrayList<testUser> list = new ArrayList<>();
-//        testUser t1 = new testUser(1, "Ayo", 9453);
-//        testUser t2 = new testUser(2, "Brandon", 5763);
-//        testUser t3 = new testUser(3, "Baradan", 2424);
-//        testUser t4 = new testUser(4, "Jason", 1453);
-//        testUser t5 = new testUser(5, "Jason 2.0", 1353);
-//
-//        list.add(t1);
-//        list.add(t2);
-//        list.add(t3);
-//        list.add(t4);
-//        list.add(t5);
-//        return list;
-//    }
-//
-//    public ArrayList AvrAndTTest() {
-//        ArrayList<testUser> list = new ArrayList<>();
-//        testUser t1 = new testUser("Gold", "23213");
-//        testUser t2 = new testUser("Green", "13425");
-//
-//        list.add(t1);
-//        list.add(t2);
-//        return list;
-//    }
+    public class statUser {
+
+        String name;
+        String score;
+        String team;
+        int rank;
+        String stat;
+
+        public statUser(String n, String s) {
+            name = n;
+            score = s;
+        }
+
+        public statUser(int r, String n, String s) {
+            rank = r;
+            name = n;
+            score = s;
+        }
+
+    }
+
+    public ArrayList ListUser(String teamName) {
+        ArrayList<statUser> list = new ArrayList<>();
+        QueryClass dbCall = new QueryClass();
+        String[][] temp;
+        temp = dbCall.getTopPlayersByTeam(5, teamName);
+        statUser[] statList = new statUser[temp.length];
+        for(int i = 0; i < temp.length; i++) {
+            statUser t = new statUser(temp[i][0], temp[i][2]);
+            statList[i] = t;
+        }
+
+        for(int i = 0; i < statList.length; i++) {
+            list.add(statList[i]);
+        }
+
+        return list;
+
+    }
+
+    public ArrayList TopPlayer() {
+        ArrayList<statUser> list = new ArrayList<>();
+        QueryClass dbCall = new QueryClass();
+        String[][] temp;
+        temp = dbCall.getTopPlayers(10);
+        statUser[] statList = new statUser[temp.length];
+        for(int i = 0; i < temp.length; i++) {
+            statUser t = new statUser(i + 1, temp[i][0], temp[i][2]);
+            statList[i] = t;
+        }
+
+        for(int i = 0; i < statList.length; i++) {
+            list.add(statList[i]);
+        }
+
+        return list;
+    }
+
+    public ArrayList AvrAndTTest() {
+        ArrayList<statUser> list = new ArrayList<>();
+        QueryClass dbCall = new QueryClass();
+        String temp = Double.toString(dbCall.getTotalGameScoreAverageForTeam("gold"));
+        String temp2 = Double.toString(dbCall.getTotalGameScoreAverageForTeam("green"));
+        statUser t1 = new statUser("Gold", temp);
+        statUser t2 = new statUser("Green", temp2);
+
+        list.add(t1);
+        list.add(t2);
+        return list;
+    }
 
     //*******************This are the methods to edit each table*********************//
 
+
     public void addRowToTable1() {
         DefaultTableModel modelTest = (DefaultTableModel) jTable1.getModel();
-        ArrayList<testUser> list = ListUser();
+        ArrayList<statUser> list = ListUser("green");
         Object rowData[] = new Object[2];
         for (int i = 0; i < list.size(); i++) {
             //**rowData[0] = list.get(i).methodName;
@@ -710,7 +714,7 @@ public class BoardGUI implements Runnable {
 
     public void addRowToTable2() {
         DefaultTableModel modelTest = (DefaultTableModel) jTable2.getModel();
-        ArrayList<testUser> list = ListUser();
+        ArrayList<statUser> list = ListUser("gold");
         Object rowData[] = new Object[2];
         for (int i = 0; i < list.size(); i++) {
             rowData[0] = list.get(i).name;
@@ -721,7 +725,7 @@ public class BoardGUI implements Runnable {
 
     public void addRowToTable3() {
         DefaultTableModel modelTest = (DefaultTableModel) jTable3.getModel();
-        ArrayList<testUser> list = TopPlayer();
+        ArrayList<statUser> list = TopPlayer();
         Object rowData[] = new Object[3];
         for (int i = 0; i < list.size(); i++) {
             rowData[0] = list.get(i).rank;
@@ -733,22 +737,22 @@ public class BoardGUI implements Runnable {
 
     public void addRowToTable4() {
         DefaultTableModel modelTest = (DefaultTableModel) jTable4.getModel();
-        ArrayList<testUser> list = AvrAndTTest();
+        ArrayList<statUser> list = AvrAndTTest();
         Object rowData[] = new Object[2];
         for (int i = 0; i < list.size(); i++) {
-            rowData[0] = list.get(i).team;
-            rowData[1] = list.get(i).stat;
+            rowData[0] = list.get(i).name;
+            rowData[1] = list.get(i).score;
             modelTest.addRow(rowData);
         }
     }
 
     public void addRowToTable5() {
         DefaultTableModel modelTest = (DefaultTableModel) jTable5.getModel();
-        ArrayList<testUser> list = AvrAndTTest();
+        ArrayList<statUser> list = AvrAndTTest();
         Object rowData[] = new Object[2];
         for (int i = 0; i < list.size(); i++) {
-            rowData[0] = list.get(i).team;
-            rowData[1] = list.get(i).stat;
+            rowData[0] = list.get(i).name;
+            rowData[1] = list.get(i).score;
             modelTest.addRow(rowData);
         }
     }
