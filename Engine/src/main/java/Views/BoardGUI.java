@@ -11,6 +11,8 @@ import java.awt.*;
 
 import Components.QueryClass;
 import Models.*;
+import Session.Session;
+
 import static Models.GameConstants.*;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -576,6 +578,7 @@ public class BoardGUI implements Runnable {
     }
 
     public void updateBoard(Space[][] board) {
+        updateHand(Session.getSession().getUsers());
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_WIDTH; y++) {
                 if (board[x][y].getTile() != null) {
@@ -754,6 +757,66 @@ public class BoardGUI implements Runnable {
             rowData[0] = list.get(i).name;
             rowData[1] = list.get(i).score;
             modelTest.addRow(rowData);
+        }
+    }
+
+    public void updateHand(User[] users) {
+        for (int i = 0; i < users.length; i++) {
+            if (users[i] != null) {
+                if (i == 0) {
+                    Tile[] hand = users[i].getHand();
+                    for (int y = 0; y < length13; y++) {
+                        if (hand[y] != null) {
+                            char letter = hand[y].getLetter();
+                            try {
+                                user1_model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), 0, y);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    user1.repaint();
+                } else if (i == 1) {
+                    Tile[] hand = users[i].getHand();
+                    for (int y = 0; y < length13; y++) {
+                        if (hand[y] != null) {
+                            char letter = hand[y].getLetter();
+                            try {
+                                user2_model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), y, 0);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    user2.repaint();
+                } else if (i == 2) {
+                    Tile[] hand = users[i].getHand();
+                    for (int y = 0; y < length13; y++) {
+                        if (hand[y] != null) {
+                            char letter = hand[y].getLetter();
+                            try {
+                                user3_model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), 0, y);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    user3.repaint();
+                } else if (i == 3) {
+                    Tile[] hand = users[i].getHand();
+                    for (int y = 0; y < length13; y++) {
+                        if (hand[y] != null) {
+                            char letter = hand[y].getLetter();
+                            try {
+                                user4_model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), y, 0);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    user4.repaint();
+                }
+            }
         }
     }
 }
