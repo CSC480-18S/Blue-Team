@@ -1,0 +1,25 @@
+INSTALL SERVER AND IMPLEMENT DATABASE UBUNTU:
+----------------------------------------
+----------------------------------------
+'sudo apt-get install mysql-server' (i use gdebi if missing dependencies)
+
+test installation: 'sudo mysql -p' and 'mysqladmin -p -u root version'
+
+'sudo apt-get update'
+
+sudo mysql -u root -p CSC480Blue < CSC480v2.sql
+
+INSTALL SERVER AND IMPLEMENT DATABASE WINDOWS:
+----------------------------------------
+----------------------------------------
+Install from https://dev.mysql.com/downloads/installer/
+
+mysql -u root -p CSC480Blue < CSC480v2.sql
+
+
+TO USE JAVA CODE
+----------------------------------------
+----------------------------------------
+Get the mysql-connector-java.jar from somewhere (on Github) and add to classpath, or use maven dependency
+
+Import QueryClass.java to the project (Methods are documented in their .java files)

@@ -1,0 +1,3 @@
+waitForPlayer = false
+turnTimeSec = 60
+aiWaitSec = 0
