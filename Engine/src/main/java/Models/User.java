@@ -21,9 +21,13 @@ public abstract class User {
     protected int score;
     private String username;
 
+
+    private int skipped;
+
     public User(String username)
     {
         score = 0;
+        skipped = 0;
         hand = new Tile[maxTilesInHand];
         this.username = username;
         draw();
@@ -88,5 +92,14 @@ public abstract class User {
     public void setUsername(String username){
         this.username = username;
     }
+
+    public int getSkipped() {
+        return skipped;
+    }
+
+    public void setSkipped(int skipped) {
+        this.skipped = skipped;
+    }
+
 
 }

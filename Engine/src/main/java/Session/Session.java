@@ -6,10 +6,16 @@ import Components.*;
 import Components.Log;
 import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
+
+import static Models.GameConstants.BOARD_WIDTH;
 
 /**
  * @author Bohdan Yevdokymov
@@ -27,6 +33,11 @@ public class Session {
     private int currentTurn;
     private int greenScore;
     private int goldScore;
+    private Timer timer;
+    private Timer aiTimer;
+    private boolean waitForPlayer = false;
+    private int turnTimeSec;
+    private  int aiWaitSec;
 
     private Session() {
         //Session.LogInfo("Initializing objects");
@@ -36,12 +47,52 @@ public class Session {
         users = new User[4];
         playedMoves = new ArrayList();
         dbQueries = new QueryClass();
-        currentTurn = -1;
+        currentTurn = 0;
+        timer = new Timer();
+        aiTimer = new Timer();
+        waitForPlayer = false;
+        turnTimeSec = 60;
+        aiWaitSec = 3;
+        try{
+            ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+            InputStream file = classloader.getResourceAsStream("settings.txt");
+            Scanner sc = new Scanner(file);
+            while (sc.hasNextLine()){
+                String line = sc.nextLine();
+                line = line.replace(" ", "");
+                String [] param = line.split("=");
+                if(param[0].equals("waitForPlayer")){
+                    if(param[1].equals("true")){
+                        waitForPlayer = true;
+                    } else if (param[1].equals("false")){
+                        waitForPlayer = false;
+                    }
+                } else if(param[0].equals("turnTimeSec")){
+                    turnTimeSec = Integer.parseInt(param[1]);
+                } else if(param[0].equals("aiWaitSec")){
+                    aiWaitSec = Integer.parseInt(param[1]);
+                }
+            }
+        } catch (Exception e ){
+            e.printStackTrace();
+        }
+
     }
 
     public static Session getSession() {
         if (session == null) {
             session = new Session();
+            //adding SkyCats initially
+            for(int i =0; i < session.users.length; i++){
+                session.users[i] = new SkyCat(session);
+            }
+            session.gui.updateUsers(session.users);
+            session.gui.setTurn(session.currentTurn);
+            //play first move to start the game
+            if(!session.waitForPlayer) {
+                SkyCat skyCat1 = (SkyCat) session.users[0];
+               session.aiPlayWord(skyCat1);
+            }
         }
         return session;
     }
@@ -59,6 +110,7 @@ public class Session {
                 session.log.logger.setLevel(Level.INFO);
             } catch (Exception e) {
                 System.out.println("Error creating logger: \n" + e);
+                e.printStackTrace();
             }
         }
 
@@ -119,13 +171,13 @@ public class Session {
 
         //check if any users are not initialized yet
         for (int i = 0; i < users.length; i++) {
-            if (users[i] == null) {
-
+            if (users[i].getClass() == SkyCat.class) {
+                //return generated tiles back in bag
+                TileGenerator.getInstance().putInBag(newPlayer.getHand());
+                Tile[] hand = users[i].getHand();
+                newPlayer.setHand(hand);
                 users[i] = newPlayer;
                 gui.updateUsers(users);
-                if (currentTurn == -1) {
-                    nextTurn();
-                }
                 return "JOINED";
             }
         }
@@ -138,8 +190,54 @@ public class Session {
         return playedMoves.isEmpty();
     }
 
+    private void displayMoveStats(Move move, int points) {
+        if (move != null) {
+            System.out.println(move.getUser().getUsername());
+            System.out.println("x: " + move.getStartX());
+            System.out.println("y: " + move.getStartY());
+            System.out.println("horizontal: " + move.isHorizontal());
+            System.out.println("word: " + move.getWordString());
+            if (!move.getOffshootMoves().isEmpty()) {
+                System.out.println("Move creates auxiliary words of : ");
+                for (Move aMove : move.getOffshootMoves()) {
+                    System.out.print(aMove.getWordString() + " ");
+                }
+                System.out.println();
+            }
+            System.out.println("points: " + points);
+        }
+    }
+
+    private boolean aiPlayWord(SkyCat skyCat) {
+        Move move = skyCat.chooseMove();
+        if (move != null) {
+            session.playWord(move.getStartX(), move.getStartY(), move.isHorizontal(), move.getWordString(), skyCat);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
+        StringBuilder wordForScoring = new StringBuilder("");
+        StringBuilder wordForValidating = new StringBuilder("");
+        boolean wildCard = false;
+        for(char c : word.toCharArray()){
+            if(c == '_') {
+                wordForScoring.append("-");
+                wildCard = true;
+            }
+            else if(wildCard){
+                wildCard = false;
+                wordForValidating.append(c);
+            }
+            else{
+                wordForValidating.append(c);
+                wordForScoring.append(c);
+            }
+        }
+        word = wordForValidating.toString();
         String initialLetters = word;
         TileGenerator tg = TileGenerator.getInstance();
         // Check if word length is less than 11,
@@ -150,14 +248,14 @@ public class Session {
         }
 
         if (word.length() == 1) {
-            if (board.getBoard()[startX + 1][startY].getTile() != null) {
+            if ((startX + 1 < BOARD_WIDTH && board.getBoard()[startX + 1][startY].getTile() != null) || (startX > 0  && board.getBoard()[startX - 1][startY].getTile() != null)) {
                 horizontal = true;
             }
         }
 
         // If first move check
         if (firstMove()) {
-            int boardCenter = GameConstants.BOARD_WIDTH / 2;
+            int boardCenter = BOARD_WIDTH / 2;
             if ((horizontal ? startX : startY) > boardCenter
                     || ((horizontal ? startX : startY) + word.length() - 1) < boardCenter
                     || (horizontal ? startY : startX) != boardCenter) {
@@ -166,37 +264,40 @@ public class Session {
 
         }
 
-        ArrayList<Character> chars = new ArrayList<>();
-        char[] arr = word.toCharArray();
-        for (int i = 0; i < arr.length; i++) {
-            chars.add(arr[i]);
-        }
-
-        word = "";
-
-        int count = 0;
-        StringBuilder wordBuilder = new StringBuilder(word);
-        //walk through the board and if tile is already placed - append it
-        while (!chars.isEmpty()) {
-            if (horizontal) {
-                if (board.getBoard()[startX + count][startY].getTile() != null) {
-                    wordBuilder.append(board.getBoard()[startX + count][startY].getTile().getLetter());
-                } else {
-                    wordBuilder.append(chars.get(0));
-                    chars.remove(0);
-                }
-            } else {
-                if (board.getBoard()[startX][startY + count].getTile() != null) {
-                    wordBuilder.append(board.getBoard()[startX][startY + count].getTile().getLetter());
-                } else {
-                    wordBuilder.append(chars.get(0));
-                    chars.remove(0);
-                }
+        //this part appends middle part of the word, ai gives full word, so only for players
+        if(user.getClass() == Player.class) {
+            ArrayList<Character> chars = new ArrayList<>();
+            char[] arr = word.toCharArray();
+            for (int i = 0; i < arr.length; i++) {
+                chars.add(arr[i]);
             }
 
-            count++;
+            word = "";
+
+            int count = 0;
+            StringBuilder wordBuilder = new StringBuilder(word);
+            //walk through the board and if tile is already placed - append it
+            while (!chars.isEmpty()) {
+                if (horizontal) {
+                    if ((startX + count) < BOARD_WIDTH && board.getBoard()[startX + count][startY].getTile() != null) {
+                        wordBuilder.append(board.getBoard()[startX + count][startY].getTile().getLetter());
+                    } else {
+                        wordBuilder.append(chars.get(0));
+                        chars.remove(0);
+                    }
+                } else {
+                    if ((startY + count) < BOARD_WIDTH && board.getBoard()[startX][startY + count].getTile() != null) {
+                        wordBuilder.append(board.getBoard()[startX][startY + count].getTile().getLetter());
+                    } else {
+                        wordBuilder.append(chars.get(0));
+                        chars.remove(0);
+                    }
+                }
+
+                count++;
+            }
+            word = wordBuilder.toString();
         }
-        word = wordBuilder.toString();
         Tile[] wordTiles = new Tile[word.length()];
 
         for (int i = 0; i < word.length(); i++) {
@@ -208,7 +309,15 @@ public class Session {
 
         if ((int) result[0] == 1) {
             board.placeWord(startX, startY, horizontal, word);
-            int score = calculateMovePoints((Move) result[1]);
+            String scoringWord = wordForScoring.toString();
+            Tile[] tilesForScoring = new Tile[scoringWord.length()];
+            for(int i = 0; i < scoringWord.length(); i++){
+                tilesForScoring[i] = tg.getTile(scoringWord.charAt(i));
+            }
+            Move scoringMove = (Move) result[1];
+            scoringMove.setWord(tilesForScoring);
+            int score = calculateMovePoints(scoringMove);
+            displayMoveStats((Move) result[1], score);
             user.setScore(user.getScore() + score);
             if (user instanceof Player) {
                 Player temp = (Player) user;
@@ -221,7 +330,15 @@ public class Session {
             return "VALID";
         } else if ((int) result[0] == 2) {
             board.placeWord(startX, startY, horizontal, word);
-            int score = calculateMovePoints((Move) result[1]) * 2;
+            String scoringWord = wordForScoring.toString();
+            Tile[] tilesForScoring = new Tile[scoringWord.length()];
+            for(int i = 0; i < scoringWord.length(); i++){
+                tilesForScoring[i] = tg.getTile(scoringWord.charAt(i));
+            }
+            Move scoringMove = (Move) result[1];
+            scoringMove.setWord(tilesForScoring);
+            int score = calculateMovePoints(scoringMove) * 2;
+            displayMoveStats((Move) result[1], score);
             user.setScore(user.getScore() + score);
             if (user instanceof Player) {
                 Player temp = (Player) user;
@@ -260,7 +377,17 @@ public class Session {
             if (users[i] != null && users[i].getClass() == Player.class) {
                 Player player = (Player) users[i];
                 if (player.getMacAddress().equals(mac)) {
-                    users[i] = null;
+                    Tile[] hand = users[i].getHand();
+                    //replace player with skycat
+                    SkyCat skyCat = new SkyCat(Session.getSession());
+                    //put generated tiles back
+                    TileGenerator.getInstance().putInBag(skyCat.getHand());
+                    skyCat.setHand(hand);
+                    users[i] = skyCat;
+                    gui.setTurn(currentTurn);
+                    gui.updateUsers(users);
+                    //play instead of player
+                    aiPlayWord(skyCat);
                     return "removed";
                 }
             }
@@ -269,6 +396,8 @@ public class Session {
     }
 
     public String exchange(String mac, String letters) {
+        //reset skip count
+        users[currentTurn].setSkipped(0);
         letters = letters.toUpperCase();
         TileGenerator tg = TileGenerator.getInstance();
         int count = 0;
@@ -304,6 +433,16 @@ public class Session {
         return "Username not found";
     }
 
+    private void exchangeAllTiles(User user){
+        TileGenerator tg = TileGenerator.getInstance();
+        Tile[] hand = user.getHand();
+        for (int i=0; i < hand.length; i++){
+            hand[i] = tg.exchangeTile(hand[i]);
+        }
+        user.setHand(hand);
+        nextTurn();
+    }
+
     public String getBoardJSON() {
         Gson gson = new Gson();
         String result = gson.toJson(board);
@@ -319,19 +458,20 @@ public class Session {
         int letterMult = 1;
         Multiplier mult = Multiplier.NONE;
         for (int i = 0; i < move.getWordString().length(); i++) {
-            Space current;
-            if (horizontal) {
+
+            Space current = null;
+            if (horizontal && (move.getStartX() + i) < boardLocal.length) {
                 mult = boardLocal[move.getStartX() + i][move.getStartY()].
                         getMultiplier();
                 current = boardLocal[move.getStartX() + i][move.getStartY()];
                 usedSpaces.add(current);
-            } else {
+            } else if(move.getStartY() + i < boardLocal.length){
                 mult = boardLocal[move.getStartX()][move.getStartY() + i].
                         getMultiplier();
                 current = boardLocal[move.getStartX()][move.getStartY() + i];
                 usedSpaces.add(current);
             }
-            if (current.getUsed() == false) {
+            if (current != null && current.getUsed() == false) {
                 switch (mult) {
                     case NONE:
                         letterMult = 1;
@@ -365,7 +505,6 @@ public class Session {
             }
 
         }
-        System.out.println("points: " + points);
         return points;
     }
 
@@ -373,7 +512,7 @@ public class Session {
      * Set's next player's turn
      */
     private void nextTurn() {
-
+        timer.cancel();
         boolean done = false;
         while (!done) {
             //increment player number
@@ -388,7 +527,54 @@ public class Session {
                 done = true;
             }
         }
+        if(users[currentTurn].getClass() == SkyCat.class){
+            aiTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    SkyCat skyCat = (SkyCat) session.users[currentTurn];
+                    boolean played = aiPlayWord(skyCat);
+                    if(played) {
+                        //reset skip counter
+                        skyCat.setSkipped(0);
+                    } else {
+                        if(skyCat.getSkipped() < 2) {
+                            skyCat.setSkipped(skyCat.getSkipped() + 1);
+                            exchangeAllTiles(users[currentTurn]);
+                        } else {//probably no moves left
+                            System.out.println("GAME OVER !");
+                        }
+                    }
+                }
+            }, aiWaitSec * 1000);
 
+    } else { //next user is real player
+            setTimer();
+        }
+
+    }
+
+    private void setTimer(){
+        if(users[currentTurn].getClass() == Player.class) {
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                        //check if player skipped 3 times
+                        if (users[currentTurn].getSkipped() == 2) {
+                            //replace player with skycat
+                            Tile[] hand = users[currentTurn].getHand();
+                            SkyCat skyCat = new SkyCat(Session.getSession());
+                            //put generated tiles back in bag
+                            TileGenerator.getInstance().putInBag(skyCat.getHand());
+                            skyCat.setHand(hand);
+                            users[currentTurn] = skyCat;
+                        } else {
+                            users[currentTurn].setSkipped(users[currentTurn].getSkipped() + 1);
+                            nextTurn();
+                        }
+                }
+            }, turnTimeSec * 1000);
+        }
     }
 
     private void replaceTiles(User user, String letters) {
@@ -444,7 +630,7 @@ public class Session {
                     return "Skycat";
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) { e.printStackTrace();}
         // Default to AI's turn
         return "Skycat";
     }

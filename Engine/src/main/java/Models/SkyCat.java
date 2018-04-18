@@ -9,6 +9,7 @@ import Components.Dictionaries;
 import Components.Validator;
 import Session.Session;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -45,6 +46,9 @@ public class SkyCat extends User {
      */
     public Move chooseMove() {
         Move[] possibleMoves = getAllMoves();
+        if(possibleMoves.length == 0){
+            return null;
+        }
         int indx = ThreadLocalRandom.current().nextInt(0, possibleMoves.length);
         return possibleMoves[indx];
     }
@@ -62,8 +66,8 @@ public class SkyCat extends User {
         boardLocal = Session.getSession().getBoardAsSpaces();
         Tile[] hand = this.getHand();
         Dictionaries dictionary = Dictionaries.getDictionaries();
-        String[] engWords = (String[]) dictionary.getEnglishWords().toArray();
-        String[] specWords = (String[]) dictionary.getSpecialWords().toArray();
+        HashSet<String> engWords = dictionary.getEnglishWords();
+        HashSet<String> specWords = dictionary.getSpecialWords();
         Validator validator = new Validator();
         // Check if first move
         if (boardLocal[boardLocal.length / 2][boardLocal[0].length / 2].getTile()
@@ -72,6 +76,7 @@ public class SkyCat extends User {
                 boolean inHand = false;
                 Tile[] handCopy = hand.clone();
                 for (char c : w.toCharArray()) {
+                    inHand = false;
                     for (int i = 0; i < handCopy.length; i++) {
                         if (handCopy[i] != null
                                 && handCopy[i].getLetter() == c) {
@@ -86,11 +91,16 @@ public class SkyCat extends User {
                 }
                 if (inHand == true) {
                     Tile[] wordTiles = stringToTiles(w);
-                    Move move = new Move(boardLocal.length / 2, boardLocal[0].length / 2, true, wordTiles, this);
-                    Object[] result = validator.isValidPlay(move);
-                    if ((int) result[0] == 1
-                            || (int) result[0] == 2) {
-                        possibleMoves.add((Move) result[1]);
+                    for (int i = 0; i < w.length(); i++) {
+                        if ((boardLocal.length / 2) - i <= 0) {
+                            break;
+                        }
+                        Move move = new Move((boardLocal.length / 2) - i, boardLocal[0].length / 2, true, wordTiles, this);
+                        Object[] result = validator.isValidPlay(move);
+                        if ((int) result[0] == 1
+                                || (int) result[0] == 2) {
+                            possibleMoves.add((Move) result[1]);
+                        }
                     }
                 }
             }
@@ -98,6 +108,7 @@ public class SkyCat extends User {
                 boolean inHand = false;
                 Tile[] handCopy = hand.clone();
                 for (char c : w.toCharArray()) {
+                    inHand = false;
                     for (int i = 0; i < handCopy.length; i++) {
                         if (handCopy[i] != null
                                 && handCopy[i].getLetter() == c) {
@@ -112,11 +123,16 @@ public class SkyCat extends User {
                 }
                 if (inHand == true) {
                     Tile[] wordTiles = stringToTiles(w);
-                    Move move = new Move(boardLocal.length / 2, boardLocal[0].length / 2, true, wordTiles, this);
-                    Object[] result = validator.isValidPlay(move);
-                    if ((int) result[0] == 1
-                            || (int) result[0] == 2) {
-                        possibleMoves.add((Move) result[1]);
+                    for (int i = 0; i < w.length(); i++) {
+                        if ((boardLocal.length / 2) - i <= 0) {
+                            break;
+                        }
+                        Move move = new Move(boardLocal.length / 2 - i, (boardLocal[0].length / 2), true, wordTiles, this);
+                        Object[] result = validator.isValidPlay(move);
+                        if ((int) result[0] == 1
+                                || (int) result[0] == 2) {
+                            possibleMoves.add((Move) result[1]);
+                        }
                     }
                 }
             }
@@ -124,11 +140,9 @@ public class SkyCat extends User {
             possibleMoves.toArray(toReturn);
             return toReturn;
         }
-        
+
         // Not the first move
-        for (int x = 0;
-                x < boardLocal.length;
-                x++) {
+        for (int x = 0;  x < boardLocal.length; x++) {
             for (int y = 0; y < boardLocal[0].length; y++) {
                 if (boardLocal[x][y].getTile() != null) {
                     int clearForward = countClearSpaces(Direction.FORWARD,
@@ -170,6 +184,7 @@ public class SkyCat extends User {
                                 boolean inHand = false;
                                 Tile[] handCopy = hand.clone();
                                 for (char c : remainingStart.toCharArray()) {
+                                    inHand = false;
                                     for (int i = 0; i < handCopy.length; i++) {
                                         if (handCopy[i] != null
                                                 && handCopy[i].getLetter() == c) {
@@ -192,7 +207,8 @@ public class SkyCat extends User {
                                     }
                                 }
                             }
-                        } else if (w.contains(verticalString)) {
+                        }
+                        if (w.contains(verticalString)) {
                             int index = w.indexOf(verticalString);
                             String remainingStart = "";
                             String remainingEnd = "";
@@ -208,6 +224,7 @@ public class SkyCat extends User {
                                 boolean inHand = false;
                                 Tile[] handCopy = hand.clone();
                                 for (char c : remainingStart.toCharArray()) {
+                                    inHand = false;
                                     for (int i = 0; i < handCopy.length; i++) {
                                         if (handCopy[i] != null
                                                 && handCopy[i].getLetter() == c) {
@@ -222,7 +239,7 @@ public class SkyCat extends User {
                                 }
                                 if (inHand == true) {
                                     Tile[] wordTiles = stringToTiles(w);
-                                    Move move = new Move(x, y - remainingStart.length(), true, wordTiles, this);
+                                    Move move = new Move(x, y - remainingStart.length(), false, wordTiles, this);
                                     Object[] result = validator.isValidPlay(move);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
@@ -249,6 +266,7 @@ public class SkyCat extends User {
                                 boolean inHand = false;
                                 Tile[] handCopy = hand.clone();
                                 for (char c : remainingStart.toCharArray()) {
+                                    inHand = false;
                                     for (int i = 0; i < handCopy.length; i++) {
                                         if (handCopy[i] != null
                                                 && handCopy[i].getLetter() == c) {
@@ -271,7 +289,8 @@ public class SkyCat extends User {
                                     }
                                 }
                             }
-                        } else if (w.contains(verticalString)) {
+                        }
+                        if (w.contains(verticalString)) {
                             int index = w.indexOf(verticalString);
                             String remainingStart = "";
                             String remainingEnd = "";
@@ -287,6 +306,7 @@ public class SkyCat extends User {
                                 boolean inHand = false;
                                 Tile[] handCopy = hand.clone();
                                 for (char c : remainingStart.toCharArray()) {
+                                    inHand = false;
                                     for (int i = 0; i < handCopy.length; i++) {
                                         if (handCopy[i] != null
                                                 && handCopy[i].getLetter() == c) {
@@ -301,7 +321,7 @@ public class SkyCat extends User {
                                 }
                                 if (inHand == true) {
                                     Tile[] wordTiles = stringToTiles(w);
-                                    Move move = new Move(x, y - remainingStart.length(), true, wordTiles, this);
+                                    Move move = new Move(x, y - remainingStart.length(), false, wordTiles, this);
                                     Object[] result = validator.isValidPlay(move);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
