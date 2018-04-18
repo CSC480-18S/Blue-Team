@@ -1,12 +1,8 @@
-
 body{
     margin: 0px;
     padding: 0px;
-}
-
-.borderClass {
-    border-color: brown;
-    border-style: solid;
+    max-width: 650px;
+    margin: auto;
 }
 
 .drag {
@@ -30,48 +26,70 @@ body{
 }
 
 .content {
-    max-width: 650px;
     margin: auto;
     background: white;
-    padding: 10px;
 }
 
 .container {
-     width: 650px;
-     float: left;
-     border: none;
-     text-align: center;
- }
-
-.handTiles {
     width: 650px;
     float: left;
     border: none;
     text-align: center;
 }
 
-image {
-    max-width: 100%;
-    max-height: 100%;
+.section1 {
+    color: #FFCC33;
+    background-color: #1A3F28;
+    text-align: center;
+    height: 40px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.section2 {
+    background-color: #4D4D4D;
+    text-align: center;
+    height: 150px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.section3 {
+    color: #FFCC33;
+    background-color: #1A3F28;
+    text-align: center;
+    height: 30px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.section4 {
+    color: #FFCC33;
+    background-color: #1A3F28;
+    text-align: center;
+    height: 115px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.section5 {
+    color: #FFCC33;
+    background-color: #2A6342;
+    text-align: center;
+    height: 30px;
+    padding: 0px;
+    margin: 0px;
+}
+
+
+.handTiles {
+    float: left;
+    border: none;
+    text-align: center;
 }
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-}
-
-form {
-    border: 3px solid #f1f1f1;
-}
-
-.imgcontainer {
-    text-align: center;
-    margin: 24px 0 12px 0;
-
-}
-
-img.avatar {
-    width: 40%;
-    border-radius: 100%;
 }
 
 .container button {
@@ -82,75 +100,68 @@ img.avatar {
     display: inline-block;
 }
 
-#menu {
-    background-color: #4CAF50;
+#exit {
+    background-color: #4D4D4D;
     color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
+    margin: 22px 8px 8px 8px;
     border: none;
     cursor: pointer;
     width: 10%;
     border-radius: 8px;
+    float: left;
 }
 
-#exit {
-    background-color: #d11c12;
+#help {
+    background-color: #4D4D4D;
     color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
+    margin: 22px 8px 8px 8px;
     border: none;
     cursor: pointer;
     width: 10%;
     border-radius: 8px;
-    cursor: pointer;
+    float: right;
 }
 
 #exchange {
-    background-color: #4CAF50;
+    background-color: #1A3F28;
     color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    font-size: 14pt;
-    border: 5px solid transparent;
+    margin: 20px 120px 8px 22px;
+    border: none;
     cursor: pointer;
-    width: 30%;
+    width: 12%;
     border-radius: 8px;
 }
 
 #shuffle {
-    background-color: #4CAF50;
+    background-color: #1A3F28;
     color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    font-size: 14pt;
-    border: 5px solid transparent;
+    margin: 20px 8px 8px 8px;
+    border: none;
     cursor: pointer;
-    width: 30%;
+    width: 12%;
     border-radius: 8px;
 }
 
 #recall {
-    background-color: red;
+    background-color: #1A3F28;
     color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    font-size: 14pt;
-    border: 5px solid transparent;
+    margin: 20px 8px 8px 22px;
+    border: none;
     cursor: pointer;
-    width: 15%;
+    width: 12%;
     border-radius: 8px;
+    float: left;
 }
 
 #confirmed {
-    background-color: #4CAF50;
+    background-color: #1A3F28;
     color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    font-size: 14pt;
-    border: 5px solid transparent;
+    margin: 20px 22px 8px 8px;
+    border: none;
     cursor: pointer;
-    width: 15%;
+    width: 12%;
     border-radius: 8px;
+    float: right;
 }
 
 button:hover {
@@ -159,7 +170,7 @@ button:hover {
 
 button:active {
     background-color: #3e8e41;
-    box-shadow: 0 5px #666;
+    box-shadow: 0 5px #FFCC33;
     transform: translateY(4px);
 }
 
@@ -168,100 +179,22 @@ input:focus {
     outline: none;
 }
 
-#exit {
-    float: left;
-    width: 100px;
-    height: 50px;
-    font-size: 14pt;
-}
-
-#help {
-    float: right;
-    width: 100px;
-    height: 50px;
-    font-size: 14pt;
-}
-
-.score-board {
-    text-align: center;
-    padding: 10px;
-}
-
-.player1 {
-    display: inline-block;
-    padding: 30px;
-    color: green;
-
-}
-
-.player2 {
-    display: inline-block;
-    padding: 30px;
-    color: gold;
-
-}
-
-.player1 h4 {
-    font-weight: bold;
-}
-
 .score-box {
-    border: 3px solid black;
-    padding: 20px;
-    color: white;
-    font-size: 25px;
-    background-color: green;
-    border-radius: 8px;
-
+    color: #FFCC33;
+    font-size: 40px;
+    font-weight: bold;
+    padding: 35px;
+    margin: 0px;
 }
 
-.turn-box {
-    border: 3px solid black;
-    padding: 20px;
-    color: white;
-    font-size: 25px;
-    background-color: gold;
-    border-radius: 8px;
-
-}
-
-
-.black_overlay {
-    display: none;
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    width: 100%;
-    height: 100%;
-    background-color: black;
-    -moz-opacity: 0.8;
-    opacity: .80;
-    filter: alpha(opacity=80);
-}
-.white_content {
-    display: none;
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    width:50%;
-    height: 50%;
-    padding: 16px;
-    border: 6px solid green;
-    background-color: white;
-    z-index: 1002;
-    overflow: auto;
-}
-
-.containers{
-    width: 3300px;
+.containers {
+    width: auto;
     float: left;
     border: none;
     text-align: center;
-
 }
 
-.special
-{
+.special {
     height:55px;
     width: 55px;
     border: 2px solid black;
@@ -299,28 +232,47 @@ input:focus {
     z-index: 1002;
     overflow: auto;
 }
+
 .black_overlay {
-  display: none;
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  width: 200%;
-  height: 200%;
-  background-color: black;
-  -moz-opacity: 0.8;
-  opacity: .80;
-  filter: alpha(opacity=80);
+    display: none;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    -moz-opacity: 0.8;
+    opacity: .80;
+    filter: alpha(opacity=80);
 }
+
 .white_content {
-  display: none;
-  position: absolute;
-  top: 25%;
-  left: 25%;
-  width:100%;
-  height: 50%;
-  padding: 16px; 
-  border: 6px solid green;
-  background-color: white;
-  z-index: 1002;
-  overflow: auto;
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 320px;
+    height: 420px;
+    padding: 16px;
+    border: 6px solid #2A6342;
+    background-color: white;
+    z-index: 1002;
+    overflow: auto;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    padding: 70px 30px;
+}
+
+#myProgress {
+    width: 100%;
+    background-color: #F3F3F3;
+}
+
+#myBar {
+    width: 5%;
+    height: 30px;
+    background-color: #C19A24;
+    text-align: center;
+    line-height: 30px;
+    color: white;
 }
