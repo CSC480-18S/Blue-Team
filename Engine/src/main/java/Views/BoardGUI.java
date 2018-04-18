@@ -11,6 +11,7 @@ import java.awt.*;
 
 import Components.QueryClass;
 import Models.*;
+import Session.Start;
 import Session.Session;
 import static Models.GameConstants.*;
 import java.awt.Color;
@@ -406,7 +407,7 @@ public class BoardGUI implements Runnable {
         logLabel.setForeground(new java.awt.Color(185, 39, 39));
         logLabel.setText("Game Log");
 
-        final ImageIcon qrIcon = new ImageIcon(classloader.getResource("qrCode.png"));
+        final ImageIcon qrIcon = new ImageIcon(Start.qrFile.getPath());
         JPanel qrBackground = new JPanel(new BorderLayout()) {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
