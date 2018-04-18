@@ -6,8 +6,7 @@ import Components.*;
 import Components.Log;
 import com.google.gson.Gson;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 import java.util.Scanner;
@@ -77,6 +76,7 @@ public class Session {
             e.printStackTrace();
         }
 
+
     }
 
     public static Session getSession() {
@@ -93,6 +93,7 @@ public class Session {
                 SkyCat skyCat1 = (SkyCat) session.users[0];
                session.aiPlayWord(skyCat1);
             }
+            session.gui.updateHand(session.users);
         }
         return session;
     }
@@ -396,6 +397,7 @@ public class Session {
     }
 
     public String exchange(String mac, String letters) {
+        gui.updateBoard(board.getBoard());
         //reset skip count
         users[currentTurn].setSkipped(0);
         letters = letters.toUpperCase();
@@ -440,6 +442,7 @@ public class Session {
             hand[i] = tg.exchangeTile(hand[i]);
         }
         user.setHand(hand);
+        gui.updateBoard(board.getBoard());
         nextTurn();
     }
 
@@ -531,17 +534,19 @@ public class Session {
             aiTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    SkyCat skyCat = (SkyCat) session.users[currentTurn];
-                    boolean played = aiPlayWord(skyCat);
-                    if(played) {
-                        //reset skip counter
-                        skyCat.setSkipped(0);
-                    } else {
-                        if(skyCat.getSkipped() < 2) {
-                            skyCat.setSkipped(skyCat.getSkipped() + 1);
-                            exchangeAllTiles(users[currentTurn]);
-                        } else {//probably no moves left
-                            System.out.println("GAME OVER !");
+                    if(session.users[currentTurn].getClass() == SkyCat.class){
+                        SkyCat skyCat = (SkyCat) session.users[currentTurn];
+                        boolean played = aiPlayWord(skyCat);
+                        if(played) {
+                            //reset skip counter
+                            skyCat.setSkipped(0);
+                        } else {
+                            if(skyCat.getSkipped() < 2) {
+                                skyCat.setSkipped(skyCat.getSkipped() + 1);
+                                exchangeAllTiles(users[currentTurn]);
+                            } else {//probably no moves left
+                                System.out.println("GAME OVER !");
+                            }
                         }
                     }
                 }
