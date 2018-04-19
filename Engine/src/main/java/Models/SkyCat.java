@@ -209,7 +209,7 @@ public class SkyCat extends User {
                                     }
                                 xIndex = x + forwardTiles.length();
                                 if(inHand == true && remainingEnd.length() <= handCount)
-                                    for(char c : remainingStart.toCharArray()){
+                                    for(char c : remainingEnd.toCharArray()){
                                         inHand = false;
                                         for(int i = 0; i < handCopy.length; i++){
                                             if(handCopy[i] != null
@@ -274,7 +274,7 @@ public class SkyCat extends User {
                                     }
                                 yIndex = y + downwardTiles.length();
                                 if(inHand == true && remainingEnd.length() <= handCount)
-                                    for(char c : remainingStart.toCharArray()){
+                                    for(char c : remainingEnd.toCharArray()){
                                         inHand = false;
                                         for(int i = 0; i < handCopy.length; i++){
                                             if(handCopy[i] != null
@@ -341,7 +341,7 @@ public class SkyCat extends User {
                                     }
                                 xIndex = x + forwardTiles.length();
                                 if(inHand == true && remainingEnd.length() <= handCount)
-                                    for(char c : remainingStart.toCharArray()){
+                                    for(char c : remainingEnd.toCharArray()){
                                         inHand = false;
                                         for(int i = 0; i < handCopy.length; i++){
                                             if(handCopy[i] != null
@@ -405,7 +405,7 @@ public class SkyCat extends User {
                                     }
                                 yIndex = y + downwardTiles.length();
                                 if(inHand == true && remainingEnd.length() <= handCount)
-                                    for(char c : remainingStart.toCharArray()){
+                                    for(char c : remainingEnd.toCharArray()){
                                         inHand = false;
                                         for(int i = 0; i < handCopy.length; i++){
                                             if(handCopy[i] != null
