@@ -36,7 +36,7 @@ public class Servlet extends HttpServlet {
         }
         catch (Exception e)
         {
-
+            e.printStackTrace();
         }
     }
 
@@ -92,6 +92,7 @@ public class Servlet extends HttpServlet {
             }else if (req.equals("leave")) {
                 // Leave a Game request
                 String mac = getMACAddress(request.getRemoteAddr());
+                System.out.println("leave");
                 out.write(EventHandler.leaveHandler(mac));
             } else if (req.equals("forfeit")) {
                 // Forfeit a Game request
@@ -121,8 +122,12 @@ public class Servlet extends HttpServlet {
             } else if (req.equals("getscore")) {
                 String macAddress = getMACAddress(request.getRemoteAddr());
                 out.write(EventHandler.scoreHandler(macAddress));
-
-            }else {
+            } else if (req.equals("getupdates")) {
+                String macAddress = getMACAddress(request.getRemoteAddr());
+                String score = EventHandler.scoreHandler(macAddress);
+                String turn = EventHandler.turnHandler(macAddress);
+                out.write(score + "_" + turn);
+            } else {
                 // Unknown request
                 out.write(EventHandler.unknownHandler());
             }

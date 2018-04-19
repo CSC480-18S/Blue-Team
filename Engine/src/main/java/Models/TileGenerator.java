@@ -80,6 +80,12 @@ public class TileGenerator {
         return newTile;
     }
 
+    public void putInBag(Tile[] tiles){
+        for(int i=0; i < tiles.length; i++){
+            bag.add(tiles[i]);
+        }
+    }
+
 
     public static TileGenerator getInstance(){
         if(generator == null) {

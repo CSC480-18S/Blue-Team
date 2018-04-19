@@ -1,33 +1,53 @@
 package Components;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /// Class to control logging throughout app
 public class Log
 {
-    public Logger logger;
-    private FileHandler handler;
-    private String filepath = "sqrabble_log.txt";
+    private static Log logger;
+    private File logFile;
 
-    public Log() throws SecurityException, IOException
+    public Log()
     {
-        // create file if it doesn't exist
-        File file = new File(filepath);
-        if (!file.exists())
-        {
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-        }
+        try {
+            // create file if it doesn't exist
+            logFile = new File("scrabble_log.txt");
+            logFile.createNewFile();
 
-        // true to append file
-        handler = new FileHandler(filepath, true);
-        logger = Logger.getLogger("sqrabble");
-        logger.addHandler(handler);
-        SimpleFormatter format = new SimpleFormatter();
-        handler.setFormatter(format);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static Log getLogger(){
+        if(logger == null){
+            logger = new Log();
+        }
+        return logger;
+    }
+
+    public void logException(Exception e){
+        try {
+            FileWriter fw = new FileWriter(logFile, true);
+            PrintWriter pw = new PrintWriter(fw);
+
+            //getting current date and time using Date class
+            DateFormat df = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
+            Date dateobj = new Date();
+            pw.write(df.format(dateobj) + "\n");
+            e.printStackTrace(pw);
+            pw.write("\n\n\n");
+
+            pw.flush();
+            pw.close();
+            fw.close();
+
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
     }
 }

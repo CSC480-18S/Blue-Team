@@ -46,8 +46,23 @@ function getSelectedTilesAsString() {
     });
     return current.join("");
 }
-function exchange()
+
+function exchange(el)
 {
+    // If no border add one and return
+    if (el.style.border != "5px solid red")
+    {
+        el.style.border = "5px solid red";
+        return;
+    }
+    else
+    {
+        el.style.border = "5px solid transparent";
+        // check if hand tiles have a border
+        if (!handTilesSelected())
+            return // if none do return
+    }
+
     var output = prompt("Exchange selected tiles?", "Yes");
     switch (output.toUpperCase()) {
         case "YES":
@@ -108,6 +123,18 @@ function getCurrentHandAsString() {
     return current.join("");
 }
 
+function handTilesSelected()
+{
+    // Check each hand tile for a border
+    // If there is a border return true to begin exchange
+    for (var i = 0; i < 7; i++)
+    {
+        if (document.getElementById('div'+i).getElementsByTagName('img')[0].style.border == "5px solid red")
+            return true;
+    }
+    return false;
+}
+
 //only problem is if you have words in play it recalls all
 //the letters on the board
 function shuffle()
@@ -147,30 +174,25 @@ function recall() {
 //need to store tile placement and check if they are in valid spots
 //change to buttons to click on for yes or no
 function exit() {
-    $("#exit").click(function () {
         var text;
         var exit = prompt("Are you sure you want to exit?", "Yes");
-        switch (exit.toUpperCase()) {
-            case "NO":
-                alert("Continue playing");
-                break;
-            case "YES":
-                alert("Bye!");
+        if ("YES" == exit.toUpperCase()) {
+            alert("Left Game.");
 
-                $.post("Servlet", {
-                    request: "leave",
-                    username: uname
-                }, function (data, status) {
-                    alert("Leave - Data: " + data + "\nStatus: " + status); // response text.
-                });
-                //leave page
-                //window.open('','_parent','');
-                var win = window.open("about:blank", "_self")
+            $.post("Servlet", {
+                request: "leave",
+            }, function (data, status) {
+                alert("Leave - Data: " + data + "\nStatus: " + status); // response text.
+            });
 
-                win.close()
-                break;
+            var win = window.open("about:blank", "_self");
+            win.close();
+
         }
-    });
+        else
+        {
+            alert("Continue Playing");
+        }
 
 }
 
@@ -183,7 +205,10 @@ Array.prototype.diff = function (a) {
 
 //cant just play one word
 function confirmed() {
-    $("#confirmed").click(function () {
+    try
+    {
+        // Switch flag to pause updates
+        isPlaying = true;
 
         // Instance variables
         var xyCoord = [];
@@ -241,7 +266,7 @@ function confirmed() {
         }
 
         wordString = wordPlayed.join("");
-        alert("Word Played: " + wordString);
+        //alert("Word Played: " + wordString);
 
         //This is the Play request
         $.post("Servlet", { //needs variables for word, coordinates and direction (h or v)
@@ -257,7 +282,7 @@ function confirmed() {
             }
             else if (result == "BONUS")
             {
-                showMessage("Bonus word !");
+                showMessage("Bonus word !!");
             }
             else if (result == "PROFANE")
             {
@@ -285,7 +310,10 @@ function confirmed() {
         currentImg = null;
         // Deep copy new board state global array
         boardState = [...xyCoord];
-    });
+
+    } catch (e) {}
+        // reset flag always
+    finally {isPlaying = false}
 }
 
 // For when we want to have a dedicated message box

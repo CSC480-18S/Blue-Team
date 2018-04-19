@@ -79,7 +79,25 @@ public final class EventHandler {
     
     public static String exchangeHandler(String mac, String tiles) {
         tiles = tiles.toUpperCase();
-        String result = Session.getSession().exchange(mac,tiles);
+
+        //searching for user
+        Session session = Session.getSession();
+        String result = "User unauthorized";
+        User[]users = session.getUsers();
+        int currentTurn = session.getCurrentTurn();
+        for(int i =0; i < users.length; i++){
+            if(users[i] != null && users[i].getClass() == Player.class) {
+                Player player = (Player) users[i];
+                if (player.getMacAddress().equals(mac)) {
+                    if(currentTurn == i) {
+                        result = Session.getSession().exchange(mac,tiles);
+                    } else {
+                        result = "Not your turn";
+                    }
+                    break;
+                }
+            }
+        }
         return result;
     }
 
@@ -106,7 +124,20 @@ public final class EventHandler {
         if (p != null)
             return Integer.toString(p.getScore());
         else
-            return "username not found";
+            return "0";
+    }
+
+    // Take mac address, check if it is this players turn
+    // If it is this players turn return 1, else 0
+    public static String turnHandler(String mac) {
+        String output = "";
+        try
+        {
+            output = Session.getSession().isMyTurn(mac);
+        }
+        catch (Exception e) {}
+
+        return output;
     }
 
 
