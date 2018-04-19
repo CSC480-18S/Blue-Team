@@ -15,6 +15,37 @@ public class QueryClass {
 		} catch (ClassNotFoundException ce) {
 			throw new RuntimeException("JDBC driver not found, jar is probably missing or in wrong folder");
 		}
+		initializeTeams();
+	}
+
+	/**
+	 * Initialize the green and gold team tables. This should only actually update on an
+	 * empty database
+	 */
+	private void initializeTeams() {
+		String query = "SELECT * FROM TEAM_TABLE";
+
+		try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			ResultSet rs = preparedStmt.executeQuery();
+			if (rs.next()) { // Team exists, the other should too
+				return;
+			} else { // No teams, this should be a new database
+				query = "INSERT INTO TEAM_TABLE (team_name, cumulative_game_score, "
+						+ "highest_word_score, highest_game_session_score, win_count, "
+						+ "lose_count, tie_count, longest_word, bonuses, dirty_word) VALUES "
+						+ "(?, 0, 0, 0, 0, 0, 0, '', 0, 0)";
+
+				preparedStmt = con.prepareStatement(query);
+				preparedStmt.setString(1, "green");
+				preparedStmt.execute();
+				preparedStmt = con.prepareStatement(query);
+				preparedStmt.setString(1, "gold");
+				preparedStmt.execute();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -22,8 +53,8 @@ public class QueryClass {
 	 *
 	 * @param num
 	 *            the number of top players/words to get
-	 * @return String[][] where the first index is a player and the second index
-	 *         is their uid, team, and associated high word score
+	 * @return String[][] where the first index is a player and the second index is
+	 *         their uid, team, and associated high word score
 	 */
 	public String[][] getHighestWordScoresAllPlayers(int num) {
 		String query = "SELECT PLAYER_TABLE.uid, PLAYER_TABLE.highest_word_score, teamid FROM PLAYER_TABLE "
@@ -55,8 +86,8 @@ public class QueryClass {
 	 *            gold or green for the top team members to get
 	 * @param num
 	 *            the number of top players to get
-	 * @return String[][] where the first index is a player and the second index
-	 *         is their uid, team, and cumulative score
+	 * @return String[][] where the first index is a player and the second index is
+	 *         their uid, team, and cumulative score
 	 */
 	public String[][] getTopPlayersByTeam(int num, String team) {
 		String query = "SELECT PLAYER_TABLE.uid, PLAYER_TABLE.cumulative_score, teamid FROM PLAYER_TABLE "
@@ -88,8 +119,8 @@ public class QueryClass {
 	 *
 	 * @param num
 	 *            the number of top players to get
-	 * @return String[][] where the first index is a player and the second index
-	 *         is their uid, team, and cumulative score
+	 * @return String[][] where the first index is a player and the second index is
+	 *         their uid, team, and cumulative score
 	 */
 	public String[][] getTopPlayers(int num) {
 		String query = "SELECT PLAYER_TABLE.uid, PLAYER_TABLE.cumulative_score, teamid FROM PLAYER_TABLE "
@@ -346,8 +377,8 @@ public class QueryClass {
 	}
 
 	/**
-	 * Checks to see if the word a player played is a new longest for them, or a
-	 * new highest word score, updates it if it is tied for longest or longer
+	 * Checks to see if the word a player played is a new longest for them, or a new
+	 * highest word score, updates it if it is tied for longest or longer
 	 *
 	 * @param uname
 	 *            the user to update
@@ -587,8 +618,8 @@ public class QueryClass {
 	 *            the word that needs an update on its bonuses_used value
 	 * @param newValue
 	 *            the new value needs to be updated
-	 * @return true if operation is successful, false if word doesn't exist;
-	 *         null if database error
+	 * @return true if operation is successful, false if word doesn't exist; null if
+	 *         database error
 	 */
 	public Boolean updateValidWordBonusesUsed(String updateWord, int newValue) {
 		try {
@@ -648,8 +679,8 @@ public class QueryClass {
 	 *
 	 * @param teamname
 	 *            a String indicates the teamname, either "green" or "gold"
-	 * @return Double indicates the average game score; null if teamname is
-	 *         neither "green" nor "gold"
+	 * @return Double indicates the average game score; null if teamname is neither
+	 *         "green" nor "gold"
 	 */
 	public Double getTotalGameScoreAverageForTeam(String teamname) {
 		try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
@@ -687,9 +718,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamCumulative = rs.getInt("cumulative_game_score");
-			return teamCumulative;
+			if (rs.next()) {
+				int teamCumulative = rs.getInt("cumulative_game_score");
+				return teamCumulative;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -708,9 +742,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamHighestW = rs.getInt("highest_word_score");
-			return teamHighestW;
+			if (rs.next()) {
+				int teamHighestW = rs.getInt("highest_word_score");
+				return teamHighestW;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -729,9 +766,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamHighest = rs.getInt("highest_game_session_score");
-			return teamHighest;
+			if (rs.next()) {
+				int teamHighest = rs.getInt("highest_game_session_score");
+				return teamHighest;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -750,9 +790,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamWin = rs.getInt("win_count");
-			return teamWin;
+			if (rs.next()) {
+				int teamWin = rs.getInt("win_count");
+				return teamWin;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -771,9 +814,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamLose = rs.getInt("lose_count");
-			return teamLose;
+			if (rs.next()) {
+				int teamLose = rs.getInt("lose_count");
+				return teamLose;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -792,9 +838,13 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamTie = rs.getInt("tie_count");
-			return teamTie;
+			if (rs.next()) {
+				;
+				int teamTie = rs.getInt("tie_count");
+				return teamTie;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -813,9 +863,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			String teamLongWord = rs.getString("longest_word");
-			return teamLongWord;
+			if (rs.next()) {
+				String teamLongWord = rs.getString("longest_word");
+				return teamLongWord;
+			} else {
+				return null;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return null;
@@ -834,9 +887,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamBonuses = rs.getInt("bonuses");
-			return teamBonuses;
+			if (rs.next()) {
+				int teamBonuses = rs.getInt("bonuses");
+				return teamBonuses;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -856,9 +912,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamDirtyCount = rs.getInt("dirty_word");
-			return teamDirtyCount;
+			if (rs.next()) {
+				int teamDirtyCount = rs.getInt("dirty_word");
+				return teamDirtyCount;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -1045,8 +1104,8 @@ public class QueryClass {
 	}
 
 	/*
-	 * Call everytime a bad word is played or not I don't think we actually use
-	 * this column
+	 * Call everytime a bad word is played or not I don't think we actually use this
+	 * column
 	 */
 	public void updateDirtWordCount(String tname) {
 		String query = "SELECT * FROM TEAM_TABLE WHERE team_name=?";
@@ -1066,9 +1125,9 @@ public class QueryClass {
 	}
 
 	/*
-	 * The test does not assume that the underlying popuation variances are
-	 * equal and it uses approximated degrees of freedom computed from the
-	 * sample data to compute the p-value.
+	 * The test does not assume that the underlying popuation variances are equal
+	 * and it uses approximated degrees of freedom computed from the sample data to
+	 * compute the p-value.
 	 */
 	public Double tTestResults() {
 		String green = "SELECT green_team_score FROM GAME_TABLE";

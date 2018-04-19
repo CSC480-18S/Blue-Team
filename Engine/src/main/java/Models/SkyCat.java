@@ -75,6 +75,7 @@ public class SkyCat extends User {
             for (String w : engWords) {
                 boolean inHand = false;
                 Tile[] handCopy = hand.clone();
+                if(w.length() <= 7)
                 for (char c : w.toCharArray()) {
                     inHand = false;
                     for (int i = 0; i < handCopy.length; i++) {
@@ -107,6 +108,7 @@ public class SkyCat extends User {
             for (String w : specWords) {
                 boolean inHand = false;
                 Tile[] handCopy = hand.clone();
+                if(w.length() <= 7)
                 for (char c : w.toCharArray()) {
                     inHand = false;
                     for (int i = 0; i < handCopy.length; i++) {
@@ -120,6 +122,8 @@ public class SkyCat extends User {
                     if (inHand == false) {
                         break;
                     }
+
+
                 }
                 if (inHand == true) {
                     Tile[] wordTiles = stringToTiles(w);
@@ -183,20 +187,45 @@ public class SkyCat extends User {
                                     && remainingEnd.length() <= clearForward) {
                                 boolean inHand = false;
                                 Tile[] handCopy = hand.clone();
-                                for (char c : remainingStart.toCharArray()) {
-                                    inHand = false;
-                                    for (int i = 0; i < handCopy.length; i++) {
-                                        if (handCopy[i] != null
-                                                && handCopy[i].getLetter() == c) {
-                                            inHand = true;
-                                            handCopy[i] = null;
+                                int handCount = handCopy.length;
+                                int xIndex = x - backwardTiles.length() - remainingStart.length();
+                                if(remainingStart.length() <= handCount)
+                                    for (char c : remainingStart.toCharArray()) {
+                                        inHand = false;
+                                        for (int i = 0; i < handCopy.length; i++) {
+                                            if (handCopy[i] != null
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[xIndex][y].getTile() == null) {
+                                                inHand = true;
+                                                handCopy[i] = null;
+                                                handCount--;
+                                                break;
+                                            }
+                                        }
+                                        if (inHand == false) {
                                             break;
                                         }
+                                        xIndex++;
                                     }
-                                    if (inHand == false) {
-                                        break;
+                                xIndex = x + forwardTiles.length();
+                                if(inHand == true && remainingEnd.length() <= handCount)
+                                    for(char c : remainingEnd.toCharArray()){
+                                        inHand = false;
+                                        for(int i = 0; i < handCopy.length; i++){
+                                            if(handCopy[i] != null
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[xIndex][y].getTile() == null){
+                                                inHand = true;
+                                                handCopy[i] = null;
+                                                handCount--;
+                                                break;
+                                            }
+                                        }
+                                        if(inHand == false){
+                                            break;
+                                        }
+                                        xIndex++;
                                     }
-                                }
                                 if (inHand == true) {
                                     Tile[] wordTiles = stringToTiles(w);
                                     Move move = new Move(x - remainingStart.length(), y, true, wordTiles, this);
@@ -223,20 +252,45 @@ public class SkyCat extends User {
                                     && remainingEnd.length() <= clearDownward) {
                                 boolean inHand = false;
                                 Tile[] handCopy = hand.clone();
-                                for (char c : remainingStart.toCharArray()) {
-                                    inHand = false;
-                                    for (int i = 0; i < handCopy.length; i++) {
-                                        if (handCopy[i] != null
-                                                && handCopy[i].getLetter() == c) {
-                                            inHand = true;
-                                            handCopy[i] = null;
+                                int handCount = handCopy.length;
+                                int yIndex = y - upwardTiles.length() - remainingStart.length();
+                                if(remainingStart.length() <= handCount)
+                                    for (char c : remainingStart.toCharArray()) {
+                                        inHand = false;
+                                        for (int i = 0; i < handCopy.length; i++) {
+                                            if (handCopy[i] != null
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[x][yIndex].getTile() == null) {
+                                                inHand = true;
+                                                handCopy[i] = null;
+                                                handCount--;
+                                                break;
+                                            }
+                                        }
+                                        if (inHand == false) {
                                             break;
                                         }
+                                        yIndex++;
                                     }
-                                    if (inHand == false) {
-                                        break;
+                                yIndex = y + downwardTiles.length();
+                                if(inHand == true && remainingEnd.length() <= handCount)
+                                    for(char c : remainingEnd.toCharArray()){
+                                        inHand = false;
+                                        for(int i = 0; i < handCopy.length; i++){
+                                            if(handCopy[i] != null
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[x][yIndex].getTile() == null){
+                                                inHand = true;
+                                                handCopy[i] = null;
+                                                handCount--;
+                                                break;
+                                            }
+                                        }
+                                        if(inHand == false){
+                                            break;
+                                        }
+                                        yIndex++;
                                     }
-                                }
                                 if (inHand == true) {
                                     Tile[] wordTiles = stringToTiles(w);
                                     Move move = new Move(x, y - remainingStart.length(), false, wordTiles, this);
@@ -265,20 +319,44 @@ public class SkyCat extends User {
                                     && remainingEnd.length() <= clearForward) {
                                 boolean inHand = false;
                                 Tile[] handCopy = hand.clone();
-                                for (char c : remainingStart.toCharArray()) {
-                                    inHand = false;
-                                    for (int i = 0; i < handCopy.length; i++) {
-                                        if (handCopy[i] != null
-                                                && handCopy[i].getLetter() == c) {
-                                            inHand = true;
-                                            handCopy[i] = null;
+                                int handCount = handCopy.length;
+                                int xIndex = x - backwardTiles.length() - remainingStart.length();
+                                if(remainingStart.length() <= handCount)
+                                    for (char c : remainingStart.toCharArray()) {
+                                        inHand = false;
+                                        for (int i = 0; i < handCopy.length; i++) {
+                                            if (handCopy[i] != null
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[xIndex][y].getTile() == null) {
+                                                inHand = true;
+                                                handCopy[i] = null;
+                                                handCount--;
+                                                break;
+                                            }
+                                        }
+                                        if (inHand == false) {
+                                            break;
+                                        }
+                                        xIndex++;
+                                    }
+                                xIndex = x + forwardTiles.length();
+                                if(inHand == true && remainingEnd.length() <= handCount)
+                                    for(char c : remainingEnd.toCharArray()){
+                                        inHand = false;
+                                        for(int i = 0; i < handCopy.length; i++){
+                                            if(handCopy[i] != null
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[xIndex][y].getTile() == null){
+                                                inHand = true;
+                                                handCopy[i] = null;
+                                                handCount--;
+                                                break;
+                                            }
+                                        }
+                                        if(inHand == false){
                                             break;
                                         }
                                     }
-                                    if (inHand == false) {
-                                        break;
-                                    }
-                                }
                                 if (inHand == true) {
                                     Tile[] wordTiles = stringToTiles(w);
                                     Move move = new Move(x - remainingStart.length(), y, true, wordTiles, this);
@@ -305,20 +383,45 @@ public class SkyCat extends User {
                                     && remainingEnd.length() <= clearDownward) {
                                 boolean inHand = false;
                                 Tile[] handCopy = hand.clone();
-                                for (char c : remainingStart.toCharArray()) {
-                                    inHand = false;
-                                    for (int i = 0; i < handCopy.length; i++) {
-                                        if (handCopy[i] != null
-                                                && handCopy[i].getLetter() == c) {
-                                            inHand = true;
-                                            handCopy[i] = null;
+                                int handCount = handCopy.length;
+                                int yIndex = y - upwardTiles.length() - remainingStart.length();
+                                if(remainingStart.length() <= handCount)
+                                    for (char c : remainingStart.toCharArray()) {
+                                        inHand = false;
+                                        for (int i = 0; i < handCopy.length; i++) {
+                                            if (handCopy[i] != null
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[x][yIndex].getTile() == null) {
+                                                inHand = true;
+                                                handCopy[i] = null;
+                                                handCount--;
+                                                break;
+                                            }
+                                        }
+                                        if (inHand == false) {
                                             break;
                                         }
+                                        yIndex++;
                                     }
-                                    if (inHand == false) {
-                                        break;
+                                yIndex = y + downwardTiles.length();
+                                if(inHand == true && remainingEnd.length() <= handCount)
+                                    for(char c : remainingEnd.toCharArray()){
+                                        inHand = false;
+                                        for(int i = 0; i < handCopy.length; i++){
+                                            if(handCopy[i] != null
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[x][yIndex].getTile() == null){
+                                                inHand = true;
+                                                handCopy[i] = null;
+                                                handCount--;
+                                                break;
+                                            }
+                                        }
+                                        if(inHand == false){
+                                            break;
+                                        }
+                                        yIndex++;
                                     }
-                                }
                                 if (inHand == true) {
                                     Tile[] wordTiles = stringToTiles(w);
                                     Move move = new Move(x, y - remainingStart.length(), false, wordTiles, this);
