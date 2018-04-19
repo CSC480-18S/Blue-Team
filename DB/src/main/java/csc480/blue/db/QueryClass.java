@@ -687,9 +687,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamCumulative = rs.getInt("cumulative_game_score");
-			return teamCumulative;
+			if(rs.next()){
+				int teamCumulative = rs.getInt("cumulative_game_score");
+				return teamCumulative;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -708,9 +711,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamHighestW = rs.getInt("highest_word_score");
-			return teamHighestW;
+			if(rs.next()){
+				int teamHighestW = rs.getInt("highest_word_score");
+				return teamHighestW;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -729,9 +735,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamHighest = rs.getInt("highest_game_session_score");
-			return teamHighest;
+			if(rs.next()){
+				int teamHighest = rs.getInt("highest_game_session_score");
+				return teamHighest;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -750,9 +759,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamWin = rs.getInt("win_count");
-			return teamWin;
+			if(rs.next()){
+				int teamWin = rs.getInt("win_count");
+				return teamWin;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -771,9 +783,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamLose = rs.getInt("lose_count");
-			return teamLose;
+			if(rs.next()){
+				int teamLose = rs.getInt("lose_count");
+				return teamLose;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -792,9 +807,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamTie = rs.getInt("tie_count");
-			return teamTie;
+			if(rs.next()){;
+				int teamTie = rs.getInt("tie_count");
+				return teamTie;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -813,9 +831,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			String teamLongWord = rs.getString("longest_word");
-			return teamLongWord;
+			if(rs.next()){
+				String teamLongWord = rs.getString("longest_word");
+				return teamLongWord;
+			} else {
+				return null;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return null;
@@ -834,9 +855,12 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamBonuses = rs.getInt("bonuses");
-			return teamBonuses;
+			if(rs.next()){
+				int teamBonuses = rs.getInt("bonuses");
+				return teamBonuses;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
@@ -856,15 +880,17 @@ public class QueryClass {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, teamname);
 			ResultSet rs = preparedStmt.executeQuery();
-			rs.next();
-			int teamDirtyCount = rs.getInt("dirty_word");
-			return teamDirtyCount;
+			if(rs.next()){
+				int teamDirtyCount = rs.getInt("dirty_word");
+				return teamDirtyCount;
+			} else {
+				return 0;
+			}
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return 0;
 		}
 	}
-
 	/*
 	 * Updates cumulative_game_score for TEAM_TABLE
 	 */
