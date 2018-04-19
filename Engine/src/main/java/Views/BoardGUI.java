@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
+import Components.Log;
 import Components.QueryClass;
 import Models.*;
 import Session.Start;
@@ -682,6 +683,8 @@ public class BoardGUI implements Runnable {
                         // *** Gets the tile equivalence of the letter
                         model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), y, x);
                     } catch (Exception e) {
+                        Log.getLogger().logException(e);
+                        e.printStackTrace();
                     }
                 }
             }
@@ -700,6 +703,7 @@ public class BoardGUI implements Runnable {
                             try {
                                 user1_model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), 0, y);
                             } catch (Exception e) {
+                                Log.getLogger().logException(e);
                                 e.printStackTrace();
                             }
                         }
@@ -713,6 +717,7 @@ public class BoardGUI implements Runnable {
                             try {
                                 user2_model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), y, 0);
                             } catch (Exception e) {
+                                Log.getLogger().logException(e);
                                 e.printStackTrace();
                             }
                         }
@@ -726,6 +731,7 @@ public class BoardGUI implements Runnable {
                             try {
                                 user3_model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), 0, y);
                             } catch (Exception e) {
+                                Log.getLogger().logException(e);
                                 e.printStackTrace();
                             }
                         }
@@ -739,6 +745,7 @@ public class BoardGUI implements Runnable {
                             try {
                                 user4_model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), y, 0);
                             } catch (Exception e) {
+                                Log.getLogger().logException(e);
                                 e.printStackTrace();
                             }
                         }

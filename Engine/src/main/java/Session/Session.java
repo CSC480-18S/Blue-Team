@@ -75,6 +75,7 @@ public class Session {
                 }
             }
         } catch (Exception e ){
+            Log.getLogger().logException(e);
             e.printStackTrace();
         }
 
@@ -114,6 +115,8 @@ public class Session {
             } catch (Exception e) {
                 System.out.println("Error creating logger: \n" + e);
                 e.printStackTrace();
+                Log.getLogger().logException(e);
+
             }
         }
 
@@ -638,7 +641,10 @@ public class Session {
                     return "Skycat";
                 }
             }
-        } catch (Exception e) { e.printStackTrace();}
+        } catch (Exception e) {
+            Log.getLogger().logException(e);
+            e.printStackTrace();
+            }
         // Default to AI's turn
         return "Skycat";
     }
