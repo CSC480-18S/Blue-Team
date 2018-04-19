@@ -29,6 +29,8 @@ public class Start {
 
         }catch (Exception e){
             e.printStackTrace();
+            Log.getLogger().logException(e);
+
         }
         Session.getSession();
     }
@@ -60,6 +62,7 @@ public class Start {
             sc.close();
         } catch (Exception e ){
             e.printStackTrace();
+            Log.getLogger().logException(e);
             return ip;
         }
         return ip;
