@@ -9,8 +9,6 @@ import Session.Session;
 
 import java.util.ArrayList;
 
-import static Session.Session.LogWarning;
-
 /**
  * @Author Bohdan Yevdokymov, Bill Cook
  *
