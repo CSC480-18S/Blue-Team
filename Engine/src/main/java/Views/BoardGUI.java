@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
+import Components.Log;
 import Components.QueryClass;
 import Models.*;
 import Session.Start;
@@ -436,64 +437,61 @@ public class BoardGUI implements Runnable {
         label.setLayout(labelLayout);
         labelLayout.setHorizontalGroup(
                 labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(labelLayout.createSequentialGroup()
-                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(labelLayout.createSequentialGroup()
-                                                .addGap(55, 55, 55)
-                                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(player1Label)
-                                                        .addComponent(player3Label))
-                                                .addGap(102, 102, 102)
-                                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(player2Label)
-                                                        .addComponent(player4Label)))
-                                        .addGroup(labelLayout.createSequentialGroup()
-                                                .addGap(39, 39, 39)
-                                                .addComponent(label2)
-                                                .addGap(78, 78, 78)
-                                                .addComponent(label3)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, labelLayout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(qrBackground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(59, 59, 59))
+                                .addGap(110, 110, 110))
                         .addGroup(labelLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(labelLayout.createSequentialGroup()
-                                                .addComponent(jScrollPane1)
+                                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(logLabel)
+                                                        .addGroup(labelLayout.createSequentialGroup()
+                                                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(player1Label)
+                                                                        .addComponent(player3Label))
+                                                                .addGap(85, 85, 85)
+                                                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(label3)
+                                                                        .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                                .addComponent(player2Label)
+                                                                                .addComponent(player4Label)))))
+                                                .addContainerGap(36, Short.MAX_VALUE))
+                                        .addGroup(labelLayout.createSequentialGroup()
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                                 .addContainerGap())
                                         .addGroup(labelLayout.createSequentialGroup()
-                                                .addComponent(logLabel)
+                                                .addComponent(label2)
                                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         labelLayout.setVerticalGroup(
                 labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(labelLayout.createSequentialGroup()
-                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(labelLayout.createSequentialGroup()
-                                                .addGap(33, 33, 33)
-                                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(label2)
-                                                        .addComponent(label3))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(player1Label)
-                                                        .addComponent(player2Label))
-                                                .addGap(34, 34, 34)
-                                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(player3Label)
-                                                        .addComponent(player4Label)))
-                                        .addGroup(labelLayout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addComponent(qrBackground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                                .addGap(33, 33, 33)
+                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(label2)
+                                        .addComponent(label3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(player1Label)
+                                        .addComponent(player2Label))
+                                .addGap(34, 34, 34)
+                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(player3Label)
+                                        .addComponent(player4Label))
+                                .addGap(36, 36, 36)
                                 .addComponent(logLabel)
                                 .addGap(3, 3, 3)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                                .addComponent(qrBackground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
         );
 
         c.gridx = 50;
         c.gridy = 5;
+        c.anchor = GridBagConstraints.FIRST_LINE_END;
         panel.add(label, c);
 
 
@@ -685,6 +683,8 @@ public class BoardGUI implements Runnable {
                         // *** Gets the tile equivalence of the letter
                         model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), y, x);
                     } catch (Exception e) {
+                        Log.getLogger().logException(e);
+                        e.printStackTrace();
                     }
                 }
             }
@@ -703,6 +703,7 @@ public class BoardGUI implements Runnable {
                             try {
                                 user1_model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), 0, y);
                             } catch (Exception e) {
+                                Log.getLogger().logException(e);
                                 e.printStackTrace();
                             }
                         }
@@ -716,6 +717,7 @@ public class BoardGUI implements Runnable {
                             try {
                                 user2_model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), y, 0);
                             } catch (Exception e) {
+                                Log.getLogger().logException(e);
                                 e.printStackTrace();
                             }
                         }
@@ -729,6 +731,7 @@ public class BoardGUI implements Runnable {
                             try {
                                 user3_model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), 0, y);
                             } catch (Exception e) {
+                                Log.getLogger().logException(e);
                                 e.printStackTrace();
                             }
                         }
@@ -742,6 +745,7 @@ public class BoardGUI implements Runnable {
                             try {
                                 user4_model.setValueAt(new ImageIcon(classloader.getResource("letters/" + letter + ".png")), y, 0);
                             } catch (Exception e) {
+                                Log.getLogger().logException(e);
                                 e.printStackTrace();
                             }
                         }
