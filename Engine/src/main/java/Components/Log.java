@@ -16,9 +16,7 @@ public class Log
         try {
             // create file if it doesn't exist
             logFile = new File("scrabble_log.txt");
-            if (!logFile.exists()) {
-                logFile.createNewFile();
-            }
+            logFile.createNewFile();
 
         }catch (IOException e){
             e.printStackTrace();

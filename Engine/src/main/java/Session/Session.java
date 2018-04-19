@@ -32,11 +32,11 @@ public class Session {
     private int currentTurn;
     private int greenScore;
     private int goldScore;
-    private Timer timer;
+    private Timer playerTimer;
     private Timer aiTimer;
-    private boolean waitForPlayer = false;
     private int turnTimeSec;
     private  int aiWaitSec;
+    private int aiWaitNoPlayers;
     private int skippedTimes;
 
     private Session() {
@@ -48,11 +48,11 @@ public class Session {
         playedMoves = new ArrayList();
         dbQueries = new QueryClass();
         currentTurn = 0;
-        timer = new Timer();
+        playerTimer = new Timer();
         aiTimer = new Timer();
-        waitForPlayer = false;
         turnTimeSec = 60;
         aiWaitSec = 3;
+        aiWaitNoPlayers = 60;
         skippedTimes = 0;
         try{
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -62,12 +62,8 @@ public class Session {
                 String line = sc.nextLine();
                 line = line.replace(" ", "");
                 String [] param = line.split("=");
-                if(param[0].equals("waitForPlayer")){
-                    if(param[1].equals("true")){
-                        waitForPlayer = true;
-                    } else if (param[1].equals("false")){
-                        waitForPlayer = false;
-                    }
+                if(param[0].equals("aiWaitNoPlayers")){
+                    aiWaitNoPlayers = Integer.parseInt(param[1]);
                 } else if(param[0].equals("turnTimeSec")){
                     turnTimeSec = Integer.parseInt(param[1]);
                 } else if(param[0].equals("aiWaitSec")){
@@ -92,10 +88,8 @@ public class Session {
             session.gui.updateUsers(session.users);
             session.gui.setTurn(session.currentTurn);
             //play first move to start the game
-            if(!session.waitForPlayer) {
                 SkyCat skyCat1 = (SkyCat) session.users[0];
-               session.aiPlayWord(skyCat1);
-            }
+               session.setAiTimer();
             session.gui.updateHand(session.users);
         }
         return session;
@@ -177,12 +171,18 @@ public class Session {
 
         //check if any users are not initialized yet
         for (int i = 0; i < users.length; i++) {
-            if (users[i].getClass() == SkyCat.class) {
+            if (users[i].getClass() == SkyCat.class && ((i == 0 || i == 2) && team.toUpperCase().equals("GREEN"))
+                    || ((i == 1 || i == 3) && team.toUpperCase().equals("GOLD"))) {
+                //cancel ai timer
+                if(i == currentTurn){
+                    aiTimer.cancel();
+                }
                 //return generated tiles back in bag
                 TileGenerator.getInstance().putInBag(newPlayer.getHand());
                 Tile[] hand = users[i].getHand();
                 newPlayer.setHand(hand);
                 users[i] = newPlayer;
+                setPlayerTimer();
                 gui.updateUsers(users);
                 return "JOINED";
             }
@@ -332,8 +332,8 @@ public class Session {
             replaceTiles(user, initialLetters);
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
-            nextTurn();
             skippedTimes = 0;
+            nextTurn();
             return "VALID";
         } else if ((int) result[0] == 2) {
             board.placeWord(startX, startY, horizontal, word);
@@ -354,8 +354,8 @@ public class Session {
             replaceTiles(user, initialLetters);
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
-            nextTurn();
             skippedTimes = 0;
+            nextTurn();
             return "bonus";
         } else if ((int) result[0] == -1) {
             return "profane";
@@ -377,6 +377,10 @@ public class Session {
             if (users[i] != null && users[i].getClass() == Player.class) {
                 Player player = (Player) users[i];
                 if (player.getMacAddress().equals(mac)) {
+                    //cancel timer if it's player's turn
+                    if(currentTurn == i){
+                        playerTimer.cancel();
+                    }
                     Tile[] hand = users[i].getHand();
                     //replace player with skycat
                     SkyCat skyCat = new SkyCat(Session.getSession());
@@ -386,8 +390,10 @@ public class Session {
                     users[i] = skyCat;
                     gui.setTurn(currentTurn);
                     gui.updateUsers(users);
-                    //play instead of player
-                    aiPlayWord(skyCat);
+                    if(currentTurn == i) {
+                        //play instead of player
+                        setAiTimer();
+                    }
                     return "removed";
                 }
             }
@@ -516,7 +522,9 @@ public class Session {
      * Set's next player's turn
      */
     private void nextTurn() {
-        timer.cancel();
+        if(users[currentTurn].getClass() == Player.class) {
+            playerTimer.cancel();
+        }
 
         //if skipped 4 times - game ended
         if(skippedTimes >= 4){
@@ -540,33 +548,17 @@ public class Session {
             }
         }
         if(users[currentTurn].getClass() == SkyCat.class){
-            aiTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if(session.users[currentTurn].getClass() == SkyCat.class){
-                        SkyCat skyCat = (SkyCat) session.users[currentTurn];
-                        boolean played = aiPlayWord(skyCat);
-                        if(played) {
-                            //reset skip counter
-                            skyCat.setSkipped(0);
-                        } else {
-                            System.out.println("AI Skipped");
-                            exchangeAllTiles(users[currentTurn]);
-                        }
-                    }
-                }
-            }, aiWaitSec * 1000);
-
-    } else { //next user is real player
-            setTimer();
+            setAiTimer();
+         } else { //next user is real player
+            setPlayerTimer();
         }
 
     }
 
-    private void setTimer(){
+    private void setPlayerTimer(){
         if(users[currentTurn].getClass() == Player.class) {
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
+            playerTimer = new Timer();
+            playerTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     skippedTimes ++;
@@ -579,6 +571,7 @@ public class Session {
                         TileGenerator.getInstance().putInBag(skyCat.getHand());
                         skyCat.setHand(hand);
                         users[currentTurn] = skyCat;
+                        setAiTimer();
                     } else {
                         users[currentTurn].setSkipped(users[currentTurn].getSkipped() + 1);
                         nextTurn();
@@ -586,6 +579,40 @@ public class Session {
                 }
             }, turnTimeSec * 1000);
         }
+    }
+
+    private void setAiTimer(){
+        //get the right delay for AI
+        //default - no players
+        int delay = aiWaitNoPlayers;
+        boolean arePlayersJoined = false;
+        for(int i =0; i < users.length; i++){
+            if(users[i] != null && users[i].getClass() == Player.class){
+                arePlayersJoined = true;
+                break;
+            }
+        }
+        //if player is in game - AI delay is lower
+        if(arePlayersJoined){
+            delay = aiWaitSec;
+        }
+
+        aiTimer = new Timer();
+        aiTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                    SkyCat skyCat = (SkyCat) session.users[currentTurn];
+                    boolean played = aiPlayWord(skyCat);
+                    if(played) {
+                        //reset skip counter
+                        skyCat.setSkipped(0);
+                    } else {
+                        System.out.println("AI Skipped");
+                        exchangeAllTiles(users[currentTurn]);
+                    }
+
+            }
+        }, delay * 1000);
     }
 
     private void replaceTiles(User user, String letters) {
