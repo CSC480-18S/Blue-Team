@@ -188,12 +188,14 @@ public class SkyCat extends User {
                                 boolean inHand = false;
                                 Tile[] handCopy = hand.clone();
                                 int handCount = handCopy.length;
+                                int xIndex = x - backwardTiles.length() - remainingStart.length();
                                 if(remainingStart.length() <= handCount)
                                     for (char c : remainingStart.toCharArray()) {
                                         inHand = false;
                                         for (int i = 0; i < handCopy.length; i++) {
                                             if (handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c) {
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[xIndex][y].getTile() == null) {
                                                 inHand = true;
                                                 handCopy[i] = null;
                                                 handCount--;
@@ -203,13 +205,16 @@ public class SkyCat extends User {
                                         if (inHand == false) {
                                             break;
                                         }
+                                        xIndex++;
                                     }
+                                xIndex = x + forwardTiles.length();
                                 if(inHand == true && remainingEnd.length() <= handCount)
                                     for(char c : remainingStart.toCharArray()){
                                         inHand = false;
                                         for(int i = 0; i < handCopy.length; i++){
                                             if(handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c){
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[xIndex][y].getTile() == null){
                                                 inHand = true;
                                                 handCopy[i] = null;
                                                 handCount--;
@@ -219,6 +224,7 @@ public class SkyCat extends User {
                                         if(inHand == false){
                                             break;
                                         }
+                                        xIndex++;
                                     }
                                 if (inHand == true) {
                                     Tile[] wordTiles = stringToTiles(w);
@@ -247,12 +253,14 @@ public class SkyCat extends User {
                                 boolean inHand = false;
                                 Tile[] handCopy = hand.clone();
                                 int handCount = handCopy.length;
+                                int yIndex = y - upwardTiles.length() - remainingStart.length();
                                 if(remainingStart.length() <= handCount)
                                     for (char c : remainingStart.toCharArray()) {
                                         inHand = false;
                                         for (int i = 0; i < handCopy.length; i++) {
                                             if (handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c) {
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[x][yIndex].getTile() == null) {
                                                 inHand = true;
                                                 handCopy[i] = null;
                                                 handCount--;
@@ -262,13 +270,16 @@ public class SkyCat extends User {
                                         if (inHand == false) {
                                             break;
                                         }
+                                        yIndex++;
                                     }
+                                yIndex = y + downwardTiles.length();
                                 if(inHand == true && remainingEnd.length() <= handCount)
                                     for(char c : remainingStart.toCharArray()){
                                         inHand = false;
                                         for(int i = 0; i < handCopy.length; i++){
                                             if(handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c){
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[x][yIndex].getTile() == null){
                                                 inHand = true;
                                                 handCopy[i] = null;
                                                 handCount--;
@@ -278,6 +289,7 @@ public class SkyCat extends User {
                                         if(inHand == false){
                                             break;
                                         }
+                                        yIndex++;
                                     }
                                 if (inHand == true) {
                                     Tile[] wordTiles = stringToTiles(w);
@@ -308,12 +320,14 @@ public class SkyCat extends User {
                                 boolean inHand = false;
                                 Tile[] handCopy = hand.clone();
                                 int handCount = handCopy.length;
+                                int xIndex = x - backwardTiles.length() - remainingStart.length();
                                 if(remainingStart.length() <= handCount)
                                     for (char c : remainingStart.toCharArray()) {
                                         inHand = false;
                                         for (int i = 0; i < handCopy.length; i++) {
                                             if (handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c) {
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[xIndex][y].getTile() == null) {
                                                 inHand = true;
                                                 handCopy[i] = null;
                                                 handCount--;
@@ -323,13 +337,16 @@ public class SkyCat extends User {
                                         if (inHand == false) {
                                             break;
                                         }
+                                        xIndex++;
                                     }
+                                xIndex = x + forwardTiles.length();
                                 if(inHand == true && remainingEnd.length() <= handCount)
                                     for(char c : remainingStart.toCharArray()){
                                         inHand = false;
                                         for(int i = 0; i < handCopy.length; i++){
                                             if(handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c){
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[xIndex][y].getTile() == null){
                                                 inHand = true;
                                                 handCopy[i] = null;
                                                 handCount--;
@@ -367,12 +384,14 @@ public class SkyCat extends User {
                                 boolean inHand = false;
                                 Tile[] handCopy = hand.clone();
                                 int handCount = handCopy.length;
+                                int yIndex = y - upwardTiles.length() - remainingStart.length();
                                 if(remainingStart.length() <= handCount)
                                     for (char c : remainingStart.toCharArray()) {
                                         inHand = false;
                                         for (int i = 0; i < handCopy.length; i++) {
                                             if (handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c) {
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[x][yIndex].getTile() == null) {
                                                 inHand = true;
                                                 handCopy[i] = null;
                                                 handCount--;
@@ -382,13 +401,16 @@ public class SkyCat extends User {
                                         if (inHand == false) {
                                             break;
                                         }
+                                        yIndex++;
                                     }
+                                yIndex = y + downwardTiles.length();
                                 if(inHand == true && remainingEnd.length() <= handCount)
                                     for(char c : remainingStart.toCharArray()){
                                         inHand = false;
                                         for(int i = 0; i < handCopy.length; i++){
                                             if(handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c){
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[x][yIndex].getTile() == null){
                                                 inHand = true;
                                                 handCopy[i] = null;
                                                 handCount--;
@@ -398,6 +420,7 @@ public class SkyCat extends User {
                                         if(inHand == false){
                                             break;
                                         }
+                                        yIndex++;
                                     }
                                 if (inHand == true) {
                                     Tile[] wordTiles = stringToTiles(w);
