@@ -609,6 +609,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamCumulative = rs.getInt("cumulative_game_score");
             return teamCumulative;
         } catch (SQLException se) {
@@ -628,6 +629,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamHighestW = rs.getInt("highest_word_score");
             return teamHighestW;
         } catch (SQLException se) {
@@ -647,6 +649,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamHighest = rs.getInt("highest_game_session_score");
             return teamHighest;
         } catch (SQLException se) {
@@ -666,6 +669,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamWin = rs.getInt("win_count");
             return teamWin;
         } catch (SQLException se) {
@@ -685,6 +689,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamLose = rs.getInt("lose_count");
             return teamLose;
         } catch (SQLException se) {
@@ -704,6 +709,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamTie = rs.getInt("tie_count");
             return teamTie;
         } catch (SQLException se) {
@@ -723,6 +729,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             String teamLongWord = rs.getString("longest_word");
             return teamLongWord;
         } catch (SQLException se) {
@@ -742,6 +749,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamBonuses = rs.getInt("bonuses");
             return teamBonuses;
         } catch (SQLException se) {
@@ -761,6 +769,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamDirtyCount = rs.getInt("dirty_word");
             return teamDirtyCount;
         } catch (SQLException se) {
