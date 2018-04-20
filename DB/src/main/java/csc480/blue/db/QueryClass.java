@@ -1,5 +1,7 @@
 import java.sql.*;
 import java.util.ArrayList;
+
+import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.commons.math3.stat.inference.TTest;
 
 public class QueryClass {
@@ -1154,6 +1156,8 @@ public class QueryClass {
 			return 1.0 - pval;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return null;
+		} catch(NumberIsTooSmallException e) { //For empty database
 			return null;
 		}
 	}
