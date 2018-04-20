@@ -155,4 +155,9 @@ public final class EventHandler {
         }
         return null;
     }
+
+    public static String amIregisteredHandler(String mac){
+        String response = Session.getSession().amIregistered(mac);
+        return response;
+    }
 }

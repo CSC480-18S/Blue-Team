@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<meta name="viewport" content ="width=device-width,initial-scale=0.54,user-scalable=yes" />
+<meta name="viewport" content ="width=device-width,initial-scale=0.55,user-scalable=yes" />
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
 <script src="scripts/jquery-3.3.1.js"></script>
 <head>
@@ -13,114 +13,104 @@
 
 <body>
 
-	<div class="content">
-		
-		<div id="container">
-		  <section class="section2">
-<!--   			<div id="yourname"></div> -->
-<!-- 		</div>	 -->
-<!-- <div id="overlay"> -->
-<!--     <div class="loginbox"> -->
+<div class="content">
 
-<!--         <img src="imgs/logo.png" class="logo"> -->
-<!--         <p id="usernameLbl">Username</p> -->
-<!--         <input id="txtUserName" type="text" placeholder="Enter Username"> -->
-<!--         <div id="joinResult"></div> -->
-<!--         <button type="button" id="btnLogin" onclick="join()">Join</button> -->
-<!--         <p id="teamLbl">Team:</p> -->
-<!--         <input type="checkbox" class="toggle-switch" id="teamToggle"> <label for="teamToggle"></label> -->
-<!--     </div> -->
-<!-- </div>		 -->
-<!-- <div id="overlay"> -->
-<!--     <div class="welcomebox"> -->
+    <div id="container">
 
-<!--         <img src="imgs/logo.png" class="logo"> -->
-<!--         <p id="w">Welcome Back</p> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <button  id="welcomeback" onclick="join()">Play</button> -->
-<!--     </div> -->
-<!-- </div> -->
-<!-- <div id="overlay"> -->
-<!--     <div class="welcomebox"> -->
+        <section class="section2">
 
-<!--         <img src="imgs/logo.png" class="logo"> -->
-<!--         <p id="full">Game is full</p> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <p> Try again later loser </p> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <br> -->
-<!--         <button  id="welcomeback" onclick="join()">Leave</button> -->
-<!--     </div> -->
-<!-- </div> -->
 
- <div class="section1">
- <div id=name></div>
- <div id=team></div>
- 
-                <h2 style="padding-top:5px;">Player Score</h2>
+            <div id="overlay">
+                <div class="loginbox">
+
+                    <img src="imgs/logo.png" class="logo">
+                    <p id="usernameLbl">Username</p>
+                    <input id="txtUserName" type="text" placeholder="Enter Username">
+                    <div id="joinResult"></div>
+                    <button type="button" id="btnLogin" onclick="join()">Join</button>
+                    <p id="teamLbl">Team:</p>
+                    <input type="checkbox" class="toggle-switch" id="teamToggle"> <label for="teamToggle"></label>
+                </div>
             </div>
-    <a href="javascript:void(0)" onclick="document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">
-                <button id="help" ><img id=btnimg src="imgs/help.png" height="55px" width="55px"></button>
-            </a>
-            <button id="exit" onClick="exit()"><img src="imgs/exit.png" height="55px" width="55px"></button>
 
-            <h2 class="score-box" >0</h2>
+            <!-- <div id="overlay"> -->
+            <!--     <div class="loginbox"> -->
+
+            <!--         <img src="imgs/logo.png" class="logo"> -->
+            <!--         <p id="w">Welcome Back</p> -->
+
+            <!--                 <button type="button" id="btnLogin" onclick="join()">Join</button> -->
+
+            <!--                 <p id="teamLbl">Team:</p> -->
+            <!--           <input type="checkbox" class="toggle-switch" id="teamToggle"> <label for="teamToggle"></label> -->
+            <!--     </div> -->
+            <!-- </div> -->
+            <!-- <div id="overlay"> -->
+            <!--     <div class="loginbox"> -->
+
+            <!--         <img src="imgs/logo.png" class="logo"> -->
+            <!--         <p id="full">Game is full!</p> -->
+            <!--         <br> -->
+            <!--         <br> -->
+            <!--         <p> Try again later!  </p> -->
+            <!--         <br> -->
+            <!--         <br> -->
+            <!--         <button  id="welcomeback" onclick="exit()">Leave</button> -->
+            <!--     </div> -->
+            <!-- </div> -->
+
+            <div class="section1">
+                <div id=name></div>
+                <div id=team></div>
+                <div class="player1">
+                    <h2 style=" margin:0px; margin-top:5px; position: relative;  width: 650px">Score: </h2>
+                    <h2 class="score-box" style=" margin:0px; margin-top:-10px; position: relative; width: 575px">0</h2>
+                    <h2 style=" margin:0px; margin-top:-18px; position: relative; right:40px;" >Turn: </h2>
+                    <h2 style=" margin:0px; margin-top:-28px; position: relative;right:-40px;" class="turn-box" >Skycat</h2>
+
+                </div>
+
+            </div>
+            <a href="javascript:void(0)" onclick="document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">
+                <button style="position: relative;" id="help" ><img id=btnimg src="imgs/help.svg" height="55px" width="55px"></button>
+            </a>
+            <button style="position: relative;" id="exit" onClick="exit()"><img src="imgs/exit.svg" height="55px" width="55px"></button>
+
 
         </section>
- <div id="fade" style="display: none"></div>
- 
-  <div id="light" class="white_content">
 
- <div class="tab">
-  <button class="tablinks" onclick="openTabs(event, 'GameRules')">Game Rules</button>
-  <button class="tablinks" onclick="openTabs(event, 'Buttons')">Buttons</button>
-  
-</div>
-  <p> Click on a tab for more info </p>
-<div id="GameRules" class="tabcontent">
-  <h3>Game Rules</h3>
-  <p>The first tile must be placed on the center red square </p>
+        <div id="light" class="white_content">
+			
+<p>
+<a href="javascript:void(0)" onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">Close</a>
+<p><b>Help Screen</b></p>	
+	<p>	<b>Rules</b></p>
+	<p>To move a tile simply click on it then click on the spot you wish to move it to </p>
+	<p>The first tile must be placed on the center red square </p>
 	<p>Make words with your tiles to score points </p>
 	<p>Words can be played horizontally and vertically </p>
 	<p>When playing a new word it must be connected to a previously played word </p>
 	<p>Use the colored squared multipliers to get a higher score </p>
 	<p>Try and use words that are specific to Oswego for even more points </p>
-</div>
 
-<div id="Buttons" class="tabcontent">
-  <h3>Buttons</h3>
- <div><img src="exit.svg" height="40px" width="40px"> <b>Exit:</b> Click on button to leave the game</div> 
-		<div><img src="recall.svg" height="40px" width="40px"> <b>Recall:</b> Click on button to return tiles that have been placed on board back to your hand</div> 
-		<div><img src="exchange.svg" height="40px" width="40px"> <b>Exchange:</b> Click on button to select the tiles that you wish to replace</div> 
-		<div><img src="shuffle.svg" height="40px" width="40px"> <b>Shuffle:</b> Click on button to randomly distribute your hand</div> 
-		<div><img src="confirm.svg" height="40px" width="40px"> <b>Play:</b> Click on button to play your tiles after they have been placed</div> 
-</div>
+	<p>	<b>Buttons</b></p>
+	
+		<div><img src="imgs/exit.svg" height="40px" width="40px"> <b>Exit:</b> Click on button to leave the game</div>
+		<div><img src="imgs/recall.svg" height="40px" width="40px"> <b>Recall:</b> Click on button to return tiles that have been placed on board back to your hand</div>
+		<div><img src="imgs/exchange.svg" height="40px" width="40px"> <b>Exchange:</b> Click on button to select the tiles that you wish to replace</div>
+		<div><img src="imgs/shuffle.svg" height="40px" width="40px"> <b>Shuffle:</b> Click on button to randomly distribute your hand</div>
+		<div><img src="imgs/confirm.svg" height="40px" width="40px"> <b>Play:</b> Click on button to play your tiles after they have been placed</div>
+			<br>
+			<br>
 
-            <a href="javascript:void(0)" onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'"><button>Close</button></a>
+	<a href="javascript:void(0)" onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">Close</a>
+	
+  		</div>
+  		<div id="fade" class="black_overlay"></div>
+	</div>
 
- 
-		</div>
-			
 
-	 <div class="container">
+        <div class="container">
             <br>
 
             <div class="drop" id="0_0" ondragover="allowDrop(event)"
@@ -134,7 +124,7 @@
             </div>
 
             <div class="drop" id="2_0" style="background-color:#1A3F28" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">3W
+                 ondrop="drop(event)">
 
             </div>
 
@@ -149,7 +139,7 @@
             </div>
 
             <div class="drop" id="5_0" style="background-color:#bf9c46" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">3L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -163,7 +153,7 @@
             </div>
 
             <div class="drop" id="8_0" style="background-color:#1A3F28" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">3W
+                 ondrop="drop(event)">
 
             </div>
 
@@ -185,7 +175,7 @@
             </div>
 
             <div class="drop" id="1_1" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -200,7 +190,7 @@
             </div>
 
             <div class="drop" id="4_1" style="background-color:#518d67" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2W
+                 ondrop="drop(event)">
 
             </div>
 
@@ -210,7 +200,7 @@
             </div>
 
             <div class="drop" id="6_1" style="background-color:#518d67" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2W
+                 ondrop="drop(event)">
             </div>
 
             <div class="drop" id="7_1" ondragover="allowDrop(event)"
@@ -224,7 +214,7 @@
             </div>
 
             <div class="drop" id="9_1" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -236,7 +226,7 @@
         <div class="container">
 
             <div class="drop" id="0_2" style="background-color:#1A3F28" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">3W
+                 ondrop="drop(event)">
 
             </div>
 
@@ -251,7 +241,7 @@
             </div>
 
             <div class="drop" id="3_2" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -270,7 +260,7 @@
             </div>
 
             <div class="drop" id="7_2" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -285,7 +275,7 @@
             </div>
 
             <div class="drop" id="10_2" style="background-color:#1A3F28" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">3W
+                 ondrop="drop(event)">
 
             </div>
         </div>
@@ -302,7 +292,7 @@
             </div>
 
             <div class="drop" id="2_3" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -331,7 +321,7 @@
             </div>
 
             <div class="drop" id="8_3" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -353,7 +343,7 @@
             </div>
 
             <div class="drop" id="1_4" style="background-color:#518d67" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2W
+                 ondrop="drop(event)">
 
             </div>
 
@@ -373,7 +363,7 @@
             </div>
 
             <div class="drop" id="5_4" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -392,7 +382,7 @@
             </div>
 
             <div class="drop" id="9_4" style="background-color:#518d67" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2W
+                 ondrop="drop(event)">
 
             </div>
 
@@ -404,7 +394,7 @@
         <div class="container">
 
             <div class="drop" id="0_5" style="background-color:#C19A24" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">3L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -424,7 +414,7 @@
             </div>
 
             <div class="drop" id="4_5" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -434,7 +424,7 @@
             </div>
 
             <div class="drop" id="6_5" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
             </div>
 
             <div class="drop" id="7_5" ondragover="allowDrop(event)"
@@ -453,7 +443,7 @@
             </div>
 
             <div class="drop" id="10_5" style="background-color:#C19A24" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">3L
+                 ondrop="drop(event)">
 
             </div>
         </div>
@@ -465,7 +455,7 @@
             </div>
 
             <div class="drop" id="1_6" style="background-color:#518d67" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2W
+                 ondrop="drop(event)">
 
             </div>
 
@@ -485,7 +475,7 @@
             </div>
 
             <div class="drop" id="5_6" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -504,7 +494,7 @@
             </div>
 
             <div class="drop" id="9_6" style="background-color:#518d67" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2W
+                 ondrop="drop(event)">
 
             </div>
 
@@ -526,7 +516,7 @@
             </div>
 
             <div class="drop" id="2_7" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -555,7 +545,7 @@
             </div>
 
             <div class="drop" id="8_7" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -572,7 +562,7 @@
         <div class="container">
 
             <div class="drop" id="0_8" style="background-color:#1A3F28" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">3W
+                 ondrop="drop(event)">
 
             </div>
 
@@ -587,7 +577,7 @@
             </div>
 
             <div class="drop" id="3_8" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -606,7 +596,7 @@
             </div>
 
             <div class="drop" id="7_8" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -621,7 +611,7 @@
             </div>
 
             <div class="drop" id="10_8" style="background-color:#1A3F28" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">3W
+                 ondrop="drop(event)">
 
             </div>
         </div>
@@ -633,7 +623,7 @@
             </div>
 
             <div class="drop" id="1_9" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -648,7 +638,7 @@
             </div>
 
             <div class="drop" id="4_9" style="background-color:#518d67" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2W
+                 ondrop="drop(event)">
 
             </div>
 
@@ -658,7 +648,7 @@
             </div>
 
             <div class="drop" id="6_9" style="background-color:#518d67" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2W
+                 ondrop="drop(event)">
             </div>
 
             <div class="drop" id="7_9" ondragover="allowDrop(event)"
@@ -672,7 +662,7 @@
             </div>
 
             <div class="drop" id="9_9" style="background-color:#FFCC33" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">2L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -694,7 +684,7 @@
             </div>
 
             <div class="drop" id="2_10" style="background-color:#1A3F28" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">3W
+                 ondrop="drop(event)">
 
             </div>
 
@@ -709,7 +699,7 @@
             </div>
 
             <div class="drop" id="5_10" style="background-color:#C19A24" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">3L
+                 ondrop="drop(event)">
 
             </div>
 
@@ -723,7 +713,7 @@
             </div>
 
             <div class="drop" id="8_10" style="background-color:#1A3F28" ondragover="allowDrop(event)"
-                 ondrop="drop(event)">3W
+                 ondrop="drop(event)">
 
             </div>
 
@@ -786,7 +776,6 @@
 
             </div>
         </div>
-    </div>
 
     <div id="specialOverlay" style="display:none">
 
@@ -984,9 +973,13 @@
 
             </div>
 
-            <button id="submitBlank" onclick="submitBlank()">Submit</button>
-            <button id="cancelBlank" onclick="cancelSpecialTile()">Cancel</button>
+            <div id="specialTilediv">
+                <button id="submitBlank" onclick="submitBlank()">Submit</button>
+            </div>
+            <div id="specialTilediv2">
 
+                <button id="cancelBlank" onclick="cancelSpecialTile()">Cancel</button>
+            </div>
         </div>
 
     </div>
@@ -997,19 +990,20 @@
             <br>
         </div>
         <section class="section4">
-
-            <button id="recall" onclick="recall()">
-                <img src="imgs/recall.png" alt="recall button" height="65px" width="65px">
-            </button>
-            <button id="exchange" onclick="exchange(this)">
-                <img src="imgs/swap.png" alt="exchange button" height="65px"  width="65px">
-            </button>
-            <button id="shuffle" onclick="shuffle()">
-                <img src="imgs/exchange.png" alt="shuffle button" height="65px" width="65px">
-            </button>
-            <button id="confirmed" onclick="confirmed()">
-                <img src="imgs/play.png" alt="confirm button" height="65px" width="65px">
-            </button>
+            <div id= buttonss>
+                <button id="recall" onclick="recall()">
+                    <img src="imgs/recall.svg" alt="recall button" height="65px" width="65px">Recall
+                </button>
+                <button id="exchange" onclick="exchange(this)">
+                    <img src="imgs/exchange.svg" alt="exchange button" height="65px"  width="65px">Exchange
+                </button>
+                <button id="shuffle" onclick="shuffle()">
+                    <img src="imgs/shuffle.svg" alt="shuffle button" height="65px" width="65px">Shuffle
+                </button>
+                <button id="confirmed" onclick="confirmed()">
+                    <img src="imgs/confirm.svg" alt="confirm button" height="65px" width="65px">Play
+                </button>
+            </div>
         </section>
     </div>
 
