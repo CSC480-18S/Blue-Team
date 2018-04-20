@@ -714,8 +714,17 @@ public class Session {
         }
     }
 
-    public void cancelTimer(){
-        timer.cancel();
+    /**
+     * Checks if user with provided mac address exists in database
+     * @param mac
+     * @return
+     */
+    public String amIregistered(String mac){
+        if(dbQueries.findUser(mac) != null){
+            return "TRUE";
+        } else {
+            return "FALSE";
+        }
     }
 
     class aiTimerTask extends TimerTask {
