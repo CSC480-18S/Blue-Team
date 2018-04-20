@@ -534,7 +534,7 @@ public class BoardGUI implements Runnable {
 
                 },
                 new String[]{
-                        "Rank", "Player", "Total Score", "H-Scoring Word", "B-Word Count"
+                        "Rank", "Player", "Total Score"
                 }
         ));
         jTable2.setRowHeight(35);
@@ -551,7 +551,7 @@ public class BoardGUI implements Runnable {
 
                 },
                 new String[]{
-                        "Team", "Cumulative", "Average", "Longest Word", "Wins", "Tiles", "Losses", "Highest Word Score", "B-Word Count"
+                        "Team", "Cumulative", "Longest Word", "Wins", "Tiles", "Losses", "Highest Word Score", "B-Word Count"
                 }
         ));
         jTable3.setRowHeight(35);
@@ -593,7 +593,7 @@ public class BoardGUI implements Runnable {
 
                 },
                 new String[]{
-                        "Rank", "Player", "Total Score", "H-Scoring Word", "B-Word Count"
+                        "Rank", "Player", "Total Score"
                 }
         ));
         jTable1.setRequestFocusEnabled(false);
@@ -623,7 +623,7 @@ public class BoardGUI implements Runnable {
 
         jTextArea2.setBackground(new java.awt.Color(255, 204, 51));
         jTextArea2.setColumns(20);
-        jTextArea2.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
+        jTextArea2.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         jTextArea2.setRows(5);
         jScrollPane4.setViewportView(jTextArea2);
 
@@ -852,19 +852,16 @@ public class BoardGUI implements Runnable {
         int rank;
         String value;
 
-        public testUser(int r, String n, String ts, String plw, int pbwc) {
+        public testUser(int r, String n, String ts) {
             rank = r;
             name = n;
             totalScore = ts;
-            plongestWord = plw;
-            pbonusWordCount = pbwc;
 
         }
 
-        public testUser(String tm, int tcs, int tca, String lw, int w, int t, int l, int hpg, int bwc) {
+        public testUser(String tm, int tcs, String lw, int w, int t, int l, int hpg, int bwc) {
             team = tm;
             teamCmuScore = tcs;
-            teamCumAverage = tca;
             longestWord = lw;
             wins = w;
             tiles = t;
@@ -888,7 +885,7 @@ public class BoardGUI implements Runnable {
         temp = dbCall.getTopPlayersByTeam(5, teamName);
         testUser[] statList = new testUser[temp.length];
         for(int i = 0; i < temp.length; i++) {
-            testUser t = new testUser(i, temp[i][0], temp[i][2], "GUI Sucks", 0);
+            testUser t = new testUser(i, temp[i][0], temp[i][2]);
             statList[i] = t;
         }
         for(int i = 0; i < temp.length; i++) {
@@ -902,8 +899,8 @@ public class BoardGUI implements Runnable {
         QueryClass dbCall = new QueryClass();
         String teamName = "green";
         String teamName2 = "gold";
-        testUser t1 = new testUser(teamName,dbCall.getTeamCumulative(teamName),0, dbCall.getTeamLongestWord(teamName),dbCall.getTeamWinCount(teamName), dbCall.getTeamTieCount(teamName), dbCall.getTeamLoseCount(teamName), dbCall.getHighestGameSessionScore(teamName), dbCall.getTeamBonuses(teamName));
-        testUser t2 = new testUser(teamName2,dbCall.getTeamCumulative(teamName2),0, dbCall.getTeamLongestWord(teamName2),dbCall.getTeamWinCount(teamName2), dbCall.getTeamTieCount(teamName2), dbCall.getTeamLoseCount(teamName2), dbCall.getHighestGameSessionScore(teamName2), dbCall.getTeamBonuses(teamName2));
+        testUser t1 = new testUser(teamName,dbCall.getTeamCumulative(teamName), dbCall.getTeamLongestWord(teamName),dbCall.getTeamWinCount(teamName), dbCall.getTeamTieCount(teamName), dbCall.getTeamLoseCount(teamName), dbCall.getHighestGameSessionScore(teamName), dbCall.getTeamBonuses(teamName));
+        testUser t2 = new testUser(teamName2,dbCall.getTeamCumulative(teamName2), dbCall.getTeamLongestWord(teamName2),dbCall.getTeamWinCount(teamName2), dbCall.getTeamTieCount(teamName2), dbCall.getTeamLoseCount(teamName2), dbCall.getHighestGameSessionScore(teamName2), dbCall.getTeamBonuses(teamName2));
 
         list.add(t1);
         list.add(t2);
@@ -944,10 +941,6 @@ public class BoardGUI implements Runnable {
         }
     }
 
-    public String TestGameLog() {
-        String word = "The T-test is good";
-        return word;
-    }
 
     //*******************This are the methods to edit each table*********************//
 
@@ -960,8 +953,6 @@ public class BoardGUI implements Runnable {
             rowData[0] = list.get(i).rank;
             rowData[1] = list.get(i).name;
             rowData[2] = list.get(i).totalScore;
-            rowData[3] = list.get(i).plongestWord;
-            rowData[4] = list.get(i).pbonusWordCount;
             modelTest.addRow(rowData);
         }
     }
@@ -974,8 +965,6 @@ public class BoardGUI implements Runnable {
             rowData[0] = list.get(i).rank;
             rowData[1] = list.get(i).name;
             rowData[2] = list.get(i).totalScore;
-            rowData[3] = list.get(i).plongestWord;
-            rowData[4] = list.get(i).pbonusWordCount;
             modelTest.addRow(rowData);
         }
     }
@@ -987,13 +976,12 @@ public class BoardGUI implements Runnable {
         for (int i = 0; i < list.size(); i++) {
             rowData[0] = list.get(i).team;
             rowData[1] = list.get(i).teamCmuScore;
-            rowData[2] = list.get(i).teamCumAverage;
-            rowData[3] = list.get(i).longestWord;
-            rowData[4] = list.get(i).wins;
-            rowData[5] = list.get(i).tiles;
-            rowData[6] = list.get(i).losses;
-            rowData[7] = list.get(i).highestPerGame;
-            rowData[8] = list.get(i).bonusWordCount;
+            rowData[2] = list.get(i).longestWord;
+            rowData[3] = list.get(i).wins;
+            rowData[4] = list.get(i).tiles;
+            rowData[5] = list.get(i).losses;
+            rowData[6] = list.get(i).highestPerGame;
+            rowData[7] = list.get(i).bonusWordCount;
             modelTest.addRow(rowData);
         }
     }
