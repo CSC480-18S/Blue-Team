@@ -716,7 +716,6 @@ public class BoardGUI implements Runnable {
 
     public void updateBoard(Space[][] board) {
         updateHand(Session.getSession().getUsers());
-        printGameLog(Session.getSession().getLogger().toString());
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_WIDTH; y++) {
                 if (board[x][y].getTile() != null) {
