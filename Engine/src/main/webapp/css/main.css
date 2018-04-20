@@ -20,6 +20,7 @@
     float: left;
     border: none;
     text-align: center;
+    
 }
 /* Change background color of buttons on hover */
 .tab button:hover {
@@ -37,6 +38,7 @@
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
+    float:left;
 }
 	
 	#myProgress {
@@ -65,51 +67,7 @@
     cursor: pointer; /* Add a pointer on hover */
 }
 
-.welcomebox {
-    position: absolute;
-    z-index: 0;
-    width: 320px;
-    height: 420px;
-    background: black;
-    color: #fff;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-sizing: border-box;
-    padding: 70px 30px;
-}
 
-.welcomebox img{
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    top: -50px;
-    left: calc(50% - 50px);
-    border-radius: 0px;
-}
-#welcomeback {
- display: flex;
-  align-items: center;
-  justify-content: center;
-    width:50%;
-     top: 0%;
-  left: 0%;
-  width:100%;
-  height: 10%;
-  }
-  #yourname {
- display: flex;
-  align-items: center;
-  justify-content: center;
-    width:50%;
-     top: 0%;
-  left: 0%;
-  width:100%;
-  height: 10%;
-  font-size: 25px;
-  border-radius: 8px;
-  color: #FFCC33;
-  }
 .black_overlay {
   display: none;
   position: absolute;
@@ -150,6 +108,7 @@
     background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
     cursor: pointer; /* Add a pointer on hover */
 }
+
 .containers {
     width: auto;
     float: left;
@@ -183,10 +142,11 @@
     cursor: pointer; /* Add a pointer on hover */
 }
 
+
 	.specialBox {
     position: absolute;
     z-index: 0;
-    width: 420px;
+    width: 500px;
     height: 420px;
     background: white;
     border: 6px solid green;
@@ -195,7 +155,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     box-sizing: border-box;
-    padding: 70px 30px;
+    padding: 20px 20px;
   z-index: 1002;
   overflow: auto;
 }
@@ -232,6 +192,7 @@
     height: 115px;
     padding: 0px;
     margin: 0px;
+    
 }
 
 .section5 {
@@ -239,6 +200,14 @@
     background-color: #2A6342;
     text-align: center;
     height: 30px;
+    padding: 0px;
+    margin: 0px;
+}
+.section7 {
+    color: #FFCC33;
+    background-color: #1A3F28;
+    text-align: center;
+    height: "100%";
     padding: 0px;
     margin: 0px;
 }
@@ -254,8 +223,19 @@
 		border: 2px solid black;
 		float: left;
 		margin-top:20px;
-			margin-left: 30px;
-			
+		margin-left: 30px;
+		border-radius: 5px;
+		    background-color: #FFCC33;
+		
+		
+	}
+	#specialTilediv
+	{
+		height:55px;
+		width: auto;
+		float: left;
+		margin-top:100px;
+		
 		
 	}
 	.drop
@@ -267,14 +247,37 @@
 		text-align: center;
 		vertical-align: middle;
 		line-height: 55px;
-		    font-size: 25px;
-		        font-weight: bold;
+		font-size: 25px;
+		font-weight: bold;
+		border-radius: 5px;
+/* 		    		    background-color: #d1d1d1; */
 		    
-		
 		
 		
 	}
 		
+		.buttonss {
+			text-align: center;
+   font-size: 25px;
+		        font-weight: bold;
+	}
+		
+	img .drag{
+	max-width: 55px;
+    max-height: 55px;
+     border-radius: 5px;
+      
+    
+    
+	}
+	img .drop{
+	max-width: 55px;
+    max-height: 55px;
+     border-radius: 5px;
+      
+    
+    
+	}
 	
 .content {
     margin: auto;
@@ -295,11 +298,7 @@
     margin: auto;
 }
 	
-	image {
-	max-width: 100%;
-    max-height: 55px;
-	}
-		
+	
 	
 body {font-family: Arial, Helvetica, sans-serif;}
 		
@@ -428,4 +427,30 @@ padding: 10px
 #t {
 
 padding: 10px
+}
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+.loginbox {
+    position: absolute;
+    z-index: 0;
+    width: 320px;
+    height: 420px;
+    background: black;
+    color: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    padding: 70px 30px;
 }
