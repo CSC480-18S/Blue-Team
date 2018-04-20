@@ -207,19 +207,24 @@ public class SkyCat extends User {
                                         }
                                         xIndex++;
                                     }
-                                xIndex = x + forwardTiles.length();
+                                xIndex = x;
                                 if (inHand == true){
                                     for (char c : remainingEnd.toCharArray()) {
                                         inHand = false;
-                                        for (int i = 0; i < handCopy.length; i++) {
-                                            if (handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c
-                                                    && boardLocal[xIndex][y].getTile() == null) {
-                                                inHand = true;
-                                                handCopy[i] = null;
-                                                handCount--;
-                                                break;
+                                        if(boardLocal[xIndex][y].getTile() == null) {
+                                            for (int i = 0; i < handCopy.length; i++) {
+                                                if (handCopy[i] != null
+                                                        && handCopy[i].getLetter() == c) {
+                                                    inHand = true;
+                                                    handCopy[i] = null;
+                                                    handCount--;
+                                                    break;
+                                                }
                                             }
+                                        }
+                                        else{
+                                            if(boardLocal[xIndex][y].getTile().getLetter() == c)
+                                                inHand = true;
                                         }
                                         if (inHand == false) {
                                             break;
@@ -275,18 +280,24 @@ public class SkyCat extends User {
                                         }
                                         yIndex++;
                                     }
-                                yIndex = y + downwardTiles.length();
+                                yIndex = y;
                                 if(inHand == true)
                                     for(char c : remainingEnd.toCharArray()){
                                         inHand = false;
-                                        for(int i = 0; i < handCopy.length; i++){
-                                            if(handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c ){
-                                                inHand = true;
-                                                handCopy[i] = null;
-                                                handCount--;
-                                                break;
+                                        if(boardLocal[x][yIndex].getTile() == null) {
+                                            for (int i = 0; i < handCopy.length; i++) {
+                                                if (handCopy[i] != null
+                                                        && handCopy[i].getLetter() == c) {
+                                                    inHand = true;
+                                                    handCopy[i] = null;
+                                                    handCount--;
+                                                    break;
+                                                }
                                             }
+                                        }
+                                        else{
+                                            if(boardLocal[x][yIndex].getTile().getLetter() == c)
+                                                inHand = true;
                                         }
                                         if(inHand == false){
                                             break;
