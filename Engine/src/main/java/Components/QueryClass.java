@@ -43,6 +43,7 @@ public class QueryClass {
             }
             return players;
         } catch (SQLException se){
+            Log.getLogger().logException(se);
             se.printStackTrace();
             return null;
         }
@@ -76,6 +77,7 @@ public class QueryClass {
             }
             return players;
         } catch (SQLException se) {
+            Log.getLogger().logException(se);
             se.printStackTrace();
             return null;
         }
@@ -107,6 +109,7 @@ public class QueryClass {
             }
             return players;
         } catch (SQLException se) {
+            Log.getLogger().logException(se);
             se.printStackTrace();
             return null;
         }
@@ -144,6 +147,7 @@ public class QueryClass {
             preparedStmt.setString(1, uname);
             preparedStmt.execute();
         } catch (SQLException se) {
+            Log.getLogger().logException(se);
             se.printStackTrace();
             if(pastQ1){
                 throw new RuntimeException("Database consistency error");
@@ -170,6 +174,7 @@ public class QueryClass {
             }
             return false;
         } catch (SQLException se) {
+            Log.getLogger().logException(se);
             se.printStackTrace();
             return null;
         }
@@ -204,6 +209,7 @@ public class QueryClass {
             }
             return null;
         } catch (SQLException se) {
+            Log.getLogger().logException(se);
             se.printStackTrace();
             return null;
         }
@@ -234,6 +240,7 @@ public class QueryClass {
                 preparedStmt.execute();
             }
         } catch (SQLException se) {
+            Log.getLogger().logException(se);
             se.printStackTrace();
         }
     }
@@ -255,6 +262,7 @@ public class QueryClass {
             }
             return count;
         } catch (SQLException e) {
+            Log.getLogger().logException(e);
             e.printStackTrace();
             return count;
         }
@@ -278,6 +286,7 @@ public class QueryClass {
                 rs.updateRow();
             }
         } catch (SQLException se) {
+            Log.getLogger().logException(se);
             se.printStackTrace();
         }
     }
@@ -300,6 +309,7 @@ public class QueryClass {
                 rs.updateRow();
             }
         } catch (SQLException se) {
+            Log.getLogger().logException(se);
             se.printStackTrace();
         }
     }
@@ -456,7 +466,7 @@ public class QueryClass {
      * @return Boolean true if username taken, false if not, null if error
      */
     public Boolean gameIDAlreadyExists(int game_id){
-        String query = "SELECT game_id FROM game_table WHERE game_id=?";
+        String query = "SELECT game_id FROM GAME_TABLE WHERE game_id=?";
 
         try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
             PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -478,7 +488,7 @@ public class QueryClass {
      * @return Boolean true if word already exist, false if not, null if error
      */
     public Boolean wordAlreadyExistsInValidWordTable(String word){
-        String query = "SELECT word FROM valid_word_table WHERE word=?";
+        String query = "SELECT word FROM VALID_WORD_TABLE WHERE word=?";
         try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, word);
@@ -498,7 +508,7 @@ public class QueryClass {
      * @return Boolean true if word_id taken, false if not, null if error
      */
     public Boolean wordIDAlreadyExistsInValidWordTable(int word_id){
-        String query = "SELECT word_id FROM valid_word_table WHERE word_id=?";
+        String query = "SELECT word_id FROM VALID_WORD_TABLE WHERE word_id=?";
 
         try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
             PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -576,9 +586,9 @@ public class QueryClass {
         try(Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
             String query = null;
             if (teamname.equalsIgnoreCase("green")) {
-                query = "SELECT SUM(green_team_score) FROM game_table;";
+                query = "SELECT SUM(green_team_score) FROM GAME_TABLE;";
             } else if (teamname.equalsIgnoreCase("gold")) {
-                query = "SELECT SUM(gold_team_score) FROM game_table;";
+                query = "SELECT SUM(gold_team_score) FROM GAME_TABLE;";
             } else {
                 return null;
             }
@@ -609,6 +619,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamCumulative = rs.getInt("cumulative_game_score");
             return teamCumulative;
         } catch (SQLException se) {
@@ -628,6 +639,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamHighestW = rs.getInt("highest_word_score");
             return teamHighestW;
         } catch (SQLException se) {
@@ -647,6 +659,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamHighest = rs.getInt("highest_game_session_score");
             return teamHighest;
         } catch (SQLException se) {
@@ -666,6 +679,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamWin = rs.getInt("win_count");
             return teamWin;
         } catch (SQLException se) {
@@ -685,6 +699,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamLose = rs.getInt("lose_count");
             return teamLose;
         } catch (SQLException se) {
@@ -704,6 +719,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamTie = rs.getInt("tie_count");
             return teamTie;
         } catch (SQLException se) {
@@ -723,6 +739,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             String teamLongWord = rs.getString("longest_word");
             return teamLongWord;
         } catch (SQLException se) {
@@ -742,6 +759,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamBonuses = rs.getInt("bonuses");
             return teamBonuses;
         } catch (SQLException se) {
@@ -761,6 +779,7 @@ public class QueryClass {
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, teamname);
             ResultSet rs = preparedStmt.executeQuery();
+            rs.next();
             int teamDirtyCount = rs.getInt("dirty_word");
             return teamDirtyCount;
         } catch (SQLException se) {

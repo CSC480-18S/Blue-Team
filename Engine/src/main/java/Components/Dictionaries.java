@@ -5,7 +5,6 @@ import java.io.*;
 import java.util.HashSet;
 import java.util.Scanner;
 
-import static Session.Session.LogWarning;
 
 /**
  * This class is used to store all (3) of the game's dictionaries. The
@@ -89,7 +88,7 @@ public class Dictionaries implements Serializable {
                 System.out.println("Dictionaries::Error loading dict\n");
                 System.out.println(System.getProperty("user.dir"));
                 e.printStackTrace();
-                LogWarning("" + e.getMessage() + "\n" + e.getStackTrace());
+                //LogWarning("" + e.getMessage() + "\n" + e.getStackTrace());
             }
         }
         return dictionaries;

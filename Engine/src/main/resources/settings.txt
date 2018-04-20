@@ -1,3 +1,4 @@
-waitForPlayer = false
+IP = 10.42.0.1
 turnTimeSec = 60
-aiWaitSec = 0
+aiWaitSec = 5
+aiWaitNoPlayers = 60
