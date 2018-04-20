@@ -207,13 +207,14 @@ public class SkyCat extends User {
                                         }
                                         xIndex++;
                                     }
-                                xIndex = x + forwardTiles.length() + 1;
-                                if (inHand == true && remainingEnd.length() <= handCount){
+                                xIndex = x + forwardTiles.length();
+                                if (inHand == true){
                                     for (char c : remainingEnd.toCharArray()) {
                                         inHand = false;
                                         for (int i = 0; i < handCopy.length; i++) {
                                             if (handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c ) {
+                                                    && handCopy[i].getLetter() == c
+                                                    && boardLocal[xIndex][y].getTile() == null) {
                                                 inHand = true;
                                                 handCopy[i] = null;
                                                 handCount--;
@@ -274,8 +275,8 @@ public class SkyCat extends User {
                                         }
                                         yIndex++;
                                     }
-                                yIndex = y + downwardTiles.length() + 1;
-                                if(inHand == true && remainingEnd.length() <= handCount)
+                                yIndex = y + downwardTiles.length();
+                                if(inHand == true)
                                     for(char c : remainingEnd.toCharArray()){
                                         inHand = false;
                                         for(int i = 0; i < handCopy.length; i++){
