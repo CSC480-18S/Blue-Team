@@ -117,6 +117,89 @@ public class QueryClass {
 	}
 
 	/**
+     * checks whether the user's stored mac address associated with the username matches the current_mac address,
+     *          whether the user name exist, whether the new user name is already taken; if conditions meets,
+     *          change the username associated with the mac address
+     *          this also updates the player username in the player_table
+     *
+     * @return true if changing operation successful
+     *          if the new uid is already taken, returns false;
+     *          if a username with a given username does not exist, returns false;
+     *          if the current mac address does not match the mac address stored on file, return false;
+     *          if database error, returns false
+     */
+    public Boolean changeUserName(String old_uid, String current_mac, String new_uid ){
+        if(userAlreadyExists(new_uid) || !userAlreadyExists(old_uid) || !getMacAddressByUserName(old_uid).equalsIgnoreCase(current_mac)){
+            System.out.println("DEBUG: doesnt meet the requirement");
+            return false;
+        }else{
+            // passing conditions -- username is changeable
+            String query = "UPDATE USER_TABLE SET uid=? WHERE mac_addr=?";
+            try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+                PreparedStatement preparedStmt = con.prepareStatement(query);
+                preparedStmt.setString(1,new_uid);
+                preparedStmt.setString(2,current_mac);
+                preparedStmt.executeUpdate();
+                //affect other usernames in the table as well, so do updates in the player table as well
+                this.updateUsernameInPlayerTable(old_uid,new_uid);
+                return true;
+            } catch (SQLException se) {
+                se.printStackTrace();
+                return false;
+            }
+
+
+
+        }
+    }
+
+
+    /**
+     * changes in the player table resulted from user name change
+     * @param old_uid old user name
+     * @param new_uid new user name
+     * @return boolean indicating whether operation is successful
+     */
+    public Boolean updateUsernameInPlayerTable(String old_uid, String new_uid){
+        String query = "UPDATE PLAYER_TABLE SET uid=? WHERE uid=?";
+        try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setString(1,new_uid);
+            preparedStmt.setString(2,old_uid);
+            preparedStmt.executeUpdate();
+
+            return true;
+        } catch (SQLException se) {
+            se.printStackTrace();
+            return false;
+        }
+
+    }
+
+    /**
+     * returns user mac address associated with the username
+     * @param username username
+     * @return the mac address that currently associates with the username
+     */
+    public String getMacAddressByUserName(String username){
+        String query = "SELECT mac_addr FROM USER_TABLE WHERE uid=?";
+
+        try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setString(1, username);
+            ResultSet rs = preparedStmt.executeQuery();
+            if (rs.next()) { // If this executes, it found a user. I don't check
+                // to see if it finds more than 1, it shouldn't
+                return rs.getString(1);
+            }
+            return null;
+        } catch (SQLException se) {
+            se.printStackTrace();
+            return null;
+        }
+    }
+	
+	/**
 	 * Get the top player's names and cumulative scores
 	 *
 	 * @param num
@@ -699,7 +782,11 @@ public class QueryClass {
 			result.next();
 			Double sum = result.getDouble(1);
 			int gameCount = this.getGameTableCount();
-			return sum / gameCount;
+            		if(Double.isNaN(sum/gameCount)){
+                		return 0.0;
+          		}else{
+              			return sum/gameCount;
+           		}
 
 		} catch (SQLException se) {
 			se.printStackTrace();
