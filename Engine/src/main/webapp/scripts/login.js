@@ -99,12 +99,41 @@ function specialTileBorder(el)
     }
 }
 
-
 $(".drop").click(function () {
+    // check null
     if (currentImg == null) return;
-    currentImg.style.border = "";
-    $(this).append(currentImg);
-    //$($img).removeClass('borderClass');
+    // check if there is already a tile there
+    if ($(this).children('img').length < 1)
+    {
+        // no image here so place the current
+        currentImg.style.border = "";
+        $(this).append(currentImg);
+    }
+    // theres an image here
+    else if ($(this).children('img').length > 0)
+    {
+        // set the clicked image as the current if it hasn't been played
+        //loops through board and gets all the coordinates
+        var thisTile = $(this);
+        var i = 0; //****
+        var xyCoord = [];
+        $(".drop:has(img)").each(function () {
+            xyCoord[i++] = $(this).attr('id');
+        });
+
+        //gets difference between the state of board now and the previous state
+        var newPlay = xyCoord.diff(boardState);
+        // check if this tile is in the newplay
+        newPlay.forEach(function (coord) {
+            if (coord == thisTile.attr("id"))
+            {
+                // give border and set as current img
+                currentImg.style.border = "";
+                currentImg = document.getElementById(coord).getElementsByTagName('img')[0];
+                currentImg.style.border = "5px solid red";
+            }
+        })
+    }
 });
 
 // Send post request when HTML is loaded incase user already has been added
