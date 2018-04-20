@@ -127,7 +127,10 @@ public class Servlet extends HttpServlet {
                 String score = EventHandler.scoreHandler(macAddress);
                 String turn = EventHandler.turnHandler(macAddress);
                 out.write(score + "_" + turn);
-            } else {
+            }else if(req.equals("amiregistered")) {
+                String mac = getMACAddress(request.getRemoteAddr());
+                out.write(EventHandler.amIregisteredHandler(mac));
+            }else {
                 // Unknown request
                 out.write(EventHandler.unknownHandler());
             }

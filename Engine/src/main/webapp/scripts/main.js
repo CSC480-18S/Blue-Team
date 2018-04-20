@@ -82,6 +82,21 @@ function exchange(el)
                 });
 
             }
+            // Clear board of unplayed tiles so there aren't duplicates
+            var i = 0; //****
+            var xyCoord = [];
+            $(".drop:has(img)").each(function () {
+                xyCoord[i++] = $(this).attr('id');
+            });
+
+            //gets difference between the state of board now and the previous state
+            var newPlay = xyCoord.diff(boardState);
+            // check if this tile is in the newplay
+            newPlay.forEach(function (coord)
+            {
+                $('#' + coord + " img").remove();
+            })
+
             break;
     }
 
@@ -129,7 +144,9 @@ function handTilesSelected()
     // If there is a border return true to begin exchange
     for (var i = 0; i < 7; i++)
     {
-        if (document.getElementById('div'+i).getElementsByTagName('img')[0].style.border == "5px solid red")
+        // Check null to account for tiles that might be on the board
+        if (document.getElementById('div'+i).getElementsByTagName('img')[0] != null
+            && document.getElementById('div'+i).getElementsByTagName('img')[0].style.border == "5px solid red")
             return true;
     }
     return false;
