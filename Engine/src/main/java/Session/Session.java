@@ -544,6 +544,7 @@ public class Session {
         //if skipped 4 times - game ended
         if(skippedTimes >= 4){
             System.out.println("Game Ended");
+            // TEAM STATS HERE
             restartGame();
             return;
         }
@@ -685,8 +686,8 @@ public class Session {
         System.out.println(player.getUsername() + " " + player.getScore());
     }
 
-    private void sendMoveStat() {
-
+    private void sendTeamStat(int [] ts) {
+        dbQueries.addNewToGameTable(ts[0], ts[1]);
     }
 
     private void aiRun(){
