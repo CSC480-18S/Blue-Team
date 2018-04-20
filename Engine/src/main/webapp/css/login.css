@@ -1,4 +1,3 @@
-
 #overlay {
     position: fixed; /* Sit on top of the page content */
     z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
@@ -25,7 +24,6 @@
     box-sizing: border-box;
     padding: 70px 30px;
 }
-
 .loginbox img{
     position: absolute;
     width: 100px;
@@ -34,7 +32,6 @@
     left: calc(50% - 50px);
     border-radius: 0px;
 }
-
 .loginbox p[id="usernameLbl"]{
     margin:0;
     padding: 0;
@@ -59,6 +56,7 @@
     border: none;
     outline: none;
     height: 40px;
+    width:100px;
     background-color: limegreen;
     font-size: 18px;
 }
@@ -75,7 +73,7 @@
     font-size: 18px;
     vertical-align: center;
     position: relative;
-    left: 30%;
+    left: 5%;
 }
 
 .loginbox input[type=checkbox].toggle-switch{
@@ -116,7 +114,3 @@
 .loginbox input[type=checkbox].toggle-switch:checked + label::after{
     left: 30px;
 }
-
-
-
-
