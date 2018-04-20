@@ -382,6 +382,8 @@ public class Session {
                         playerTimer.cancel();
                     }
                     Tile[] hand = users[i].getHand();
+                    //DB Stats Call
+                    sendScoreStat(users[i]);
                     //replace player with skycat
                     SkyCat skyCat = new SkyCat(Session.getSession());
                     //put generated tiles back
@@ -564,6 +566,8 @@ public class Session {
                     skippedTimes ++;
                     //check if player skipped 3 times
                     if (users[currentTurn].getSkipped() == 2) {
+                        //DB Stats Call
+                        sendScoreStat(users[currentTurn]);
                         //replace player with skycat
                         Tile[] hand = users[currentTurn].getHand();
                         SkyCat skyCat = new SkyCat(Session.getSession());
@@ -697,6 +701,16 @@ public class Session {
     private static void restartGame(){
         session = null;
         Session.getSession();
+
+    }
+
+    private void sendScoreStat(User player) {
+        Player temp = (Player) player;
+        dbQueries.updatePlayerCumulative("test", temp.getScore());
+        System.out.println(player.getUsername() + " " + player.getScore());
+    }
+
+    private void sendMoveStat() {
 
     }
 }
