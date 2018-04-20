@@ -1145,30 +1145,17 @@ public class QueryClass {
 	}
 
 	/*
-	 * Tie teams itterate tie count tname = tie team 1 tnname = tie team 2
+	 * Game ended in tie
 	 */
-	public void updateTie(String tname, String tnname) {
-		String query = "SELECT * FROM TEAM_TABLE WHERE team_name = ?";
-
-		try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
-			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_UPDATABLE);
-			for (int i = 0; i < 2; i++) {
-				if (i == 0) {
-					preparedStmt.setString(1, tname);
-					ResultSet rs = preparedStmt.executeQuery();
-					if (rs.next()) {
-						rs.updateInt("tie_count", (rs.getInt("tie_count") + 1));
-						rs.updateRow();
-					}
-				} else {
-					preparedStmt.setString(1, tnname);
-					ResultSet rs = preparedStmt.executeQuery();
-					if (rs.next()) {
-						rs.updateInt("tie_count", (rs.getInt("tie_count") + 1));
-						rs.updateRow();
-					}
-				}
+	public void updateTie() {
+		String query = "SELECT * FROM TEAM_TABLE WHERE team_name = 'gold' OR team_name = 'green'";
+		try (Connection conn = DriverManager.getConnection(dbAddress, dbUser, dbPass);
+				PreparedStatement preparedStmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
+						ResultSet.CONCUR_UPDATABLE)) {
+			ResultSet rs = preparedStmt.executeQuery();
+			while (rs.next()) {
+				rs.updateInt("tie_count", (rs.getInt("tie_count") + 1));
+				rs.updateRow();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
