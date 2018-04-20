@@ -16,10 +16,14 @@ import Session.Start;
 import Session.Session;
 import static Models.GameConstants.*;
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.text.DefaultCaret;
 
 /**
  * @author mide_
@@ -172,8 +176,8 @@ public class BoardGUI implements Runnable {
         user2.getColumnModel().getColumn(0).setCellRenderer(new BoardCellRenderer());
         user2.setDefaultEditor(Object.class, null);
         user2.setRowHeight(50);
-        user2.setGridColor(new Color(242,208, 176));
-        user2.setBorder(BorderFactory.createLineBorder(new Color(242,208, 176), 1));
+        user2.setGridColor(new Color(242, 208, 176));
+        user2.setBorder(BorderFactory.createLineBorder(new Color(242, 208, 176), 1));
         user2.setFont(new Font("Serif", Font.BOLD, 15));
         user2.getColumnModel().getColumn(0).setPreferredWidth(50);
         DefaultTableCellRenderer renderer5 = (DefaultTableCellRenderer) user2.getDefaultRenderer(Object.class);
@@ -217,8 +221,8 @@ public class BoardGUI implements Runnable {
             user3.getColumnModel().getColumn(i).setPreferredWidth(50);
             user3.getColumnModel().getColumn(i).setCellRenderer(new BoardCellRenderer());
         }
-        user3.setGridColor(new Color(242,208, 176));
-        user3.setBorder(BorderFactory.createLineBorder(new Color(242,208, 176), 1));
+        user3.setGridColor(new Color(242, 208, 176));
+        user3.setBorder(BorderFactory.createLineBorder(new Color(242, 208, 176), 1));
         user3.setFont(new Font("Serif", Font.BOLD, 15));
         DefaultTableCellRenderer renderer4 = (DefaultTableCellRenderer) user3.getDefaultRenderer(Object.class);
         renderer4.setOpaque(false);
@@ -260,8 +264,8 @@ public class BoardGUI implements Runnable {
             user1.getColumnModel().getColumn(i).setPreferredWidth(50);
             user1.getColumnModel().getColumn(i).setCellRenderer(new BoardCellRenderer());
         }
-        user1.setGridColor(new Color(242,208, 176));
-        user1.setBorder(BorderFactory.createLineBorder(new Color(242,208, 176), 1));
+        user1.setGridColor(new Color(242, 208, 176));
+        user1.setBorder(BorderFactory.createLineBorder(new Color(242, 208, 176), 1));
         user1.setFont(new Font("Serif", Font.BOLD, 15));
         DefaultTableCellRenderer renderer3 = (DefaultTableCellRenderer) user1.getDefaultRenderer(Object.class);
         renderer3.setOpaque(false);
@@ -345,8 +349,8 @@ public class BoardGUI implements Runnable {
         user4.getColumnModel().getColumn(0).setCellRenderer(new BoardCellRenderer());
         user4.setDefaultEditor(Object.class, null);
         user4.setRowHeight(50);
-        user4.setGridColor(new Color(242,208, 176));
-        user4.setBorder(BorderFactory.createLineBorder(new Color(242,208, 176), 1));
+        user4.setGridColor(new Color(242, 208, 176));
+        user4.setBorder(BorderFactory.createLineBorder(new Color(242, 208, 176), 1));
         user4.setFont(new Font("Serif", Font.BOLD, 15));
         user4.getColumnModel().getColumn(0).setPreferredWidth(50);
         DefaultTableCellRenderer renderer2 = (DefaultTableCellRenderer) user4.getDefaultRenderer(Object.class);
@@ -402,6 +406,10 @@ public class BoardGUI implements Runnable {
         gameLogArea.setColumns(20);
         gameLogArea.setFont(new java.awt.Font("Comic Sans MS", 1, 16)); // NOI18N
         gameLogArea.setRows(5);
+
+        DefaultCaret caret = (DefaultCaret)gameLogArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+
         jScrollPane1.setViewportView(gameLogArea);
 
         logLabel.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
@@ -495,7 +503,7 @@ public class BoardGUI implements Runnable {
         panel.add(label, c);
 
 
-        frame.setSize(1500, 1076);
+        frame.setSize(1920, 1080);
         frame.setVisible(true);
 
         // *********************************This is the start of Stats frame*********************************** //
@@ -517,77 +525,105 @@ public class BoardGUI implements Runnable {
         jTextArea2 = new javax.swing.JTextArea();
 
         frame2.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        frame2.getContentPane().setBackground(new java.awt.Color(42, 99, 66));
         frame2.setResizable(true);
 
         jTable2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
-                        "Rank", "Player", "Total Score", "Game Played", "Avg Score"
+                new String[]{
+                        "Rank", "Player", "Total Score", "H-Scoring Word", "B-Word Count"
                 }
         ));
         jTable2.setRowHeight(35);
+
+        JTableHeader header = jTable2.getTableHeader();
+        header.setFont(new java.awt.Font("Tahoma", 0, 16));
+        header.setBackground(new java.awt.Color(255, 204, 51));
+
         jScrollPane2.setViewportView(jTable2);
 
         jTable3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
-                        "Team", "Cumulative", "Average", "Longest Word", "Wins", "Tiles", "Losses", "H Per Game", "B-Word Count"
+                new String[]{
+                        "Team", "Cumulative", "Average", "Longest Word", "Wins", "Tiles", "Losses", "Highest Word Score", "B-Word Count"
                 }
         ));
         jTable3.setRowHeight(35);
+
+        JTableHeader header3 = jTable3.getTableHeader();
+        header3.setFont(new java.awt.Font("Tahoma", 0, 16));
+        header3.setBackground(new java.awt.Color(255, 204, 51));
+
         jScrollPane3.setViewportView(jTable3);
 
         jTable4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTable4.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
-                        "Team", "Stats"
+                new String[]{
+                        "Team", "Average Score"
                 }
         ));
         jTable4.setRowHeight(35);
+
+        JTableHeader header4 = jTable4.getTableHeader();
+        header4.setFont(new java.awt.Font("Tahoma", 0, 16));
+        header4.setBackground(new java.awt.Color(255, 204, 51));
+
         jScrollPane5.setViewportView(jTable4);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 204, 51));
         jLabel1.setText("Green");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 204, 51));
         jLabel3.setText("Statistics");
 
         jTable1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
+                new Object[][]{
 
                 },
-                new String [] {
-                        "Rank", "Player", "Total Score", "Game Played", "Avg Score"
+                new String[]{
+                        "Rank", "Player", "Total Score", "H-Scoring Word", "B-Word Count"
                 }
         ));
         jTable1.setRequestFocusEnabled(false);
         jTable1.setRowHeight(35);
+
+        JTableHeader header2 = jTable1.getTableHeader();
+        header2.setFont(new java.awt.Font("Tahoma", 0, 16));
+        header2.setBackground(new java.awt.Color(255, 204, 51));
+
         jScrollPane6.setViewportView(jTable1);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 204, 51));
         jLabel4.setText("T Test:");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 204, 51));
         jLabel2.setText("Gold");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 204, 51));
         jLabel6.setText("Leaderboard");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 204, 51));
         jLabel5.setText("Conclusion:");
 
-        jTextArea2.setColumns(10);
-        jTextArea2.setFont(new java.awt.Font("Comic Sans MS", 1, 12));
+        jTextArea2.setBackground(new java.awt.Color(255, 204, 51));
+        jTextArea2.setColumns(20);
+        jTextArea2.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
         jTextArea2.setRows(5);
         jScrollPane4.setViewportView(jTextArea2);
 
@@ -600,7 +636,20 @@ public class BoardGUI implements Runnable {
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel2)
-                                .addGap(390, 390, 390))
+                                .addGap(319, 319, 319))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jScrollPane3)
+                                .addContainerGap())
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addComponent(jLabel6)
+                                                .addGap(626, 626, 626))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addComponent(jLabel3)
+                                                .addGap(626, 626, 626))))
                         .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
@@ -611,58 +660,50 @@ public class BoardGUI implements Runnable {
                                                 .addGap(44, 44, 44)
                                                 .addComponent(jLabel5)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, Short.MAX_VALUE))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addContainerGap()
                                                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(585, 585, 585)
-                                                .addComponent(jLabel6))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(617, 617, 617)
-                                                .addComponent(jLabel3))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1331, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap())
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(jLabel6)
-                                .addGap(22, 22, 22)
+                                .addGap(45, 45, 45)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel2)
                                         .addComponent(jLabel1))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
                                 .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(39, 39, 39)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 144, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(jLabel4)
                                                 .addGap(81, 81, 81))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(82, 82, 82)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGroup(layout.createSequentialGroup()
-                                                                        .addComponent(jLabel5)
-                                                                        .addGap(59, 59, 59))))
-                                                .addContainerGap(44, Short.MAX_VALUE))))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(54, 54, 54))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addComponent(jLabel5)
+                                                .addGap(81, 81, 81))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(63, 63, 63))))
         );
 
         frame2.pack();
+        frame2.setSize(1440, 900);
         frame2.setVisible(true);
 
     }
@@ -792,53 +833,53 @@ public class BoardGUI implements Runnable {
     }
 
 
-//**************************** This is a test class*************************//
-public class testUser {
+    //**************************** This is a test class*************************//
+    public class testUser {
 
-    String name;
-    String longestWord;
-    String team;
-    String totalScore;
-    int gamePlayed;
-    int averageScore;
-    int teamCmuScore;
-    int teamCumAverage;
-    int wins;
-    int tiles;
-    int losses;
-    int highestPerGame;
-    int bonusWordCount;
-    int rank;
-    String value;
+        String name;
+        String longestWord;
+        String team;
+        String totalScore;
+        String plongestWord;
+        int pbonusWordCount;
+        int teamCmuScore;
+        int teamCumAverage;
+        int wins;
+        int tiles;
+        int losses;
+        int highestPerGame;
+        int bonusWordCount;
+        int rank;
+        String value;
 
-    public testUser(int r, String n, String ts, int gp, int as) {
-        rank = r;
-        name = n;
-        totalScore = ts;
-        gamePlayed = gp;
-        averageScore = as;
+        public testUser(int r, String n, String ts, String plw, int pbwc) {
+            rank = r;
+            name = n;
+            totalScore = ts;
+            plongestWord = plw;
+            pbonusWordCount = pbwc;
+
+        }
+
+        public testUser(String tm, int tcs, int tca, String lw, int w, int t, int l, int hpg, int bwc) {
+            team = tm;
+            teamCmuScore = tcs;
+            teamCumAverage = tca;
+            longestWord = lw;
+            wins = w;
+            tiles = t;
+            losses = l;
+            highestPerGame = hpg;
+            bonusWordCount = bwc;
+        }
+
+        public testUser(String t, String v) {
+            team = t;
+            value = v;
+        }
+
 
     }
-
-    public testUser(String tm, int tcs, int tca, String lw, int w, int t, int l, int hpg, int bwc) {
-        team = tm;
-        teamCmuScore = tcs;
-        teamCumAverage = tca;
-        longestWord = lw;
-        wins = w;
-        tiles = t;
-        losses = l;
-        highestPerGame = hpg;
-        bonusWordCount =bwc;
-    }
-
-    public testUser(String t, String v) {
-        team = t;
-        value = v;
-    }
-
-
-}
 
     public ArrayList TopPlayer(String teamName) {
         ArrayList<testUser> list = new ArrayList<>();
@@ -847,25 +888,12 @@ public class testUser {
         temp = dbCall.getTopPlayersByTeam(5, teamName);
         testUser[] statList = new testUser[temp.length];
         for(int i = 0; i < temp.length; i++) {
-            testUser t = new testUser(i, temp[i][0], temp[i][2], 0, 0);
+            testUser t = new testUser(i, temp[i][0], temp[i][2], "GUI Sucks", 0);
             statList[i] = t;
         }
         for(int i = 0; i < temp.length; i++) {
             list.add(statList[i]);
         }
-
-        return list;
-    }
-
-    public ArrayList TTest() {
-        ArrayList<testUser> list = new ArrayList<>();
-        QueryClass dbCall = new QueryClass();
-
-        testUser t1 = new testUser("Gold", Double.toString(dbCall.getTotalGameScoreAverageForTeam("gold")));
-        testUser t2 = new testUser("Green", Double.toString(dbCall.getTotalGameScoreAverageForTeam("green")));
-
-        list.add(t1);
-        list.add(t2);
         return list;
     }
 
@@ -874,7 +902,6 @@ public class testUser {
         QueryClass dbCall = new QueryClass();
         String teamName = "green";
         String teamName2 = "gold";
-        int test = dbCall.getTeamCumulative(teamName);
         testUser t1 = new testUser(teamName,dbCall.getTeamCumulative(teamName),0, dbCall.getTeamLongestWord(teamName),dbCall.getTeamWinCount(teamName), dbCall.getTeamTieCount(teamName), dbCall.getTeamLoseCount(teamName), dbCall.getHighestGameSessionScore(teamName), dbCall.getTeamBonuses(teamName));
         testUser t2 = new testUser(teamName2,dbCall.getTeamCumulative(teamName2),0, dbCall.getTeamLongestWord(teamName2),dbCall.getTeamWinCount(teamName2), dbCall.getTeamTieCount(teamName2), dbCall.getTeamLoseCount(teamName2), dbCall.getHighestGameSessionScore(teamName2), dbCall.getTeamBonuses(teamName2));
 
@@ -884,7 +911,40 @@ public class testUser {
 
     }
 
+    public ArrayList TTest() {
+        ArrayList<testUser> list = new ArrayList<>();
+        QueryClass dbCalls = new QueryClass();
+        testUser t1 = new testUser("Gold", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("gold")));
+        testUser t2 = new testUser("Green", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("green")));
+
+        list.add(t1);
+        list.add(t2);
+        return list;
+    }
+
     public String TestConclusion() {
+        QueryClass dbCalls = new QueryClass();
+        String team = " ";
+        String notSig = "There is not a significant difference between the teams.";
+        String sig = "There is a significant difference between the teams.";
+        if(dbCalls.tTestResults()>= 0.05) {
+            double greenAvg;
+            double goldAvg;
+            greenAvg = dbCalls.getTotalGameScoreAverageForTeam("green");
+            goldAvg = dbCalls.getTotalGameScoreAverageForTeam("gold");
+            System.out.println(greenAvg + " " + goldAvg);
+            if(greenAvg > goldAvg) {
+                team = "Green team is statistically better.";
+            } else {
+                team = "Gold team is statistically better.";
+            }
+            return sig + "\n" + team;
+        } else {
+            return notSig;
+        }
+    }
+
+    public String TestGameLog() {
         String word = "The T-test is good";
         return word;
     }
@@ -893,29 +953,29 @@ public class testUser {
 
     public void addRowToTable1() {
         DefaultTableModel modelTest = (DefaultTableModel) jTable1.getModel();
-        ArrayList<testUser> list = TopPlayer("green");
+        ArrayList<testUser> list = TopPlayer("Gold");
         Object rowData[] = new Object[5];
         for (int i = 0; i < list.size(); i++) {
             //**rowData[0] = list.get(i).methodName;
             rowData[0] = list.get(i).rank;
             rowData[1] = list.get(i).name;
             rowData[2] = list.get(i).totalScore;
-            rowData[3] = list.get(i).gamePlayed;
-            rowData[4] = list.get(i).averageScore;
+            rowData[3] = list.get(i).plongestWord;
+            rowData[4] = list.get(i).pbonusWordCount;
             modelTest.addRow(rowData);
         }
     }
 
     public void addRowToTable2() {
         DefaultTableModel modelTest = (DefaultTableModel) jTable2.getModel();
-        ArrayList<testUser> list = TopPlayer("gold");
+        ArrayList<testUser> list = TopPlayer("Green");
         Object rowData[] = new Object[5];
         for (int i = 0; i < list.size(); i++) {
             rowData[0] = list.get(i).rank;
             rowData[1] = list.get(i).name;
             rowData[2] = list.get(i).totalScore;
-            rowData[3] = list.get(i).gamePlayed;
-            rowData[4] = list.get(i).averageScore;
+            rowData[3] = list.get(i).plongestWord;
+            rowData[4] = list.get(i).pbonusWordCount;
             modelTest.addRow(rowData);
         }
     }
@@ -952,5 +1012,10 @@ public class testUser {
     public void setTTestConclusion() {
         String word = TestConclusion();
         jTextArea2.append(word);
+    }
+
+    public void printGameLog(String message){
+        gameLogArea.append( message + "\n");
+        gameLogArea.setCaretPosition(gameLogArea.getDocument().getLength());
     }
 }

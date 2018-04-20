@@ -32,8 +32,7 @@ public class Session {
     private int currentTurn;
     private int greenScore;
     private int goldScore;
-    private Timer playerTimer;
-    private Timer aiTimer;
+    private Timer timer;
     private int turnTimeSec;
     private  int aiWaitSec;
     private int aiWaitNoPlayers;
@@ -47,9 +46,8 @@ public class Session {
         users = new User[4];
         playedMoves = new ArrayList();
         dbQueries = new QueryClass();
+        timer = new Timer();
         currentTurn = 0;
-        playerTimer = new Timer();
-        aiTimer = new Timer();
         turnTimeSec = 60;
         aiWaitSec = 3;
         aiWaitNoPlayers = 60;
@@ -74,6 +72,14 @@ public class Session {
             Log.getLogger().logException(e);
             e.printStackTrace();
         }
+
+        //this runs when program is closing
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+             public void run() {
+                 timer.cancel();
+             }
+         }
+        );
 
 
     }
@@ -175,7 +181,7 @@ public class Session {
                     || ((i == 1 || i == 3) && team.toUpperCase().equals("GOLD"))) {
                 //cancel ai timer
                 if(i == currentTurn){
-                    aiTimer.cancel();
+                    timer.cancel();
                 }
                 //return generated tiles back in bag
                 TileGenerator.getInstance().putInBag(newPlayer.getHand());
@@ -184,6 +190,7 @@ public class Session {
                 users[i] = newPlayer;
                 setPlayerTimer();
                 gui.updateUsers(users);
+                gui.printGameLog(newPlayer.getUsername() + " has joined " + team + " Team");
                 return "JOINED";
             }
         }
@@ -333,6 +340,7 @@ public class Session {
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             skippedTimes = 0;
+            gui.printGameLog(user.getUsername() + " played " + word + " (" + score + " points)");
             nextTurn();
             return "VALID";
         } else if ((int) result[0] == 2) {
@@ -355,9 +363,11 @@ public class Session {
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             skippedTimes = 0;
+            gui.printGameLog(user.getUsername() + " played BONUS " + word + " (" + score + " points)");
             nextTurn();
             return "bonus";
         } else if ((int) result[0] == -1) {
+            gui.printGameLog(user.getUsername() + " is uncultured");
             return "profane";
         }
         return "Invalid";
@@ -379,9 +389,11 @@ public class Session {
                 if (player.getMacAddress().equals(mac)) {
                     //cancel timer if it's player's turn
                     if(currentTurn == i){
-                        playerTimer.cancel();
+                        timer.cancel();
                     }
                     Tile[] hand = users[i].getHand();
+                    //DB Stats Call
+                    sendScoreStat(users[i]);
                     //replace player with skycat
                     SkyCat skyCat = new SkyCat(Session.getSession());
                     //put generated tiles back
@@ -394,6 +406,7 @@ public class Session {
                         //play instead of player
                         setAiTimer();
                     }
+                    gui.printGameLog(player.getUsername() + " leaves the game");
                     return "removed";
                 }
             }
@@ -434,6 +447,7 @@ public class Session {
                     player.setHand(hand);
                     nextTurn();
                     skippedTimes ++;
+                    gui.printGameLog(player.getUsername() + " exchanged some tiles");
                     return "Exchanged: " + count + " tiles";
                 }
             }
@@ -449,6 +463,7 @@ public class Session {
         }
         user.setHand(hand);
         gui.updateBoard(board.getBoard());
+        gui.printGameLog(user.getUsername() + " exchanged all tiles");
         skippedTimes ++;
         nextTurn();
     }
@@ -523,7 +538,7 @@ public class Session {
      */
     private void nextTurn() {
         if(users[currentTurn].getClass() == Player.class) {
-            playerTimer.cancel();
+            timer.cancel();
         }
 
         //if skipped 4 times - game ended
@@ -556,29 +571,8 @@ public class Session {
     }
 
     private void setPlayerTimer(){
-        if(users[currentTurn].getClass() == Player.class) {
-            playerTimer = new Timer();
-            playerTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    skippedTimes ++;
-                    //check if player skipped 3 times
-                    if (users[currentTurn].getSkipped() == 2) {
-                        //replace player with skycat
-                        Tile[] hand = users[currentTurn].getHand();
-                        SkyCat skyCat = new SkyCat(Session.getSession());
-                        //put generated tiles back in bag
-                        TileGenerator.getInstance().putInBag(skyCat.getHand());
-                        skyCat.setHand(hand);
-                        users[currentTurn] = skyCat;
-                        setAiTimer();
-                    } else {
-                        users[currentTurn].setSkipped(users[currentTurn].getSkipped() + 1);
-                        nextTurn();
-                    }
-                }
-            }, turnTimeSec * 1000);
-        }
+        timer = new Timer();
+        timer.schedule(new playerTimerTask(session), turnTimeSec * 1000);
     }
 
     private void setAiTimer(){
@@ -596,23 +590,8 @@ public class Session {
         if(arePlayersJoined){
             delay = aiWaitSec;
         }
-
-        aiTimer = new Timer();
-        aiTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                    SkyCat skyCat = (SkyCat) session.users[currentTurn];
-                    boolean played = aiPlayWord(skyCat);
-                    if(played) {
-                        //reset skip counter
-                        skyCat.setSkipped(0);
-                    } else {
-                        System.out.println("AI Skipped");
-                        exchangeAllTiles(users[currentTurn]);
-                    }
-
-            }
-        }, delay * 1000);
+        timer = new Timer();
+        timer.schedule(new aiTimerTask(session), delay * 1000);
     }
 
     private void replaceTiles(User user, String letters) {
@@ -698,5 +677,86 @@ public class Session {
         session = null;
         Session.getSession();
 
+    }
+
+    private void sendScoreStat(User player) {
+        Player temp = (Player) player;
+        dbQueries.updatePlayerCumulative("test", temp.getScore());
+        System.out.println(player.getUsername() + " " + player.getScore());
+    }
+
+    private void sendMoveStat() {
+
+    }
+
+    private void aiRun(){
+        SkyCat skyCat = (SkyCat) session.users[currentTurn];
+        boolean played = aiPlayWord(skyCat);
+        if(played) {
+            //reset skip counter
+            skyCat.setSkipped(0);
+        } else {
+            System.out.println("AI Skipped");
+            exchangeAllTiles(users[currentTurn]);
+        }
+    }
+
+    private void playerTimeExpired(){
+        skippedTimes ++;
+        //check if player skipped 3 times
+        if (users[currentTurn].getSkipped() == 2) {
+            //DB Stats Call
+            sendScoreStat(users[currentTurn]);
+            //replace player with skycat
+            Tile[] hand = users[currentTurn].getHand();
+            SkyCat skyCat = new SkyCat(Session.getSession());
+            //put generated tiles back in bag
+            TileGenerator.getInstance().putInBag(skyCat.getHand());
+            skyCat.setHand(hand);
+            gui.printGameLog(users[currentTurn].getUsername() + " leaves the game");
+            users[currentTurn] = skyCat;
+            setAiTimer();
+        } else {
+            users[currentTurn].setSkipped(users[currentTurn].getSkipped() + 1);
+            gui.printGameLog(users[currentTurn].getUsername() + " was thinking for too long");
+            nextTurn();
+        }
+    }
+
+    /**
+     * Checks if user with provided mac address exists in database
+     * @param mac
+     * @return
+     */
+    public String amIregistered(String mac){
+        if(dbQueries.findUser(mac) != null){
+            return "TRUE";
+        } else {
+            return "FALSE";
+        }
+    }
+
+    class aiTimerTask extends TimerTask {
+        Session session;
+
+        aiTimerTask(Session session) {
+            this.session = session;
+        }
+
+        public void run() {
+            session.aiRun();
+        }
+    }
+
+    class playerTimerTask extends TimerTask {
+        Session session;
+
+        playerTimerTask(Session session) {
+            this.session = session;
+        }
+
+        public void run() {
+            session.playerTimeExpired();
+        }
     }
 }
