@@ -16,6 +16,7 @@ import Session.Start;
 import Session.Session;
 import static Models.GameConstants.*;
 import java.awt.Color;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -1005,5 +1006,12 @@ public class BoardGUI implements Runnable {
     public void printGameLog(String message){
         gameLogArea.append( message + "\n");
         gameLogArea.setCaretPosition(gameLogArea.getDocument().getLength());
+    }
+
+    public void closeFrame(){
+        frame.setVisible(false);
+        frame2.setVisible(false);
+        frame.dispose();
+        frame2.dispose();
     }
 }

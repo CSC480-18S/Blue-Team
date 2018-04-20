@@ -73,12 +73,8 @@ public class Session {
             e.printStackTrace();
         }
 
-        //this runs when program is closing
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-             public void run() {
-                 timer.cancel();
-             }
-         }
+        /* this runs when program is closing */
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> timer.cancel())
         );
 
 
@@ -328,7 +324,7 @@ public class Session {
                 tilesForScoring[i] = tg.getTile(scoringWord.charAt(i));
             }
             Move scoringMove = (Move) result[1];
-            scoringMove.setWord(tilesForScoring);
+            //scoringMove.setWord(tilesForScoring);
             int score = calculateMovePoints(scoringMove);
             displayMoveStats((Move) result[1], score);
             user.setScore(user.getScore() + score);
@@ -340,7 +336,9 @@ public class Session {
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             skippedTimes = 0;
-            gui.printGameLog(user.getUsername() + " played " + word + " (" + score + " points)");
+            Move move = (Move)result[1];
+            String temp = move.getWordString();
+            gui.printGameLog(user.getUsername() + " played " + temp + " (" + score + " points)");
             nextTurn();
             return "VALID";
         } else if ((int) result[0] == 2) {
@@ -363,7 +361,9 @@ public class Session {
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             skippedTimes = 0;
-            gui.printGameLog(user.getUsername() + " played BONUS " + word + " (" + score + " points)");
+            Move move = (Move)result[1];
+            String temp = move.getWordString();
+            gui.printGameLog(user.getUsername() + " played BONUS " + temp + " (" + score + " points)");
             nextTurn();
             return "bonus";
         } else if ((int) result[0] == -1) {
@@ -675,6 +675,7 @@ public class Session {
     }
 
     private static void restartGame(){
+        session.gui.closeFrame();
         session = null;
         Session.getSession();
 
