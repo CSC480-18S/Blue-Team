@@ -28,7 +28,7 @@ public class Validator {
         int startX = move.getStartX();
         int startY = move.getStartY();
         boolean horizontal = move.isHorizontal();
-        
+
         // Ensure move does not extend off board
         if (horizontal && startX + move.getWordString().length() >
                 Session.getSession().getBoardAsSpaces().length) {
@@ -38,15 +38,16 @@ public class Validator {
             return new Object[] {0, move};
         } else if (startX < 0 || startY < 0)
             return new Object[] {0, move};
-        
+
         // Check that move connects to existing tiles
         if (!connectsToTiles(move)) {
             return new Object[] {0, move};
         }
-        
+
         // Get full word, appending any characters on the ends due to placement
-        move.setWord(getFullWord(startX, startY, horizontal, 
-                move.getWordString()));
+        if(!(move.getUser() instanceof Models.SkyCat))
+            move.setWord(getFullWord(startX, startY, horizontal,
+                move.getWord()));
         move.updateStartCoordinate(getTrueStart(move.getStartX(), move.getStartY(),move.isHorizontal()));
         startX = move.getStartX();
         startY = move.getStartY();
@@ -118,8 +119,9 @@ public class Validator {
                     }
                     //getting full vertical offshoot word
                     if(boardLocal[x+i][y0].getTile() != null) {
-                        Tile[] fullOffshootWord = getFullWord(x+i, y, false, String.valueOf(move.getWordString().charAt(i)));
-                        if (fullOffshootWord.length > 1)
+                        Tile temp[] = new Tile[1];
+                        temp[0] = move.getWord()[i];
+                        Tile[] fullOffshootWord = getFullWord(x+i, y, false, temp);                        if (fullOffshootWord.length > 1)
                             //creating move to add to list of offshoot moves
                             offshootMoves.add(new Move(x+i, y0, false, fullOffshootWord, move.getUser()));
                     }
@@ -142,7 +144,9 @@ public class Validator {
                     }
                     //getting full horizontal offshoot word
                     if(boardLocal[x0][y+i].getTile() != null) {
-                        Tile[] fullOffshootWord = getFullWord(x, y+i, true, String.valueOf(move.getWordString().charAt(i)));
+                        Tile temp[] = new Tile[1];
+                        temp[0] = move.getWord()[i];
+                        Tile[] fullOffshootWord = getFullWord(x, y+i, true, temp);
                         if (fullOffshootWord.length > 1)
                             //creating move and adding it to list of offshoot moves
                             offshootMoves.add(new Move(x0, y+i, true, fullOffshootWord, move.getUser()));
@@ -167,17 +171,17 @@ public class Validator {
             while (remaining > 0) {
                 if (boardLocal[x][y].getTile() != null
                         || (x > 0 && boardLocal[x-1][y].getTile() != null)
-                        || (x < GameConstants.BOARD_WIDTH-1 
+                        || (x < GameConstants.BOARD_WIDTH-1
                         && boardLocal[x+1][y].getTile() != null)
                         || (y > 0 && boardLocal[x][y-1].getTile() != null)
-                        || (y < GameConstants.BOARD_WIDTH-1 
+                        || (y < GameConstants.BOARD_WIDTH-1
                         && boardLocal[x][y+1].getTile() != null))
                     return true;
                 else if (hor && x < GameConstants.BOARD_WIDTH)
                     x++;
                 else if (!hor && y < GameConstants.BOARD_WIDTH)
                     y++;
-                // Move extends off board
+                    // Move extends off board
                 else
                     return false;
                 remaining--;
@@ -233,48 +237,87 @@ public class Validator {
         -Bill Cook
      */
     private Tile[] getFullWord(int startX, int startY, boolean horizontal,
-            String word) {
-        String leftChars = "";
-        String rightChars = "";
-        boolean finished = false;
+                               Tile placedTiles[]) {
+        System.out.print(placedTiles.length + " ");
+        for(Tile each : placedTiles)
+            System.out.print(each.getLetter() + " ");
+        System.out.print("\n");
+        ArrayList<Tile> newWord = new ArrayList<>();
         Space[][] boardLocal = Session.getSession().getBoardAsSpaces();
-        TileGenerator tg = TileGenerator.getInstance();
+        int index = 0;
 
-        int x = startX;
-        int y = startY;
-        if (horizontal) {
-            while (x > 0 && boardLocal[x - 1][y].getTile() != null) {
-                leftChars = boardLocal[x - 1][y].getTile().getLetter()
-                        + leftChars;
-                x--;
+        if(horizontal) {
+            //getting tiles to the left of the starting placed tile
+            for (int i = startX - 1; i >= 0; i--) {
+                if(boardLocal[i][startY].getTile() != null)
+                    newWord.add(0, boardLocal[i][startY].getTile());
+                else
+                    break;
             }
-            x = startX + word.length()-1;
-            while (x + 1< boardLocal.length
-                    && boardLocal[x + 1][y].getTile() != null) {
-                rightChars += boardLocal[x + 1][y].getTile().getLetter();
-                x++;
+
+            //inserting starting tile into word
+            newWord.add(placedTiles[index]);
+            index++;
+
+            //adding tiles to right of start to word
+            for(int i = startX + 1; i < boardLocal[0].length; i++){
+                //if a tile is on the board already here insert it into word
+                if(boardLocal[i][startY].getTile() != null)
+                    newWord.add(boardLocal[i][startY].getTile());
+                    //if no tile is on the board at this location take next letter from placed tiles
+                else if(index < placedTiles.length) {
+                    newWord.add(placedTiles[index]);
+                    index++;
+                }
+                //if all placed tiles are used and the board space is null exit loop
+                else
+                    break;
             }
-            finished = true;
-        } else {
-            while (y > 0 && boardLocal[x][y - 1].getTile() != null) {
-                leftChars = boardLocal[x][y - 1].getTile().getLetter()
-                        + leftChars;
-                y--;
-            }
-            y = startY + word.length()-1;
-            while (y + 1 < boardLocal[0].length
-                    && boardLocal[x][y + 1].getTile() != null) {
-                rightChars += boardLocal[x][y + 1].getTile().getLetter();
-                y++;
-            }
-            finished = true;
         }
-        word = leftChars + word + rightChars;
-        Tile[] wordTiles = new Tile[word.length()];
-        for (int i = 0; i < word.length(); i++)
-            wordTiles[i] = tg.getTile(word.charAt(i));
-        
-        return wordTiles;
+        else{
+            //getting tiles above of first placed tile
+            for(int i = startY - 1; i >= 0; i--){
+                //if tile exists at current coordinate on board insert it at the begining of word
+                if(boardLocal[startX][i].getTile() != null)
+                    newWord.add(0, boardLocal[startX][i].getTile());
+                    //if no tile exists exit loop
+                else
+                    break;
+            }
+
+            //insert first placed tile into word
+            newWord.add(placedTiles[index]);
+            index++;
+
+            //getting tiles below first placed tile
+            for(int i = startY + 1; i < boardLocal[0].length; i++){
+                //if a tile exists on board at the current position append it to end of new word
+                if(boardLocal[startX][i].getTile() != null)
+                    newWord.add(boardLocal[startX][i].getTile());
+                    //if no tile exists on the board at this location and another letter remains to be used in the placed tiles
+                    //append the placed tile to the end of the word
+                else if(index < placedTiles.length){
+                    newWord.add(placedTiles[index]);
+                    index++;
+                }
+                //if no tile exists on the board at this location and all placed tiles have been used then exit loop
+                else
+                    break;
+            }
+
+
+        }
+
+        //converting ArrayList to array and returning it
+        Tile returnWord[] = new Tile[newWord.size()];
+        for(int i = 0; i < newWord.size(); i++) {
+            returnWord[i] = newWord.get(i);
+        }
+        System.out.println("Full Word Played");
+        for(Tile each : newWord)
+            System.out.print(each.getLetter() + " ");
+        System.out.println("\n");
+        return returnWord;
     }
 
     /*
@@ -282,7 +325,7 @@ public class Validator {
         -Bill Cook
      */
     private int checkPlacement(int x, int y, boolean horizontal,
-            String remaining) {
+                               String remaining) {
         if (remaining.length() == 0) {
             return 1;
         } else {
