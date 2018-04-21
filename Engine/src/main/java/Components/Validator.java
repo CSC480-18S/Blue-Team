@@ -45,9 +45,12 @@ public class Validator {
         }
 
         // Get full word, appending any characters on the ends due to placement
-        if(!(move.getUser() instanceof Models.SkyCat))
-            move.setWord(getFullWord(startX, startY, horizontal,
-                    move.getWord()));
+        if(!(move.getUser() instanceof Models.SkyCat)) {
+            move.setWord(getFullWord(startX, startY, horizontal, move.getWord()));
+        }
+        else{
+            move.setWord(getSkyCatFullWord(move));
+        }
         move.updateStartCoordinate(getTrueStart(move.getStartX(), move.getStartY(),move.isHorizontal()));
         startX = move.getStartX();
         startY = move.getStartY();
@@ -71,8 +74,40 @@ public class Validator {
             return new Object[] {0, move};
 
         //generating offshoot moves and adding them to the validated move
-        move.setOffshootMoves(getOffshootMoves(move));
-        return new Object[] {valid, move};
+        if(checkForOverwrite(move) == true) {
+            move.setOffshootMoves(getOffshootMoves(move));
+            return new Object[]{valid, move};
+        }
+        else
+            return new Object[]{0, move};
+    }
+
+    private boolean checkForOverwrite(Move move){
+        boolean clearUnder = true;
+        Space boardLocal[][] = Session.getSession().getBoardAsSpaces();
+        if(move.isHorizontal()){
+            String word = move.getWordString();
+            int y = move.getStartY();
+            int xIndex = move.getStartX();
+            for(int i = 0; i < move.getWordString().length(); i++){
+                if(boardLocal[xIndex][y].getTile() != null && boardLocal[xIndex][y].getTile().getLetter() != word.charAt(i))
+                    return false;
+                else
+                    xIndex++;
+            }
+        }
+        else{
+            String word = move.getWordString();
+            int yIndex = move.getStartY();
+            int x = move.getStartX();
+            for(int i = 0; i < move.getWordString().length(); i++){
+                if(boardLocal[x][yIndex].getTile() != null && boardLocal[x][yIndex].getTile().getLetter() != word.charAt(i))
+                    return false;
+                else
+                    yIndex++;
+            }
+        }
+        return clearUnder;
     }
 
     private int[] getTrueStart(int x0, int y0, boolean horiz){
@@ -229,6 +264,37 @@ public class Validator {
         }
 
         return 1;
+    }
+
+    private Tile[] getSkyCatFullWord(Move move){
+        ArrayList<Tile> newWord = new ArrayList<>();
+        for(Tile each : move.getWord()){
+            newWord.add(each);
+        }
+        Space boardLocal[][] = Session.getSession().getBoardAsSpaces();
+        if(move.isHorizontal()){
+            int xIndex = move.getStartX()+move.getWordString().length();
+            int y = move.getStartY();
+            while(xIndex + 1 < boardLocal[0].length && boardLocal[xIndex + 1][y].getTile() != null){
+                xIndex++;
+                newWord.add(boardLocal[xIndex][y].getTile());
+            }
+        }
+        else{
+            int yIndex = move.getStartY()+move.getWordString().length();
+            int x = move.getStartX();
+            while(yIndex + 1 < boardLocal[0].length && boardLocal[x][yIndex+1].getTile() != null){
+                yIndex++;
+                newWord.add(boardLocal[x][yIndex].getTile());
+            }
+        }
+
+        Tile word[] = new Tile[newWord.size()];
+        for(int i = 0; i < newWord.size(); i++){
+            word[i] = newWord.get(i);
+        }
+
+        return word;
     }
 
     /*
