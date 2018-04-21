@@ -402,6 +402,8 @@ public class Session {
                     if(currentTurn == i){
                         timer.cancel();
                     }
+                    //DB Stats Call
+                    sendScoreStat(users[i]);
                     if(aiRun) {
                         Tile[] hand = users[i].getHand();
                         //replace player with skycat
@@ -410,9 +412,9 @@ public class Session {
                         TileGenerator.getInstance().putInBag(skyCat.getHand());
                         skyCat.setHand(hand);
                         users[i] = skyCat;
+                    } else {
+                        users[i] = null;
                     }
-                    //DB Stats Call
-                    sendScoreStat(users[i]);
                     gui.setTurn(currentTurn);
                     gui.updateUsers(users);
                     if(currentTurn == i && users[i] != null && users[i].getClass() == SkyCat.class) {
@@ -645,7 +647,7 @@ public class Session {
             if (users.length >= turn)
             {
                 // Check if real live player
-                if (users[turn].getClass() == Player.class)
+                if (users[turn] != null && users[turn].getClass() == Player.class)
                 {
                     // Check if its this players turn
                     if (((Player)users[turn]).getMacAddress().equals(mac)) {
