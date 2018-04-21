@@ -16,6 +16,7 @@ import Session.Start;
 import Session.Session;
 import static Models.GameConstants.*;
 import java.awt.Color;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -911,12 +912,20 @@ public class BoardGUI implements Runnable {
     public ArrayList TTest() {
         ArrayList<testUser> list = new ArrayList<>();
         QueryClass dbCalls = new QueryClass();
-        testUser t1 = new testUser("Gold", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("gold")));
-        testUser t2 = new testUser("Green", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("green")));
+        if(dbCalls.getTotalGameScoreAverageForTeam("gold").isNaN() || dbCalls.getTotalGameScoreAverageForTeam("green").isNaN()) {
+            testUser t1 = new testUser("gold", "0");
+            testUser t2 = new testUser("green", "0");
+            list.add(t1);
+            list.add(t2);
+            return list;
+        } else {
+            testUser t1 = new testUser("Gold", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("gold")));
+            testUser t2 = new testUser("Green", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("green")));
 
-        list.add(t1);
-        list.add(t2);
-        return list;
+            list.add(t1);
+            list.add(t2);
+            return list;
+        }
     }
 
     public String TestConclusion() {
@@ -924,7 +933,7 @@ public class BoardGUI implements Runnable {
         String team = " ";
         String notSig = "There is not a significant difference between the teams.";
         String sig = "There is a significant difference between the teams.";
-        if(dbCalls.tTestResults()>= 0.05) {
+        if(dbCalls.tTestResults() != null && dbCalls.tTestResults() >= 0.05) {
             double greenAvg;
             double goldAvg;
             greenAvg = dbCalls.getTotalGameScoreAverageForTeam("green");
@@ -1005,5 +1014,12 @@ public class BoardGUI implements Runnable {
     public void printGameLog(String message){
         gameLogArea.append( message + "\n");
         gameLogArea.setCaretPosition(gameLogArea.getDocument().getLength());
+    }
+
+    public void closeFrame(){
+        frame.setVisible(false);
+        frame2.setVisible(false);
+        frame.dispose();
+        frame2.dispose();
     }
 }
