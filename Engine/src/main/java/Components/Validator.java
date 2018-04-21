@@ -275,17 +275,17 @@ public class Validator {
         if(move.isHorizontal()){
             int xIndex = move.getStartX()+move.getWordString().length();
             int y = move.getStartY();
-            while(xIndex + 1 < boardLocal[0].length && boardLocal[xIndex + 1][y].getTile() != null){
-                xIndex++;
+            while(xIndex < boardLocal[0].length && boardLocal[xIndex][y].getTile() != null){
                 newWord.add(boardLocal[xIndex][y].getTile());
+                xIndex++;
             }
         }
         else{
             int yIndex = move.getStartY()+move.getWordString().length();
             int x = move.getStartX();
-            while(yIndex + 1 < boardLocal[0].length && boardLocal[x][yIndex+1].getTile() != null){
-                yIndex++;
+            while(yIndex < boardLocal[0].length && boardLocal[x][yIndex].getTile() != null){
                 newWord.add(boardLocal[x][yIndex].getTile());
+                yIndex++;
             }
         }
 
