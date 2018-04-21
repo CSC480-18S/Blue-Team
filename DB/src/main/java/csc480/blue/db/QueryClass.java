@@ -1,5 +1,7 @@
 import java.sql.*;
 import java.util.ArrayList;
+
+import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.commons.math3.stat.inference.TTest;
 
 public class QueryClass {
@@ -114,6 +116,112 @@ public class QueryClass {
 		}
 	}
 
+	/**
+     * checks whether the user's stored mac address associated with the username matches the current_mac address,
+     *          whether the user name exist, whether the new user name is already taken; if conditions meets,
+     *          change the username associated with the mac address
+     *          this also updates the player username in the player_table
+     *
+     * @return true if changing operation successful
+     *          if the new uid is already taken, returns false;
+     *          if a username with a given username does not exist, returns false;
+     *          if the current mac address does not match the mac address stored on file, return false;
+     *          if database error, returns false
+     */
+    public Boolean changeUserName(String old_uid, String current_mac, String new_uid ){
+        if(userAlreadyExists(new_uid) || !userAlreadyExists(old_uid) || 
+                !getMacAddressByUserName(old_uid).equalsIgnoreCase(current_mac)){
+            System.out.println("DEBUG: doesnt meet the requirement");
+            return false;
+        }else{
+            // passing conditions -- username is changeable
+            String query = "UPDATE USER_TABLE SET uid=? WHERE mac_addr=?";
+            try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+                PreparedStatement preparedStmt = con.prepareStatement(query);
+                preparedStmt.setString(1,new_uid);
+                preparedStmt.setString(2,current_mac);
+                preparedStmt.executeUpdate();
+                //affect other usernames in the table as well, so do updates in the player table and player team as well
+                this.updateUsernameInPlayerTable(old_uid,new_uid);
+                this.updateUsernameInPlayerTeam(old_uid, new_uid);
+                return true;
+            } catch (SQLException se) {
+                se.printStackTrace();
+                return false;
+            }
+
+
+
+        }
+    }
+
+
+    /**
+     * changes in the player table resulted from user name change
+     * @param old_uid old user name
+     * @param new_uid new user name
+     * @return boolean indicating whether operation is successful. false when database error occur
+     */
+    private Boolean updateUsernameInPlayerTable(String old_uid, String new_uid){
+        String query = "UPDATE PLAYER_TABLE SET uid=? WHERE uid=?";
+        try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setString(1,new_uid);
+            preparedStmt.setString(2,old_uid);
+            preparedStmt.executeUpdate();
+
+            return true;
+        } catch (SQLException se) {
+            se.printStackTrace();
+            return false;
+        }
+
+    }
+
+    /**
+     * changes in the player team from user name change
+     * @param old_uid old username
+     * @param new_uid new username 
+     * @return whether operation is successful. false when database error occur
+     */
+
+    private Boolean updateUsernameInPlayerTeam(String old_uid, String new_uid){
+        String query = "UPDATE PLAYER_TEAM SET uid=? WHERE uid=?";
+        try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setString(1,new_uid);
+            preparedStmt.setString(2,old_uid);
+            preparedStmt.executeUpdate();
+
+            return true;
+        } catch (SQLException se) {
+            se.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * returns user mac address associated with the username
+     * @param username username
+     * @return the mac address that currently associates with the username
+     */
+    public String getMacAddressByUserName(String username){
+        String query = "SELECT mac_addr FROM USER_TABLE WHERE uid=?";
+
+        try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
+            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setString(1, username);
+            ResultSet rs = preparedStmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+            return null;
+        } catch (SQLException se) {
+            se.printStackTrace();
+            return null;
+        }
+    }
+	
 	/**
 	 * Get the top player's names and cumulative scores
 	 *
@@ -696,8 +804,12 @@ public class QueryClass {
 			ResultSet result = statement.executeQuery();
 			result.next();
 			Double sum = result.getDouble(1);
-			int gameCount = this.getGameTableCount();
-			return sum / gameCount;
+           		int gameCount = this.getGameTableCount();
+            		if(Double.isNaN(sum/gameCount)){
+               			return 0.0;
+           		}else{
+                		return sum/gameCount;
+            		}
 
 		} catch (SQLException se) {
 			se.printStackTrace();
@@ -1033,30 +1145,17 @@ public class QueryClass {
 	}
 
 	/*
-	 * Tie teams itterate tie count tname = tie team 1 tnname = tie team 2
+	 * Game ended in tie
 	 */
-	public void updateTie(String tname, String tnname) {
-		String query = "SELECT * FROM TEAM_TABLE WHERE team_name = ?";
-
-		try (Connection con = DriverManager.getConnection(dbAddress, dbUser, dbPass)) {
-			PreparedStatement preparedStmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_UPDATABLE);
-			for (int i = 0; i < 2; i++) {
-				if (i == 0) {
-					preparedStmt.setString(1, tname);
-					ResultSet rs = preparedStmt.executeQuery();
-					if (rs.next()) {
-						rs.updateInt("tie_count", (rs.getInt("tie_count") + 1));
-						rs.updateRow();
-					}
-				} else {
-					preparedStmt.setString(1, tnname);
-					ResultSet rs = preparedStmt.executeQuery();
-					if (rs.next()) {
-						rs.updateInt("tie_count", (rs.getInt("tie_count") + 1));
-						rs.updateRow();
-					}
-				}
+	public void updateTie() {
+		String query = "SELECT * FROM TEAM_TABLE WHERE team_name = 'gold' OR team_name = 'green'";
+		try (Connection conn = DriverManager.getConnection(dbAddress, dbUser, dbPass);
+				PreparedStatement preparedStmt = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
+						ResultSet.CONCUR_UPDATABLE)) {
+			ResultSet rs = preparedStmt.executeQuery();
+			while (rs.next()) {
+				rs.updateInt("tie_count", (rs.getInt("tie_count") + 1));
+				rs.updateRow();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1154,6 +1253,8 @@ public class QueryClass {
 			return 1.0 - pval;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return null;
+		} catch(NumberIsTooSmallException e) { //For empty database
 			return null;
 		}
 	}

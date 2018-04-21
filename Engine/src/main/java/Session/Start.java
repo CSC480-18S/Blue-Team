@@ -25,7 +25,7 @@ public class Start {
             System.out.println("IP: " + ip);
             String link = "http://" + ip + ":8080/blueteam";
             qrFile = new File("qr.png");
-            generateQRCodeImage(link, 150, 150, qrFile.getPath());
+            //generateQRCodeImage(link, 150, 150, qrFile.getPath());
 
         }catch (Exception e){
             e.printStackTrace();

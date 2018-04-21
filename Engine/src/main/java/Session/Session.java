@@ -32,12 +32,12 @@ public class Session {
     private int currentTurn;
     private int greenScore;
     private int goldScore;
-    private Timer playerTimer;
-    private Timer aiTimer;
+    private Timer timer;
     private int turnTimeSec;
     private  int aiWaitSec;
     private int aiWaitNoPlayers;
     private int skippedTimes;
+    private static boolean aiRun = true;
 
     private Session() {
         //Session.LogInfo("Initializing objects");
@@ -47,9 +47,8 @@ public class Session {
         users = new User[4];
         playedMoves = new ArrayList();
         dbQueries = new QueryClass();
+        timer = new Timer();
         currentTurn = 0;
-        playerTimer = new Timer();
-        aiTimer = new Timer();
         turnTimeSec = 60;
         aiWaitSec = 3;
         aiWaitNoPlayers = 60;
@@ -68,6 +67,12 @@ public class Session {
                     turnTimeSec = Integer.parseInt(param[1]);
                 } else if(param[0].equals("aiWaitSec")){
                     aiWaitSec = Integer.parseInt(param[1]);
+                }else if(param[0].equals("aiRun")){
+                    if(param[1].equals("true")){
+                        aiRun = true;
+                    }else if(param[1].equals("false")){
+                        aiRun = false;
+                    }
                 }
             }
         } catch (Exception e ){
@@ -75,22 +80,28 @@ public class Session {
             e.printStackTrace();
         }
 
+        /* this runs when program is closing */
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> timer.cancel())
+        );
+
 
     }
 
     public static Session getSession() {
         if (session == null) {
             session = new Session();
-            //adding SkyCats initially
-            for(int i =0; i < session.users.length; i++){
-                session.users[i] = new SkyCat(session);
-            }
-            session.gui.updateUsers(session.users);
-            session.gui.setTurn(session.currentTurn);
-            //play first move to start the game
+            if(aiRun) {
+                //adding SkyCats initially
+                for (int i = 0; i < session.users.length; i++) {
+                    session.users[i] = new SkyCat(session);
+                }
+                session.gui.updateUsers(session.users);
+                session.gui.setTurn(session.currentTurn);
+                //play first move to start the game
                 SkyCat skyCat1 = (SkyCat) session.users[0];
-               session.setAiTimer();
-            session.gui.updateHand(session.users);
+                session.setAiTimer();
+                session.gui.updateHand(session.users);
+            }
         }
         return session;
     }
@@ -171,19 +182,22 @@ public class Session {
 
         //check if any users are not initialized yet
         for (int i = 0; i < users.length; i++) {
-            if (users[i].getClass() == SkyCat.class && ((i == 0 || i == 2) && team.toUpperCase().equals("GREEN"))
+            if ((users[i] == null || users[i].getClass() == SkyCat.class) && ((i == 0 || i == 2) && team.toUpperCase().equals("GREEN"))
                     || ((i == 1 || i == 3) && team.toUpperCase().equals("GOLD"))) {
                 //cancel ai timer
-                if(i == currentTurn){
-                    aiTimer.cancel();
+                if(i == currentTurn && users[currentTurn] != null && users[i].getClass() == SkyCat.class){
+                    timer.cancel();
                 }
-                //return generated tiles back in bag
-                TileGenerator.getInstance().putInBag(newPlayer.getHand());
-                Tile[] hand = users[i].getHand();
-                newPlayer.setHand(hand);
+                if(users[currentTurn] != null && users[i].getClass() == SkyCat.class) {
+                    //return generated tiles back in bag
+                    TileGenerator.getInstance().putInBag(newPlayer.getHand());
+                    Tile[] hand = users[i].getHand();
+                    newPlayer.setHand(hand);
+                }
                 users[i] = newPlayer;
                 setPlayerTimer();
                 gui.updateUsers(users);
+                gui.printGameLog(newPlayer.getUsername() + " has joined " + team + " Team");
                 return "JOINED";
             }
         }
@@ -226,24 +240,6 @@ public class Session {
 
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
-        StringBuilder wordForScoring = new StringBuilder("");
-        StringBuilder wordForValidating = new StringBuilder("");
-        boolean wildCard = false;
-        for(char c : word.toCharArray()){
-            if(c == '_') {
-                wordForScoring.append("-");
-                wildCard = true;
-            }
-            else if(wildCard){
-                wildCard = false;
-                wordForValidating.append(c);
-            }
-            else{
-                wordForValidating.append(c);
-                wordForScoring.append(c);
-            }
-        }
-        word = wordForValidating.toString();
         String initialLetters = word;
         TileGenerator tg = TileGenerator.getInstance();
         // Check if word length is less than 11,
@@ -269,60 +265,31 @@ public class Session {
             }
 
         }
-
-        //this part appends middle part of the word, ai gives full word, so only for players
-        if(user.getClass() == Player.class) {
-            ArrayList<Character> chars = new ArrayList<>();
-            char[] arr = word.toCharArray();
-            for (int i = 0; i < arr.length; i++) {
-                chars.add(arr[i]);
+        ArrayList<Tile> wordTileBuilder = new ArrayList<>();
+        boolean wildCard = false;
+        for(char each : word.toCharArray()){
+            if(each == '_'){
+                wildCard = true;
             }
-
-            word = "";
-
-            int count = 0;
-            StringBuilder wordBuilder = new StringBuilder(word);
-            //walk through the board and if tile is already placed - append it
-            while (!chars.isEmpty()) {
-                if (horizontal) {
-                    if ((startX + count) < BOARD_WIDTH && board.getBoard()[startX + count][startY].getTile() != null) {
-                        wordBuilder.append(board.getBoard()[startX + count][startY].getTile().getLetter());
-                    } else {
-                        wordBuilder.append(chars.get(0));
-                        chars.remove(0);
-                    }
-                } else {
-                    if ((startY + count) < BOARD_WIDTH && board.getBoard()[startX][startY + count].getTile() != null) {
-                        wordBuilder.append(board.getBoard()[startX][startY + count].getTile().getLetter());
-                    } else {
-                        wordBuilder.append(chars.get(0));
-                        chars.remove(0);
-                    }
-                }
-
-                count++;
+            else if(wildCard){
+                wordTileBuilder.add(new Tile(each, 0));
+                wildCard = false;
             }
-            word = wordBuilder.toString();
+            else
+                wordTileBuilder.add(tg.getTile(each));
         }
-        Tile[] wordTiles = new Tile[word.length()];
 
-        for (int i = 0; i < word.length(); i++) {
 
-            wordTiles[i] = tg.getTile(word.charAt(i));
+        Tile[] wordTiles = new Tile[wordTileBuilder.size()];
+        for(int i = 0; i < wordTileBuilder.size(); i++){
+            wordTiles[i] = wordTileBuilder.get(i);
         }
 
         Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, wordTiles, user));
 
         if ((int) result[0] == 1) {
             board.placeWord(startX, startY, horizontal, word);
-            String scoringWord = wordForScoring.toString();
-            Tile[] tilesForScoring = new Tile[scoringWord.length()];
-            for(int i = 0; i < scoringWord.length(); i++){
-                tilesForScoring[i] = tg.getTile(scoringWord.charAt(i));
-            }
-            Move scoringMove = (Move) result[1];
-            scoringMove.setWord(tilesForScoring);
-            int score = calculateMovePoints(scoringMove);
+            int score = calculateMovePoints((Move)result[1]);
             displayMoveStats((Move) result[1], score);
             user.setScore(user.getScore() + score);
             if (user instanceof Player) {
@@ -333,18 +300,14 @@ public class Session {
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             skippedTimes = 0;
+            Move move = (Move)result[1];
+            String temp = move.getWordString();
+            gui.printGameLog(user.getUsername() + " played " + temp + " (" + score + " points)");
             nextTurn();
             return "VALID";
         } else if ((int) result[0] == 2) {
             board.placeWord(startX, startY, horizontal, word);
-            String scoringWord = wordForScoring.toString();
-            Tile[] tilesForScoring = new Tile[scoringWord.length()];
-            for(int i = 0; i < scoringWord.length(); i++){
-                tilesForScoring[i] = tg.getTile(scoringWord.charAt(i));
-            }
-            Move scoringMove = (Move) result[1];
-            scoringMove.setWord(tilesForScoring);
-            int score = calculateMovePoints(scoringMove) * 2;
+            int score = calculateMovePoints((Move)result[1]) * 2;
             displayMoveStats((Move) result[1], score);
             user.setScore(user.getScore() + score);
             if (user instanceof Player) {
@@ -355,9 +318,13 @@ public class Session {
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             skippedTimes = 0;
+            Move move = (Move)result[1];
+            String temp = move.getWordString();
+            gui.printGameLog(user.getUsername() + " played BONUS " + temp + " (" + score + " points)");
             nextTurn();
             return "bonus";
         } else if ((int) result[0] == -1) {
+            gui.printGameLog(user.getUsername() + " is uncultured");
             return "profane";
         }
         return "Invalid";
@@ -379,21 +346,28 @@ public class Session {
                 if (player.getMacAddress().equals(mac)) {
                     //cancel timer if it's player's turn
                     if(currentTurn == i){
-                        playerTimer.cancel();
+                        timer.cancel();
                     }
-                    Tile[] hand = users[i].getHand();
-                    //replace player with skycat
-                    SkyCat skyCat = new SkyCat(Session.getSession());
-                    //put generated tiles back
-                    TileGenerator.getInstance().putInBag(skyCat.getHand());
-                    skyCat.setHand(hand);
-                    users[i] = skyCat;
+                    //DB Stats Call
+                    sendScoreStat(users[i]);
+                    if(aiRun) {
+                        Tile[] hand = users[i].getHand();
+                        //replace player with skycat
+                        SkyCat skyCat = new SkyCat(Session.getSession());
+                        //put generated tiles back
+                        TileGenerator.getInstance().putInBag(skyCat.getHand());
+                        skyCat.setHand(hand);
+                        users[i] = skyCat;
+                    } else {
+                        users[i] = null;
+                    }
                     gui.setTurn(currentTurn);
                     gui.updateUsers(users);
-                    if(currentTurn == i) {
+                    if(currentTurn == i && users[i] != null && users[i].getClass() == SkyCat.class) {
                         //play instead of player
                         setAiTimer();
                     }
+                    gui.printGameLog(player.getUsername() + " leaves the game");
                     return "removed";
                 }
             }
@@ -434,6 +408,7 @@ public class Session {
                     player.setHand(hand);
                     nextTurn();
                     skippedTimes ++;
+                    gui.printGameLog(player.getUsername() + " exchanged some tiles");
                     return "Exchanged: " + count + " tiles";
                 }
             }
@@ -449,6 +424,7 @@ public class Session {
         }
         user.setHand(hand);
         gui.updateBoard(board.getBoard());
+        gui.printGameLog(user.getUsername() + " exchanged all tiles");
         skippedTimes ++;
         nextTurn();
     }
@@ -523,12 +499,13 @@ public class Session {
      */
     private void nextTurn() {
         if(users[currentTurn].getClass() == Player.class) {
-            playerTimer.cancel();
+            timer.cancel();
         }
 
         //if skipped 4 times - game ended
         if(skippedTimes >= 4){
             System.out.println("Game Ended");
+            // TEAM STATS HERE
             restartGame();
             return;
         }
@@ -556,29 +533,8 @@ public class Session {
     }
 
     private void setPlayerTimer(){
-        if(users[currentTurn].getClass() == Player.class) {
-            playerTimer = new Timer();
-            playerTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    skippedTimes ++;
-                    //check if player skipped 3 times
-                    if (users[currentTurn].getSkipped() == 2) {
-                        //replace player with skycat
-                        Tile[] hand = users[currentTurn].getHand();
-                        SkyCat skyCat = new SkyCat(Session.getSession());
-                        //put generated tiles back in bag
-                        TileGenerator.getInstance().putInBag(skyCat.getHand());
-                        skyCat.setHand(hand);
-                        users[currentTurn] = skyCat;
-                        setAiTimer();
-                    } else {
-                        users[currentTurn].setSkipped(users[currentTurn].getSkipped() + 1);
-                        nextTurn();
-                    }
-                }
-            }, turnTimeSec * 1000);
-        }
+        timer = new Timer();
+        timer.schedule(new playerTimerTask(session), turnTimeSec * 1000);
     }
 
     private void setAiTimer(){
@@ -596,23 +552,8 @@ public class Session {
         if(arePlayersJoined){
             delay = aiWaitSec;
         }
-
-        aiTimer = new Timer();
-        aiTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                    SkyCat skyCat = (SkyCat) session.users[currentTurn];
-                    boolean played = aiPlayWord(skyCat);
-                    if(played) {
-                        //reset skip counter
-                        skyCat.setSkipped(0);
-                    } else {
-                        System.out.println("AI Skipped");
-                        exchangeAllTiles(users[currentTurn]);
-                    }
-
-            }
-        }, delay * 1000);
+        timer = new Timer();
+        timer.schedule(new aiTimerTask(session), delay * 1000);
     }
 
     private void replaceTiles(User user, String letters) {
@@ -652,7 +593,7 @@ public class Session {
             if (users.length >= turn)
             {
                 // Check if real live player
-                if (users[turn].getClass() == Player.class)
+                if (users[turn] != null && users[turn].getClass() == Player.class)
                 {
                     // Check if its this players turn
                     if (((Player)users[turn]).getMacAddress().equals(mac)) {
@@ -695,8 +636,92 @@ public class Session {
     }
 
     private static void restartGame(){
+        session.gui.closeFrame();
         session = null;
         Session.getSession();
 
+    }
+
+    private void sendScoreStat(User player) {
+        Player temp = (Player) player;
+        dbQueries.updatePlayerCumulative("test", temp.getScore());
+        System.out.println(player.getUsername() + " " + player.getScore());
+    }
+
+    private void sendTeamStat(int [] ts) {
+        dbQueries.addNewToGameTable(ts[0], ts[1]);
+    }
+
+    private void aiRun(){
+        SkyCat skyCat = (SkyCat) session.users[currentTurn];
+        boolean played = aiPlayWord(skyCat);
+        if(played) {
+            //reset skip counter
+            skyCat.setSkipped(0);
+        } else {
+            System.out.println("AI Skipped");
+            exchangeAllTiles(users[currentTurn]);
+        }
+    }
+
+    private void playerTimeExpired(){
+        skippedTimes ++;
+        //check if player skipped 3 times
+        if (users[currentTurn].getSkipped() == 2) {
+            //DB Stats Call
+            sendScoreStat(users[currentTurn]);
+            if(aiRun) {
+                //replace player with skycat
+                Tile[] hand = users[currentTurn].getHand();
+                SkyCat skyCat = new SkyCat(Session.getSession());
+                //put generated tiles back in bag
+                TileGenerator.getInstance().putInBag(skyCat.getHand());
+                skyCat.setHand(hand);
+                users[currentTurn] = skyCat;
+                setAiTimer();
+            }
+            gui.printGameLog(users[currentTurn].getUsername() + " leaves the game");
+        } else {
+            users[currentTurn].setSkipped(users[currentTurn].getSkipped() + 1);
+            gui.printGameLog(users[currentTurn].getUsername() + " was thinking for too long");
+            nextTurn();
+        }
+    }
+
+    /**
+     * Checks if user with provided mac address exists in database
+     * @param mac
+     * @return
+     */
+    public String amIregistered(String mac){
+        if(dbQueries.findUser(mac) != null){
+            return "TRUE";
+        } else {
+            return "FALSE";
+        }
+    }
+
+    class aiTimerTask extends TimerTask {
+        Session session;
+
+        aiTimerTask(Session session) {
+            this.session = session;
+        }
+
+        public void run() {
+            session.aiRun();
+        }
+    }
+
+    class playerTimerTask extends TimerTask {
+        Session session;
+
+        playerTimerTask(Session session) {
+            this.session = session;
+        }
+
+        public void run() {
+            session.playerTimeExpired();
+        }
     }
 }

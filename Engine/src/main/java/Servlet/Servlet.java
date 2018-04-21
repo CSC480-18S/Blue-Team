@@ -57,7 +57,12 @@ public class Servlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             String req = request.getParameter("request");
-            req = req.toLowerCase();
+            if(req != null) {
+                req = req.toLowerCase();
+            }else {
+                req = "";
+                System.out.println("Request is not specified");
+            }
             if (req.equals("join")) {
                 // Join request
                 String username = request.getParameter("username");
@@ -127,7 +132,10 @@ public class Servlet extends HttpServlet {
                 String score = EventHandler.scoreHandler(macAddress);
                 String turn = EventHandler.turnHandler(macAddress);
                 out.write(score + "_" + turn);
-            } else {
+            }else if(req.equals("amiregistered")) {
+                String mac = getMACAddress(request.getRemoteAddr());
+                out.write(EventHandler.amIregisteredHandler(mac));
+            }else {
                 // Unknown request
                 out.write(EventHandler.unknownHandler());
             }
