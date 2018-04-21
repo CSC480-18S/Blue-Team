@@ -47,7 +47,7 @@ public class Validator {
         // Get full word, appending any characters on the ends due to placement
         if(!(move.getUser() instanceof Models.SkyCat))
             move.setWord(getFullWord(startX, startY, horizontal,
-                move.getWord()));
+                    move.getWord()));
         move.updateStartCoordinate(getTrueStart(move.getStartX(), move.getStartY(),move.isHorizontal()));
         startX = move.getStartX();
         startY = move.getStartY();
@@ -238,10 +238,6 @@ public class Validator {
      */
     private Tile[] getFullWord(int startX, int startY, boolean horizontal,
                                Tile placedTiles[]) {
-        System.out.print(placedTiles.length + " ");
-        for(Tile each : placedTiles)
-            System.out.print(each.getLetter() + " ");
-        System.out.print("\n");
         ArrayList<Tile> newWord = new ArrayList<>();
         Space[][] boardLocal = Session.getSession().getBoardAsSpaces();
         int index = 0;
@@ -304,19 +300,12 @@ public class Validator {
                 else
                     break;
             }
-
-
         }
-
         //converting ArrayList to array and returning it
         Tile returnWord[] = new Tile[newWord.size()];
         for(int i = 0; i < newWord.size(); i++) {
             returnWord[i] = newWord.get(i);
         }
-        System.out.println("Full Word Played");
-        for(Tile each : newWord)
-            System.out.print(each.getLetter() + " ");
-        System.out.println("\n");
         return returnWord;
     }
 
