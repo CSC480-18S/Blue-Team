@@ -248,11 +248,12 @@ public class Session {
         // Check if word length is less than 11,
         // it will cause errors if too big.
         // This should never happen but just in case..
-        if (word.length() > 11) {
+        String tempWord = word.replace("_","");
+        if (tempWord.length() > 11) {
             return "Please play a shorter word?...";
         }
 
-        if (word.length() == 1) {
+        if (tempWord.length() == 1) {
             if ((startX + 1 < BOARD_WIDTH && board.getBoard()[startX + 1][startY].getTile() != null) || (startX > 0  && board.getBoard()[startX - 1][startY].getTile() != null)) {
                 horizontal = true;
             }
@@ -282,7 +283,6 @@ public class Session {
                 wordTileBuilder.add(tg.getTile(each));
         }
 
-
         Tile[] wordTiles = new Tile[wordTileBuilder.size()];
         for(int i = 0; i < wordTileBuilder.size(); i++){
             wordTiles[i] = wordTileBuilder.get(i);
@@ -290,6 +290,7 @@ public class Session {
 
         Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, wordTiles, user));
 
+        word = ((Move) result[1]).getWordString();
         if ((int) result[0] == 1) {
             board.placeWord(startX, startY, horizontal, word);
             int score = calculateMovePoints((Move)result[1]);
