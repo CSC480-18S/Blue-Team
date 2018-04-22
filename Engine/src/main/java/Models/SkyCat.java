@@ -114,14 +114,6 @@ public class SkyCat extends User {
         for (int x = 0;  x < boardLocal.length; x++) {
             for (int y = 0; y < boardLocal[0].length; y++) {
                 if (boardLocal[x][y].getTile() != null) {
-                    int clearForward = countClearSpaces(Direction.FORWARD,
-                            x, y);
-                    int clearBackward = countClearSpaces(Direction.BACKWARD,
-                            x, y);
-                    int clearUpward = countClearSpaces(Direction.UPWARD,
-                            x, y);
-                    int clearDownward = countClearSpaces(Direction.DOWNWARD,
-                            x, y);
                     String forwardTiles = getTilesDirection(Direction.FORWARD,
                             x, y);
                     String backwardTiles = getTilesDirection(Direction.BACKWARD,
@@ -148,6 +140,7 @@ public class SkyCat extends User {
                             if(x - remainingStart.length() >= 0 && x + remainingEnd.length() < boardLocal[0].length){
                                 boolean inHand = true;
                                 Tile[] handCopy = hand.clone();
+                                ArrayList<Tile> tilesFromHand = new ArrayList<>();
                                 int xIndex = x - remainingStart.length();
                                 int trueX = xIndex;
                                 int handCount = handCopy.length;
@@ -163,6 +156,9 @@ public class SkyCat extends User {
                                         boolean found = false;
                                         for(Tile tileInHand : handCopy){
                                             if(tileInHand != null && tileInHand.getLetter() == letterInWord){
+                                                if(handCount == 7)
+                                                    trueX = xIndex;
+                                                tilesFromHand.add(tileInHand);
                                                 tileInHand = null;
                                                 handCount--;
                                                 found = true;
@@ -181,11 +177,15 @@ public class SkyCat extends User {
                                     }
                                 }
                                 if (inHand == true && handCount < hand.length) {
-                                    Move move = new Move(x - remainingStart.length(), y, true, stringToTiles(w), this);
-                                    Object[] result = validator.isValidPlay(move);
+                                    Tile[] word = new Tile[tilesFromHand.size()];
+                                    for(int i = 0; i < tilesFromHand.size(); i ++){
+                                        word[i] = tilesFromHand.get(i);
+                                    }
+                                    Move move = new Move(trueX, y, true, word, this);
+                                    Object[] result = validator.isValidPlaySkyCat(move);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
-                                        possibleMoves.add((Move) result[1]);
+                                        possibleMoves.add(move);
                                         }
                                 }
                             }
@@ -241,12 +241,16 @@ public class SkyCat extends User {
                                         break;
                                     }
                                 }
-                                if (inHand == true && handCount < hand.length) {
-                                    Move move = new Move(x, y - remainingStart.length(), false, stringToTiles(w), this);
-                                    Object[] result = validator.isValidPlay(move);
+                                if (inHand == true && handCount < hand.length ) {
+                                    Tile[] word = new Tile[tilesFromHand.size()];
+                                    for(int i = 0; i < tilesFromHand.size(); i ++) {
+                                        word[i] = tilesFromHand.get(i);
+                                    }
+                                    Move move = new Move(x, trueY, false, word, this);
+                                    Object[] result = validator.isValidPlaySkyCat(move);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
-                                        possibleMoves.add((Move) result[1]);
+                                        possibleMoves.add(move);
                                     }
                                 }
                             }
@@ -260,52 +264,6 @@ public class SkyCat extends User {
 
         possibleMoves.toArray(toReturn);
         return toReturn;
-    }
-
-    /*
-        Method to count clear spaces
-        @return number of clear spaces
-     */
-    private int countClearSpaces(Direction d, int x, int y) {
-        int count = 0;
-        switch (d) {
-            case FORWARD:
-                x++;
-                break;
-            case BACKWARD:
-                x--;
-                break;
-            case UPWARD:
-                y++;
-                break;
-            case DOWNWARD:
-                y--;
-                break;
-        }
-        while (x < boardLocal.length && x >= 0
-                && y < boardLocal[0].length && y >= 0) {
-            if (boardLocal[x][y].getTile() != null) {
-                break;
-            } else {
-                count++;
-            }
-            switch (d) {
-                case FORWARD:
-                    x++;
-                    break;
-                case BACKWARD:
-                    x--;
-                    break;
-                case UPWARD:
-                    y++;
-                    break;
-                case DOWNWARD:
-                    y--;
-                    break;
-            }
-        }
-
-        return count;
     }
 
     /*
