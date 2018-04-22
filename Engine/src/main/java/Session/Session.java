@@ -244,13 +244,11 @@ public class Session {
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
         String initialLetters = word;
-        System.out.println(initialLetters + " ******************************** initial letter input");
         TileGenerator tg = TileGenerator.getInstance();
         // Check if word length is less than 11,
         // it will cause errors if too big.
         // This should never happen but just in case..
         String tempWord = word.replace("_","");
-        System.out.println("Word minus _ " + tempWord);
         if (tempWord.length() > 11) {
             return "Please play a shorter word?...";
         }
@@ -284,11 +282,6 @@ public class Session {
             else
                 wordTileBuilder.add(tg.getTile(each));
         }
-
-        for(Tile each : wordTileBuilder){
-            System.out.println(each.toString());
-        }
-
 
         Tile[] wordTiles = new Tile[wordTileBuilder.size()];
         for(int i = 0; i < wordTileBuilder.size(); i++){
