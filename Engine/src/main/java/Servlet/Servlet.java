@@ -57,7 +57,12 @@ public class Servlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             String req = request.getParameter("request");
-            req = req.toLowerCase();
+            if(req != null) {
+                req = req.toLowerCase();
+            }else {
+                req = "";
+                System.out.println("Request is not specified");
+            }
             if (req.equals("join")) {
                 // Join request
                 String username = request.getParameter("username");
