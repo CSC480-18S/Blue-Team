@@ -265,7 +265,7 @@ public class Validator {
     }
 
     private Tile[] getSkyCatFullWord(Move move){
-//        ArrayList<Tile> newWord = new ArrayList<>();
+        ArrayList<Tile> newWord = new ArrayList<>();
 //        for(Tile each : move.getWord()){
 //            newWord.add(each);
 //        }
@@ -293,12 +293,12 @@ public class Validator {
 //            }
 //        }
 //
-//        Tile word[] = new Tile[newWord.size()];
-//        for(int i = 0; i < newWord.size(); i++){
-//            word[i] = newWord.get(i);
-//        }
-//
-//        return move.getWord();
+        Tile word[] = new Tile[newWord.size()];
+        for(int i = 0; i < newWord.size(); i++){
+            word[i] = newWord.get(i);
+        }
+
+        return word;
     }
 
     /*

@@ -644,6 +644,7 @@ public class Session {
 
     private static void restartGame(){
         session.gui.closeFrame();
+        session.sendTeamStat();
         session = null;
         Session.getSession();
 
@@ -655,8 +656,10 @@ public class Session {
         System.out.println(player.getUsername() + " " + player.getScore());
     }
 
-    private void sendTeamStat(int [] ts) {
-        dbQueries.addNewToGameTable(ts[0], ts[1]);
+    private void sendTeamStat() {
+        int[] scores;
+        scores = getTeamScores();
+        dbQueries.addNewToGameTable(scores[0], scores[1]);
     }
 
     private void aiRun(){
