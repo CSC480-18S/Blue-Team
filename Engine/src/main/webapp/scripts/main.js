@@ -29,8 +29,10 @@ function shuffleMe(array) {
 
 function getSelectedTilesAsString() {
     //var current = new Array();
-    var current = []; var file;
-    var i = 0; var s;
+    var current = [];
+    var file;
+    var i = 0;
+    var s;
     $(".drag").find("img").each(function (e) {
         // only selecteds
         var color = $(this).css("border-color");
@@ -47,16 +49,13 @@ function getSelectedTilesAsString() {
     return current.join("");
 }
 
-function exchange(el)
-{
+function exchange(el) {
     // If no border add one and return
-    if (el.style.border != "5px solid red")
-    {
+    if (el.style.border != "5px solid red") {
         el.style.border = "5px solid red";
         return;
     }
-    else
-    {
+    else {
         el.style.border = "5px solid transparent";
         // check if hand tiles have a border
         if (!handTilesSelected())
@@ -71,8 +70,7 @@ function exchange(el)
             var exchangedTiles = getSelectedTilesAsString();
             var i = 0;
 
-            if (exchangedTiles.length > 0)
-            {
+            if (exchangedTiles.length > 0) {
                 $.post("Servlet", {
                     request: "exchange",
                     tiles: exchangedTiles, //tiles to be exchanged
@@ -92,8 +90,7 @@ function exchange(el)
             //gets difference between the state of board now and the previous state
             var newPlay = xyCoord.diff(boardState);
             // check if this tile is in the newplay
-            newPlay.forEach(function (coord)
-            {
+            newPlay.forEach(function (coord) {
                 $('#' + coord + " img").remove();
             })
 
@@ -125,8 +122,10 @@ function getCurrentHand() {
 
 function getCurrentHandAsString() {
     //var current = new Array();
-    var current = []; var file;
-    var i = 0; var s;
+    var current = [];
+    var file;
+    var i = 0;
+    var s;
     $(".drag").find("img").each(function () {
         file = $(this).attr('src');
         // Get the start point of the file
@@ -138,15 +137,13 @@ function getCurrentHandAsString() {
     return current.join("");
 }
 
-function handTilesSelected()
-{
+function handTilesSelected() {
     // Check each hand tile for a border
     // If there is a border return true to begin exchange
-    for (var i = 0; i < 7; i++)
-    {
+    for (var i = 0; i < 7; i++) {
         // Check null to account for tiles that might be on the board
-        if (document.getElementById('div'+i).getElementsByTagName('img')[0] != null
-            && document.getElementById('div'+i).getElementsByTagName('img')[0].style.border == "5px solid red")
+        if (document.getElementById('div' + i).getElementsByTagName('img')[0] != null
+            && document.getElementById('div' + i).getElementsByTagName('img')[0].style.border == "5px solid red")
             return true;
     }
     return false;
@@ -154,8 +151,7 @@ function handTilesSelected()
 
 //only problem is if you have words in play it recalls all
 //the letters on the board
-function shuffle()
-{
+function shuffle() {
     var hand = getCurrentHand();
 
     var shuffled = shuffleMe(hand);
@@ -179,8 +175,7 @@ function recall() {
 
     var newPlay = xyCoord.diff(boardState);
     // Remove tiles
-    for (var i = 0; i < newPlay.length; i++)
-    {
+    for (var i = 0; i < newPlay.length; i++) {
         $('#' + newPlay[i] + " img").remove();
     }
     // Update hand
@@ -191,25 +186,23 @@ function recall() {
 //need to store tile placement and check if they are in valid spots
 //change to buttons to click on for yes or no
 function exit() {
-        var text;
-        var exit = prompt("Are you sure you want to exit?", "Yes");
-        if ("YES" == exit.toUpperCase()) {
-            alert("Left Game.");
+    var text;
+    var exit = prompt("Are you sure you want to exit?", "Yes");
+    if ("YES" == exit.toUpperCase()) {
+        $.post("Servlet", {
+            request: "leave",
+        }, function (data, status) {
+            alert("Leave - Data: " + data + "\nStatus: " + status); // response text.
+        });
 
-            $.post("Servlet", {
-                request: "leave",
-            }, function (data, status) {
-                alert("Leave - Data: " + data + "\nStatus: " + status); // response text.
-            });
+        alert("Left Game.");
+        var win = window.open("about:blank", "_self");
+        win.close();
 
-            var win = window.open("about:blank", "_self");
-            win.close();
-
-        }
-        else
-        {
-            alert("Continue Playing");
-        }
+    }
+    else {
+        alert("Continue Playing");
+    }
 
 }
 
@@ -222,8 +215,7 @@ Array.prototype.diff = function (a) {
 
 //cant just play one word
 function confirmed() {
-    try
-    {
+    try {
         // Switch flag to pause updates
         isPlaying = true;
 
@@ -275,10 +267,16 @@ function confirmed() {
             // get the file name (src) by the id (coordinate)
             //may need to change this or change split
             var file = document.getElementById(newPlay[n]).getElementsByTagName('img')[0].src;
-            // Get the start point of the file
-            var s = file.search(/.png/i);
-            // now we have the letter of just the latest word
-            wordPlayed[i++] = file.slice(s - 1, -4);
+            // Get the start point of the filename
+            var s = (file.indexOf('\\') >= 0 ? file.lastIndexOf('\\') : file.lastIndexOf('/'));
+            // now can get the file name without path
+            var filename = file.substring(s);
+            // Drop the extension
+            if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                filename = filename.substring(1, filename.lastIndexOf('.'));
+            }
+            // Add letter to word array
+            wordPlayed[i++] = filename;
 
         }
 
@@ -293,28 +291,22 @@ function confirmed() {
             direction: orientationWord
         }, function (responsetext) {
             var result = responsetext.toUpperCase();
-            if (result == "VALID")
-            {
+            if (result == "VALID") {
                 showMessage("Success");
             }
-            else if (result == "BONUS")
-            {
+            else if (result == "BONUS") {
                 showMessage("Bonus word !!");
             }
-            else if (result == "PROFANE")
-            {
+            else if (result == "PROFANE") {
                 // If play was invalid remove played tiles from board
-                for (var i = 0; i < newPlay.length; i++)
-                {
+                for (var i = 0; i < newPlay.length; i++) {
                     $('#' + newPlay[i] + " img").remove();
                 }
                 showMessage("Profanity !");
             }
-            else
-            {
+            else {
                 // If play was invalid remove played tiles from board
-                for (var i = 0; i < newPlay.length; i++)
-                {
+                for (var i = 0; i < newPlay.length; i++) {
                     $('#' + newPlay[i] + " img").remove();
                 }
                 // Give user message
@@ -326,16 +318,20 @@ function confirmed() {
         // Reset current tile select
         currentImg = null;
         // Deep copy new board state global array
-        boardState = [...xyCoord];
+        boardState = [...xyCoord
+    ]
+        ;
 
-    } catch (e) {}
+    } catch (e) {
+    }
         // reset flag always
-    finally {isPlaying = false}
+    finally {
+        isPlaying = false
+    }
 }
 
 // For when we want to have a dedicated message box
 // and we don't have alerts every where
-function showMessage(str)
-{
+function showMessage(str) {
     alert(str);
 }
