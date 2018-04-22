@@ -44,11 +44,8 @@ public class Validator {
         }
 
         // Get full word, appending any characters on the ends due to placement
-        if(!(move.getUser() instanceof Models.SkyCat)) {
             move.setWord(getFullWord(startX, startY, horizontal, move.getWord()));
-        }
-        else
-            move.setWord(getSkyCatFullWord(move));
+
         move.updateStartCoordinate(getTrueStart(move.getStartX(), move.getStartY(),move.isHorizontal()));
         startX = move.getStartX();
         startY = move.getStartY();
@@ -264,43 +261,6 @@ public class Validator {
         return 1;
     }
 
-    private Tile[] getSkyCatFullWord(Move move){
-//        ArrayList<Tile> newWord = new ArrayList<>();
-//        for(Tile each : move.getWord()){
-//            newWord.add(each);
-//        }
-//        Space boardLocal[][] = Session.getSession().getBoardAsSpaces();
-//        int index = 0;
-//        if(boardLocal[move.getStartX()][move.getStartY()].getTile() != null) {
-//            char start = boardLocal[move.getStartX()][move.getStartY()].getTile().getLetter();
-//            index = move.getWordString().indexOf(start);
-//        }
-//
-//        if(move.isHorizontal()){
-//            int xIndex = move.getStartX() + move.getWordString().length() - index;
-//            int y = move.getStartY();
-//            while(xIndex < boardLocal[0].length && boardLocal[xIndex][y].getTile() != null){
-//                newWord.add(boardLocal[xIndex][y].getTile());
-//                xIndex++;
-//            }
-//        }
-//        else{
-//            int yIndex = move.getStartY()+move.getWordString().length() - index;
-//            int x = move.getStartX();
-//            while(yIndex < boardLocal[0].length && boardLocal[x][yIndex].getTile() != null){
-//                newWord.add(boardLocal[x][yIndex].getTile());
-//                yIndex++;
-//            }
-//        }
-//
-//        Tile word[] = new Tile[newWord.size()];
-//        for(int i = 0; i < newWord.size(); i++){
-//            word[i] = newWord.get(i);
-//        }
-//
-//        return move.getWord();
-    }
-
     /*
         Appends any extra characters on the end of the word that may have
         been overlooked when submitting a word for validation
@@ -434,6 +394,61 @@ public class Validator {
             }
         }
 
+    }
+
+
+    public Object[] isValidPlaySkyCat(Move move) {
+        int startX = move.getStartX();
+        int startY = move.getStartY();
+        boolean horizontal = move.isHorizontal();
+        Tile[] testWord= move.getWord();
+        Move testMove = new Move(startX, startY, horizontal, testWord, move.getUser());
+        //Ensure move does not extend off board
+        if (horizontal && startX + testMove.getWordString().length() >
+                Session.getSession().getBoardAsSpaces().length) {
+            return new Object[] {0, move};
+        } else if (!horizontal && startY + testMove.getWordString().length() >
+                Session.getSession().getBoardAsSpaces()[0].length) {
+            return new Object[] {0, move};
+        } else if (startX < 0 || startY < 0)
+            return new Object[] {0, move};
+
+        // Check that move connects to existing tiles
+        if (!connectsToTiles(testMove)) {
+            return new Object[] {0, move};
+        }
+
+        // Get full word, appending any characters on the ends due to placement
+        testMove.setWord(getFullWord(startX, startY, horizontal, move.getWord()));
+        testMove.updateStartCoordinate(getTrueStart(testMove.getStartX(), testMove.getStartY(),testMove.isHorizontal()));
+        startX = testMove.getStartX();
+        startY = testMove.getStartY();
+        String word = testMove.getWordString();
+
+        // Check if the user has entered a bad word
+        int valid = isProfane(word);
+
+        if (valid == -1) {
+            return new Object[] {valid, move};
+        }
+        // Check if the user entered a bonus word
+        valid = isBonus(word);
+        if (valid != 2) {
+            // If not a bonus, Check if word is in dictionary
+            valid = isDictionaryWord(word);
+        }
+
+        // Check for valid placement on the board
+        if (valid <= 0 || checkPlacement(startX, startY, horizontal, word) == 0)
+            return new Object[] {0, move};
+
+        //generating offshoot moves and adding them to the validated move
+        if(checkForOverwrite(move) == true) {
+            testMove.setOffshootMoves(getOffshootMoves(move));
+            return new Object[]{valid, move};
+        }
+        else
+            return new Object[]{0, move};
     }
 
 }
