@@ -24,6 +24,7 @@ public class Dictionaries implements Serializable {
     private HashSet<String> englishWords;
     private HashSet<String> specialWords; // Words like "snow" and "oswego"
     private HashSet<String> badWords;
+    private HashSet<String> aiWords;
 
     /**
      * Load dictionary from .txt files
@@ -33,10 +34,11 @@ public class Dictionaries implements Serializable {
      * @param bad Path to bad words text file
      * @throws FileNotFoundException
      */
-    public Dictionaries(String eng, String spec, String bad) throws FileNotFoundException {
+    public Dictionaries(String eng, String spec, String bad, String ai) throws FileNotFoundException {
         englishWords = new HashSet<String>();
         specialWords = new HashSet<String>();
         badWords = new HashSet<String>();
+        aiWords = new HashSet<String>();
         Scanner sc = null;
         ClassLoader classloader;
         InputStream file;
@@ -74,6 +76,16 @@ public class Dictionaries implements Serializable {
         }
         sc.close();
 
+        // Load ai words
+        //file = new File(bad);
+        classloader = Thread.currentThread().getContextClassLoader();
+        file = classloader.getResourceAsStream(ai);
+
+        sc = new Scanner(file);
+        while (sc.hasNextLine()) {
+            aiWords.add(sc.nextLine());
+        }
+        sc.close();
     }
 
     public static Dictionaries getDictionaries() {
@@ -83,7 +95,8 @@ public class Dictionaries implements Serializable {
                 dictionaries = new Dictionaries(
                         "dictionary_short.txt",
                         "bonus.txt",
-                        "profanity.txt");
+                        "profanity.txt",
+                        "aiDict.txt");
             } catch (Exception e) {
                 System.out.println("Dictionaries::Error loading dict\n");
                 System.out.println(System.getProperty("user.dir"));
@@ -106,4 +119,6 @@ public class Dictionaries implements Serializable {
     public HashSet<String> getBadWords() {
         return badWords;
     }
+
+    public HashSet<String> getaiWords(){return aiWords;}
 }
