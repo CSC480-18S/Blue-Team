@@ -330,6 +330,8 @@ public class Session {
             if (user instanceof Player) {
                 Player temp = (Player) user;
                 updateTeamScore(score, temp.getTeam());
+                updateTeamHighestWordScore(temp.getTeam(), score);
+                updateLongestWord(temp.getTeam(), (Move) result[1]);
             }
             replaceTiles(user, tilesForChecking.toString());
             gui.updateBoard(board.getBoard());
@@ -348,6 +350,9 @@ public class Session {
             if (user instanceof Player) {
                 Player temp = (Player) user;
                 updateTeamScore(score, temp.getTeam());
+                updateBonusWord(temp.getTeam());
+                updateTeamHighestWordScore(temp.getTeam(), score);
+                updateLongestWord(temp.getTeam(), (Move) result[1]);
             }
             replaceTiles(user, tilesForChecking.toString());
             gui.updateBoard(board.getBoard());
@@ -540,7 +545,6 @@ public class Session {
         //if skipped 4 times - game ended
         if(skippedTimes >= 4){
             System.out.println("Game Ended");
-            // TEAM STATS HERE
             restartGame();
             return;
         }
@@ -671,6 +675,8 @@ public class Session {
     }
 
     private static void restartGame(){
+        session.sendTeamStat();
+        session.updateWTLCount();
         session.gui.closeFrame();
         session = null;
         Session.getSession();
@@ -683,9 +689,34 @@ public class Session {
         System.out.println(player.getUsername() + " " + player.getScore());
     }
 
-    private void sendTeamStat(int [] ts) {
-        dbQueries.addNewToGameTable(ts[0], ts[1]);
+    private void sendTeamStat() {
+        int[] ts;
+        ts = getTeamScores();
+        System.out.println("What is being sent to db: " + ts[1] + "  " + ts[0]);
+        dbQueries.addNewToGameTable(ts[1], ts[0]);
+        dbQueries.updateTeamCumulative("green", ts[0]);
+        dbQueries.updateTeamCumulative("gold", ts[1]);
     }
+
+    private void updateWTLCount() {
+        int[] ts;
+        ts = getTeamScores();
+        if(ts[1] > ts[0]) {
+            dbQueries.updateWin("gold");
+            dbQueries.updateLose("green");
+        } else if(ts[0] > ts[1]) {
+            dbQueries.updateWin("green");
+            dbQueries.updateLose("gold");
+        } else if(ts[0] == ts[1]) {
+            dbQueries.updateTie();
+        }
+    }
+
+    private void updateTeamHighestWordScore(String team, int score) { dbQueries.updateHighestWordScore(team, score); }
+
+    private void updateLongestWord(String team, Move move) { dbQueries.updateTeamLongestWord(team, move.getWordString()); }
+
+    private void updateBonusWord(String team) { dbQueries.updateTeamBonusCount(team, 1); }
 
     private void aiRun(){
         SkyCat skyCat = (SkyCat) session.users[currentTurn];
