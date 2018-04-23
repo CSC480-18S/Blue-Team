@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -552,7 +553,7 @@ public class BoardGUI implements Runnable {
 
                 },
                 new String[]{
-                        "Team", "Cumulative", "Longest Word", "Wins", "Tiles", "Losses", "Highest Word Score", "B-Word Count"
+                        "Team", "Cumulative", "Longest Word", "Wins", "Ties", "Losses", "Highest Word Score", "B-Word Count"
                 }
         ));
         jTable3.setRowHeight(35);
@@ -886,7 +887,7 @@ public class BoardGUI implements Runnable {
         temp = dbCall.getTopPlayersByTeam(5, teamName);
         testUser[] statList = new testUser[temp.length];
         for(int i = 0; i < temp.length; i++) {
-            testUser t = new testUser(i, temp[i][0], temp[i][2]);
+            testUser t = new testUser(i + 1, temp[i][0], temp[i][2]);
             statList[i] = t;
         }
         for(int i = 0; i < temp.length; i++) {
@@ -902,7 +903,8 @@ public class BoardGUI implements Runnable {
         String teamName2 = "gold";
         testUser t1 = new testUser(teamName,dbCall.getTeamCumulative(teamName), dbCall.getTeamLongestWord(teamName),dbCall.getTeamWinCount(teamName), dbCall.getTeamTieCount(teamName), dbCall.getTeamLoseCount(teamName), dbCall.getHighestGameSessionScore(teamName), dbCall.getTeamBonuses(teamName));
         testUser t2 = new testUser(teamName2,dbCall.getTeamCumulative(teamName2), dbCall.getTeamLongestWord(teamName2),dbCall.getTeamWinCount(teamName2), dbCall.getTeamTieCount(teamName2), dbCall.getTeamLoseCount(teamName2), dbCall.getHighestGameSessionScore(teamName2), dbCall.getTeamBonuses(teamName2));
-
+        System.out.println("At Stats Dispaly: Green: " + dbCall.getTeamCumulative("green"));
+        System.out.println("At stats display: Gold: " + dbCall.getTeamCumulative("gold"));
         list.add(t1);
         list.add(t2);
         return list;
@@ -913,14 +915,17 @@ public class BoardGUI implements Runnable {
         ArrayList<testUser> list = new ArrayList<>();
         QueryClass dbCalls = new QueryClass();
         if(dbCalls.getTotalGameScoreAverageForTeam("gold").isNaN() || dbCalls.getTotalGameScoreAverageForTeam("green").isNaN()) {
-            testUser t1 = new testUser("gold", "0");
-            testUser t2 = new testUser("green", "0");
+            testUser t1 = new testUser("Gold", "0");
+            testUser t2 = new testUser("Green", "0");
             list.add(t1);
             list.add(t2);
             return list;
         } else {
-            testUser t1 = new testUser("Gold", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("gold")));
-            testUser t2 = new testUser("Green", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("green")));
+            DecimalFormat df = new DecimalFormat("#.##");
+            String formatAvg = df.format(dbCalls.getTotalGameScoreAverageForTeam("gold"));
+            String formatAvg2 = df.format(dbCalls.getTotalGameScoreAverageForTeam("green"));
+            testUser t1 = new testUser("Gold", formatAvg);
+            testUser t2 = new testUser("Green", formatAvg2);
 
             list.add(t1);
             list.add(t2);
@@ -955,7 +960,7 @@ public class BoardGUI implements Runnable {
 
     public void addRowToTable1() {
         DefaultTableModel modelTest = (DefaultTableModel) jTable1.getModel();
-        ArrayList<testUser> list = TopPlayer("Gold");
+        ArrayList<testUser> list = TopPlayer("Green");
         Object rowData[] = new Object[5];
         for (int i = 0; i < list.size(); i++) {
             //**rowData[0] = list.get(i).methodName;
@@ -968,7 +973,7 @@ public class BoardGUI implements Runnable {
 
     public void addRowToTable2() {
         DefaultTableModel modelTest = (DefaultTableModel) jTable2.getModel();
-        ArrayList<testUser> list = TopPlayer("Green");
+        ArrayList<testUser> list = TopPlayer("Gold");
         Object rowData[] = new Object[5];
         for (int i = 0; i < list.size(); i++) {
             rowData[0] = list.get(i).rank;
