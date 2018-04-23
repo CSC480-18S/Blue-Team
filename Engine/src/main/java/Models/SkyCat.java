@@ -182,7 +182,8 @@ public class SkyCat extends User {
                                         word[i] = tilesFromHand.get(i);
                                     }
                                     Move move = new Move(trueX, y, true, word, this);
-                                    Object[] result = validator.isValidPlaySkyCat(move);
+                                    Move validatorMove = new Move(trueX, y, true, word, this);
+                                    Object[] result = validator.isValidPlay(validatorMove);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
                                         possibleMoves.add(move);
@@ -247,7 +248,8 @@ public class SkyCat extends User {
                                         word[i] = tilesFromHand.get(i);
                                     }
                                     Move move = new Move(x, trueY, false, word, this);
-                                    Object[] result = validator.isValidPlaySkyCat(move);
+                                    Move validatorMove = new Move(x, trueY, false, word, this);
+                                    Object[] result = validator.isValidPlay(validatorMove);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
                                         possibleMoves.add(move);
