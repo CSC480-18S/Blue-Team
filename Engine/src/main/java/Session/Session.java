@@ -573,10 +573,13 @@ public class Session {
 
     private void setPlayerTimer(){
         timer = new Timer();
-        timer.schedule(new playerTimerTask(session), turnTimeSec * 1000);
+        timer.schedule(new playerTimerTask(session, turnTimeSec), 0, 1000);
     }
 
     private void setAiTimer(){
+        //clear user timer
+        gui.setTimerText(4,0);
+
         //get the right delay for AI
         //default - no players
         int delay = aiWaitNoPlayers;
@@ -592,7 +595,7 @@ public class Session {
             delay = aiWaitSec;
         }
         timer = new Timer();
-        timer.schedule(new aiTimerTask(session), delay * 1000);
+        timer.schedule(new aiTimerTask(session),delay * 1000);
     }
 
     private void replaceTiles(User user, String letters) {
@@ -731,6 +734,8 @@ public class Session {
     }
 
     private void playerTimeExpired(){
+        //cancel looping timer
+        timer.cancel();
         skippedTimes ++;
         //check if player skipped 3 times
         if (users[currentTurn].getSkipped() == 2) {
@@ -784,10 +789,13 @@ public class Session {
      * @return
      */
     public String amIregistered(String mac){
-        if(dbQueries.findUser(mac) != null){
-            return "TRUE";
+        Gson gson = new Gson();
+        String[] result = dbQueries.findUser(mac);
+        if(result != null){
+            return gson.toJson(result);
         } else {
-            return "FALSE";
+            String[] response = {"FALSE"};
+            return gson.toJson(response);
         }
     }
 
@@ -799,19 +807,26 @@ public class Session {
         }
 
         public void run() {
-            session.aiRun();
+                session.aiRun();
         }
     }
 
     class playerTimerTask extends TimerTask {
         Session session;
+        int timeLeft;
 
-        playerTimerTask(Session session) {
+        playerTimerTask(Session session, int timeLeft) {
             this.session = session;
+            this.timeLeft = timeLeft;
         }
 
         public void run() {
-            session.playerTimeExpired();
+            if(timeLeft > 0){
+                session.gui.setTimerText(session.getCurrentTurn(), timeLeft);
+                timeLeft--;
+            }else {
+                session.playerTimeExpired();
+            }
         }
     }
 }
