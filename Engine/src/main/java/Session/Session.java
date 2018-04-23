@@ -231,7 +231,10 @@ public class Session {
     private boolean aiPlayWord(SkyCat skyCat) {
         Move move = skyCat.chooseMove();
         if (move != null) {
-            session.playWord(move.getStartX(), move.getStartY(), move.isHorizontal(), move.getWordString(), skyCat);
+            String temp = session.playWord(move.getStartX(), move.getStartY(), move.isHorizontal(), move.getWordString(), skyCat);
+            if(temp.compareTo("Invalid") == 0){
+                return false;
+            }
             return true;
         } else {
             return false;
@@ -240,34 +243,17 @@ public class Session {
 
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
-        StringBuilder wordForScoring = new StringBuilder("");
-        StringBuilder wordForValidating = new StringBuilder("");
-        boolean wildCard = false;
-        for(char c : word.toCharArray()){
-            if(c == '_') {
-                wordForScoring.append("-");
-                wildCard = true;
-            }
-            else if(wildCard){
-                wildCard = false;
-                wordForValidating.append(c);
-            }
-            else{
-                wordForValidating.append(c);
-                wordForScoring.append(c);
-            }
-        }
-        word = wordForValidating.toString();
         String initialLetters = word;
         TileGenerator tg = TileGenerator.getInstance();
         // Check if word length is less than 11,
         // it will cause errors if too big.
         // This should never happen but just in case..
-        if (word.length() > 11) {
+        String tempWord = word.replace("_","");
+        if (tempWord.length() > 11) {
             return "Please play a shorter word?...";
         }
 
-        if (word.length() == 1) {
+        if (tempWord.length() == 1) {
             if ((startX + 1 < BOARD_WIDTH && board.getBoard()[startX + 1][startY].getTile() != null) || (startX > 0  && board.getBoard()[startX - 1][startY].getTile() != null)) {
                 horizontal = true;
             }
@@ -283,60 +269,31 @@ public class Session {
             }
 
         }
-
-        //this part appends middle part of the word, ai gives full word, so only for players
-        if(user.getClass() == Player.class) {
-            ArrayList<Character> chars = new ArrayList<>();
-            char[] arr = word.toCharArray();
-            for (int i = 0; i < arr.length; i++) {
-                chars.add(arr[i]);
+        ArrayList<Tile> wordTileBuilder = new ArrayList<>();
+        boolean wildCard = false;
+        for(char each : word.toCharArray()){
+            if(each == '_'){
+                wildCard = true;
             }
-
-            word = "";
-
-            int count = 0;
-            StringBuilder wordBuilder = new StringBuilder(word);
-            //walk through the board and if tile is already placed - append it
-            while (!chars.isEmpty()) {
-                if (horizontal) {
-                    if ((startX + count) < BOARD_WIDTH && board.getBoard()[startX + count][startY].getTile() != null) {
-                        wordBuilder.append(board.getBoard()[startX + count][startY].getTile().getLetter());
-                    } else {
-                        wordBuilder.append(chars.get(0));
-                        chars.remove(0);
-                    }
-                } else {
-                    if ((startY + count) < BOARD_WIDTH && board.getBoard()[startX][startY + count].getTile() != null) {
-                        wordBuilder.append(board.getBoard()[startX][startY + count].getTile().getLetter());
-                    } else {
-                        wordBuilder.append(chars.get(0));
-                        chars.remove(0);
-                    }
-                }
-
-                count++;
+            else if(wildCard){
+                wordTileBuilder.add(new Tile(each, 0));
+                wildCard = false;
             }
-            word = wordBuilder.toString();
+            else
+                wordTileBuilder.add(tg.getTile(each));
         }
-        Tile[] wordTiles = new Tile[word.length()];
 
-        for (int i = 0; i < word.length(); i++) {
-
-            wordTiles[i] = tg.getTile(word.charAt(i));
+        Tile[] wordTiles = new Tile[wordTileBuilder.size()];
+        for(int i = 0; i < wordTileBuilder.size(); i++){
+            wordTiles[i] = wordTileBuilder.get(i);
         }
 
         Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, wordTiles, user));
 
+        word = ((Move) result[1]).getWordString();
         if ((int) result[0] == 1) {
             board.placeWord(startX, startY, horizontal, word);
-            String scoringWord = wordForScoring.toString();
-            Tile[] tilesForScoring = new Tile[scoringWord.length()];
-            for(int i = 0; i < scoringWord.length(); i++){
-                tilesForScoring[i] = tg.getTile(scoringWord.charAt(i));
-            }
-            Move scoringMove = (Move) result[1];
-            //scoringMove.setWord(tilesForScoring);
-            int score = calculateMovePoints(scoringMove);
+            int score = calculateMovePoints((Move)result[1]);
             displayMoveStats((Move) result[1], score);
             user.setScore(user.getScore() + score);
             if (user instanceof Player) {
@@ -354,14 +311,7 @@ public class Session {
             return "VALID";
         } else if ((int) result[0] == 2) {
             board.placeWord(startX, startY, horizontal, word);
-            String scoringWord = wordForScoring.toString();
-            Tile[] tilesForScoring = new Tile[scoringWord.length()];
-            for(int i = 0; i < scoringWord.length(); i++){
-                tilesForScoring[i] = tg.getTile(scoringWord.charAt(i));
-            }
-            Move scoringMove = (Move) result[1];
-            scoringMove.setWord(tilesForScoring);
-            int score = calculateMovePoints(scoringMove) * 2;
+            int score = calculateMovePoints((Move)result[1]) * 2;
             displayMoveStats((Move) result[1], score);
             user.setScore(user.getScore() + score);
             if (user instanceof Player) {

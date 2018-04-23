@@ -912,12 +912,20 @@ public class BoardGUI implements Runnable {
     public ArrayList TTest() {
         ArrayList<testUser> list = new ArrayList<>();
         QueryClass dbCalls = new QueryClass();
-        testUser t1 = new testUser("Gold", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("gold")));
-        testUser t2 = new testUser("Green", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("green")));
+        if(dbCalls.getTotalGameScoreAverageForTeam("gold").isNaN() || dbCalls.getTotalGameScoreAverageForTeam("green").isNaN()) {
+            testUser t1 = new testUser("gold", "0");
+            testUser t2 = new testUser("green", "0");
+            list.add(t1);
+            list.add(t2);
+            return list;
+        } else {
+            testUser t1 = new testUser("Gold", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("gold")));
+            testUser t2 = new testUser("Green", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("green")));
 
-        list.add(t1);
-        list.add(t2);
-        return list;
+            list.add(t1);
+            list.add(t2);
+            return list;
+        }
     }
 
     public String TestConclusion() {
@@ -925,7 +933,7 @@ public class BoardGUI implements Runnable {
         String team = " ";
         String notSig = "There is not a significant difference between the teams.";
         String sig = "There is a significant difference between the teams.";
-        if(dbCalls.tTestResults()>= 0.05) {
+        if(dbCalls.tTestResults() != null && dbCalls.tTestResults() >= 0.05) {
             double greenAvg;
             double goldAvg;
             greenAvg = dbCalls.getTotalGameScoreAverageForTeam("green");

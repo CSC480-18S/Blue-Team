@@ -66,13 +66,12 @@ public class SkyCat extends User {
         boardLocal = Session.getSession().getBoardAsSpaces();
         Tile[] hand = this.getHand();
         Dictionaries dictionary = Dictionaries.getDictionaries();
-        HashSet<String> engWords = dictionary.getEnglishWords();
-        HashSet<String> specWords = dictionary.getSpecialWords();
+        HashSet<String> aiWords = dictionary.getaiWords();
         Validator validator = new Validator();
         // Check if first move
         if (boardLocal[boardLocal.length / 2][boardLocal[0].length / 2].getTile()
                 == null) {
-            for (String w : engWords) {
+            for (String w : aiWords) {
                 boolean inHand = false;
                 Tile[] handCopy = hand.clone();
                 if(w.length() <= handCopy.length)
@@ -105,41 +104,7 @@ public class SkyCat extends User {
                     }
                 }
             }
-            for (String w : specWords) {
-                boolean inHand = false;
-                Tile[] handCopy = hand.clone();
-                if(w.length() <= hand.length)
-                for (char c : w.toCharArray()) {
-                    inHand = false;
-                    for (int i = 0; i < handCopy.length; i++) {
-                        if (handCopy[i] != null
-                                && handCopy[i].getLetter() == c) {
-                            inHand = true;
-                            handCopy[i] = null;
-                            break;
-                        }
-                    }
-                    if (inHand == false) {
-                        break;
-                    }
 
-
-                }
-                if (inHand == true) {
-                    Tile[] wordTiles = stringToTiles(w);
-                    for (int i = 0; i < w.length(); i++) {
-                        if ((boardLocal.length / 2) - i <= 0) {
-                            break;
-                        }
-                        Move move = new Move(boardLocal.length / 2 - i, (boardLocal[0].length / 2), true, wordTiles, this);
-                        Object[] result = validator.isValidPlay(move);
-                        if ((int) result[0] == 1
-                                || (int) result[0] == 2) {
-                            possibleMoves.add((Move) result[1]);
-                        }
-                    }
-                }
-            }
             Move toReturn[] = new Move[possibleMoves.size()];
             possibleMoves.toArray(toReturn);
             return toReturn;
@@ -149,14 +114,6 @@ public class SkyCat extends User {
         for (int x = 0;  x < boardLocal.length; x++) {
             for (int y = 0; y < boardLocal[0].length; y++) {
                 if (boardLocal[x][y].getTile() != null) {
-                    int clearForward = countClearSpaces(Direction.FORWARD,
-                            x, y);
-                    int clearBackward = countClearSpaces(Direction.BACKWARD,
-                            x, y);
-                    int clearUpward = countClearSpaces(Direction.UPWARD,
-                            x, y);
-                    int clearDownward = countClearSpaces(Direction.DOWNWARD,
-                            x, y);
                     String forwardTiles = getTilesDirection(Direction.FORWARD,
                             x, y);
                     String backwardTiles = getTilesDirection(Direction.BACKWARD,
@@ -165,13 +122,9 @@ public class SkyCat extends User {
                             x, y);
                     String downwardTiles = getTilesDirection(Direction.DOWNWARD,
                             x, y);
-                    String horizontalString = backwardTiles
-                            + boardLocal[x][y].getTile().getLetter()
-                            + forwardTiles;
-                    String verticalString = upwardTiles
-                            + boardLocal[x][y].getTile().getLetter()
-                            + downwardTiles;
-                    for (String w : engWords) {
+                    String horizontalString = backwardTiles + boardLocal[x][y].getTile().getLetter() + forwardTiles;
+                    String verticalString = upwardTiles + boardLocal[x][y].getTile().getLetter() + downwardTiles;
+                    for (String w : aiWords) {
                         if (w.contains(horizontalString)) {
                             int index = w.indexOf(horizontalString);
                             String remainingStart = "";
@@ -183,144 +136,62 @@ public class SkyCat extends User {
                                 remainingEnd += w.substring(index
                                         + horizontalString.length());
                             }
-                            if (remainingStart.length() <= clearBackward
-                                    && remainingEnd.length() <= clearForward && (remainingStart.length() + remainingEnd.length()) <= hand.length) {
-                                boolean inHand = false;
+
+                            if(x - remainingStart.length() >= 0 && x + remainingEnd.length() < boardLocal[0].length){
+                                boolean inHand = true;
                                 Tile[] handCopy = hand.clone();
+                                ArrayList<Tile> tilesFromHand = new ArrayList<>();
+                                int xIndex = x - remainingStart.length();
+                                int trueX = xIndex;
                                 int handCount = handCopy.length;
-                                int xIndex = x - backwardTiles.length() - remainingStart.length();
-                                if (remainingStart.length() <= handCount && xIndex >= 0)
-                                    for (char c : remainingStart.toCharArray()) {
+
+                                for(char letterInWord : w.toCharArray()){
+                                    if(xIndex < boardLocal[0].length && boardLocal[xIndex][y].getTile() != null && boardLocal[xIndex][y].getTile().getLetter() == letterInWord)
+                                        xIndex++;
+                                    else if(xIndex < boardLocal[0].length && boardLocal[xIndex][y].getTile() != null && boardLocal[xIndex][y].getTile().getLetter() != letterInWord){
                                         inHand = false;
-                                        for (int i = 0; i < handCopy.length; i++) {
-                                            if (handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c
-                                                    && boardLocal[xIndex][y].getTile() == null) {
-                                                inHand = true;
-                                                handCopy[i] = null;
+                                        break;
+                                    }
+                                    else if(xIndex < boardLocal[0].length && boardLocal[xIndex][y].getTile() == null && handCount > 0){
+                                        boolean found = false;
+                                        for(Tile tileInHand : handCopy){
+                                            if(tileInHand != null && tileInHand.getLetter() == letterInWord){
+                                                if(handCount == 7)
+                                                    trueX = xIndex;
+                                                tilesFromHand.add(tileInHand);
+                                                tileInHand = null;
                                                 handCount--;
+                                                found = true;
+                                                xIndex++;
                                                 break;
                                             }
                                         }
-                                        if (inHand == false) {
+                                        if(!found) {
+                                            inHand = false;
                                             break;
                                         }
-                                        xIndex++;
                                     }
-                                xIndex = x;
-                                if (inHand == true){
-                                    for (char c : remainingEnd.toCharArray()) {
+                                    else {
                                         inHand = false;
-                                        if(boardLocal[xIndex][y].getTile() == null) {
-                                            for (int i = 0; i < handCopy.length; i++) {
-                                                if (handCopy[i] != null
-                                                        && handCopy[i].getLetter() == c) {
-                                                    inHand = true;
-                                                    handCopy[i] = null;
-                                                    handCount--;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        else{
-                                            if(boardLocal[xIndex][y].getTile().getLetter() == c)
-                                                inHand = true;
-                                        }
-                                        if (inHand == false) {
-                                            break;
-                                        }
-                                        if(xIndex == boardLocal[0].length - 1)
-                                            break;
-                                        xIndex++;
+                                        break;
                                     }
                                 }
-                                if (inHand == true) {
-                                    Tile[] wordTiles = stringToTiles(w);
-                                    Move move = new Move(x - remainingStart.length(), y, true, wordTiles, this);
-                                    Object[] result = validator.isValidPlay(move);
+                                if (inHand == true && handCount < hand.length) {
+                                    Tile[] word = new Tile[tilesFromHand.size()];
+                                    for(int i = 0; i < tilesFromHand.size(); i ++){
+                                        word[i] = tilesFromHand.get(i);
+                                    }
+                                    Move move = new Move(trueX, y, true, word, this);
+                                    Object[] result = validator.isValidPlaySkyCat(move);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
-                                        possibleMoves.add((Move) result[1]);
+                                        possibleMoves.add(move);
                                         }
                                 }
                             }
                         }
                         if (w.contains(verticalString)) {
                             int index = w.indexOf(verticalString);
-                            String remainingStart = "";
-                            String remainingEnd = "";
-                            if (index > 0) {
-                                remainingStart += w.substring(0, index);
-                            }
-                            if (index + verticalString.length() < w.length()) {
-                                remainingEnd += w.substring(index
-                                        + verticalString.length());
-                            }
-                            if (remainingStart.length() <= clearUpward
-                                    && remainingEnd.length() <= clearDownward && (remainingStart.length() + remainingEnd.length()) <= hand.length) {
-                                boolean inHand = false;
-                                Tile[] handCopy = hand.clone();
-                                int handCount = handCopy.length;
-                                int yIndex = y - upwardTiles.length() - remainingStart.length();
-                                if(remainingStart.length() <= handCount && yIndex >= 0)
-                                    for (char c : remainingStart.toCharArray()) {
-                                        inHand = false;
-                                        for (int i = 0; i < handCopy.length; i++) {
-                                            if (handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c
-                                                    && boardLocal[x][yIndex].getTile() == null) {
-                                                inHand = true;
-                                                handCopy[i] = null;
-                                                handCount--;
-                                                break;
-                                            }
-                                        }
-                                        if (inHand == false) {
-                                            break;
-                                        }
-                                        yIndex++;
-                                    }
-                                yIndex = y;
-                                if(inHand == true)
-                                    for(char c : remainingEnd.toCharArray()){
-                                        inHand = false;
-                                        if(boardLocal[x][yIndex].getTile() == null) {
-                                            for (int i = 0; i < handCopy.length; i++) {
-                                                if (handCopy[i] != null
-                                                        && handCopy[i].getLetter() == c) {
-                                                    inHand = true;
-                                                    handCopy[i] = null;
-                                                    handCount--;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        else{
-                                            if(boardLocal[x][yIndex].getTile().getLetter() == c)
-                                                inHand = true;
-                                        }
-                                        if(inHand == false){
-                                            break;
-                                        }
-                                        if(yIndex == boardLocal[0].length - 1)
-                                            break;
-                                        yIndex++;
-                                    }
-                                if (inHand == true) {
-                                    Tile[] wordTiles = stringToTiles(w);
-                                    Move move = new Move(x, y - remainingStart.length(), false, wordTiles, this);
-                                    Object[] result = validator.isValidPlay(move);
-                                    if ((int) result[0] == 1
-                                            || (int) result[0] == 2) {
-                                        possibleMoves.add((Move) result[1]);
-                                        }
-                                }
-                            }
-                        }
-                    }
-                    for (String w : specWords) {
-                        if (w.contains(horizontalString)) {
-                            int index = w.indexOf(horizontalString);
                             String remainingStart = "";
                             String remainingEnd = "";
                             if (index > 0) {
@@ -330,123 +201,56 @@ public class SkyCat extends User {
                                 remainingEnd += w.substring(index
                                         + horizontalString.length());
                             }
-                            if (remainingStart.length() <= clearBackward
-                                    && remainingEnd.length() <= clearForward && (remainingStart.length() + remainingEnd.length()) <= hand.length) {
-                                boolean inHand = false;
+
+                            if(y - remainingStart.length() >= 0 && y + remainingEnd.length() < boardLocal[0].length) {
+                                boolean inHand = true;
                                 Tile[] handCopy = hand.clone();
+                                ArrayList<Tile> tilesFromHand = new ArrayList<>();
+                                int yIndex = y - remainingStart.length();
+                                int trueY = yIndex;
                                 int handCount = handCopy.length;
-                                int xIndex = x - backwardTiles.length() - remainingStart.length();
-                                if(remainingStart.length() <= handCount && xIndex >= 0)
-                                    for (char c : remainingStart.toCharArray()) {
+
+                                for(char letterInWord : w.toCharArray()){
+                                    if(yIndex < boardLocal[0].length && boardLocal[x][yIndex].getTile() != null && boardLocal[x][yIndex].getTile().getLetter() == letterInWord)
+                                        yIndex++;
+                                    else if(yIndex < boardLocal[0].length && boardLocal[x][yIndex].getTile() != null && boardLocal[x][yIndex].getTile().getLetter() != letterInWord){
                                         inHand = false;
-                                        for (int i = 0; i < handCopy.length; i++) {
-                                            if (handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c
-                                                    && boardLocal[xIndex][y].getTile() == null) {
-                                                inHand = true;
-                                                handCopy[i] = null;
+                                        break;
+                                    }
+                                    else if(yIndex < boardLocal[0].length && boardLocal[x][yIndex].getTile() == null && handCount > 0){
+                                        boolean found = false;
+                                        for(Tile tileInHand : handCopy){
+                                            if(tileInHand != null && tileInHand.getLetter() == letterInWord){
+                                                if(handCount == 7)
+                                                    trueY = yIndex;
+                                                tilesFromHand.add(tileInHand);
+                                                tileInHand = null;
                                                 handCount--;
+                                                found = true;
+                                                yIndex++;
                                                 break;
                                             }
                                         }
-                                        if (inHand == false) {
+                                        if(!found) {
+                                            inHand = false;
                                             break;
                                         }
-                                        xIndex++;
                                     }
-                                xIndex = x + forwardTiles.length() + 1;
-                                if(inHand == true && remainingEnd.length() <= handCount)
-                                    for(char c : remainingEnd.toCharArray()){
+                                    else {
                                         inHand = false;
-                                        for(int i = 0; i < handCopy.length; i++){
-                                            if(handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c){
-                                                inHand = true;
-                                                handCopy[i] = null;
-                                                handCount--;
-                                                break;
-                                            }
-                                        }
-                                        if(inHand == false){
-                                            break;
-                                        }
-                                        if(xIndex == boardLocal[0].length - 1)
-                                            break;
-                                        xIndex++;
-                                    }
-                                if (inHand == true) {
-                                    Tile[] wordTiles = stringToTiles(w);
-                                    Move move = new Move(x - remainingStart.length(), y, true, wordTiles, this);
-                                    Object[] result = validator.isValidPlay(move);
-                                    if ((int) result[0] == 1
-                                            || (int) result[0] == 2) {
-                                        possibleMoves.add((Move) result[1]);
+                                        break;
                                     }
                                 }
-                            }
-                        }
-                        if (w.contains(verticalString)) {
-                            int index = w.indexOf(verticalString);
-                            String remainingStart = "";
-                            String remainingEnd = "";
-                            if (index > 0) {
-                                remainingStart += w.substring(0, index);
-                            }
-                            if (index + verticalString.length() < w.length()) {
-                                remainingEnd += w.substring(index
-                                        + verticalString.length());
-                            }
-                            if (remainingStart.length() <= clearUpward
-                                    && remainingEnd.length() <= clearDownward && (remainingStart.length() + remainingEnd.length()) <= hand.length) {
-                                boolean inHand = false;
-                                Tile[] handCopy = hand.clone();
-                                int handCount = handCopy.length;
-                                int yIndex = y - upwardTiles.length() - remainingStart.length();
-                                if(remainingStart.length() <= handCount && yIndex >= 0)
-                                    for (char c : remainingStart.toCharArray()) {
-                                        inHand = false;
-                                        for (int i = 0; i < handCopy.length; i++) {
-                                            if (handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c
-                                                    && boardLocal[x][yIndex].getTile() == null) {
-                                                inHand = true;
-                                                handCopy[i] = null;
-                                                handCount--;
-                                                break;
-                                            }
-                                        }
-                                        if (inHand == false) {
-                                            break;
-                                        }
-                                        yIndex++;
+                                if (inHand == true && handCount < hand.length ) {
+                                    Tile[] word = new Tile[tilesFromHand.size()];
+                                    for(int i = 0; i < tilesFromHand.size(); i ++) {
+                                        word[i] = tilesFromHand.get(i);
                                     }
-                                yIndex = y + downwardTiles.length() + 1;
-                                if(inHand == true && remainingEnd.length() <= handCount)
-                                    for(char c : remainingEnd.toCharArray()){
-                                        inHand = false;
-                                        for(int i = 0; i < handCopy.length; i++){
-                                            if(handCopy[i] != null
-                                                    && handCopy[i].getLetter() == c){
-                                                inHand = true;
-                                                handCopy[i] = null;
-                                                handCount--;
-                                                break;
-                                            }
-                                        }
-                                        if(inHand == false){
-                                            break;
-                                        }
-                                        if(yIndex == boardLocal[0].length - 1)
-                                            break;
-                                        yIndex++;
-                                    }
-                                if (inHand == true) {
-                                    Tile[] wordTiles = stringToTiles(w);
-                                    Move move = new Move(x, y - remainingStart.length(), false, wordTiles, this);
-                                    Object[] result = validator.isValidPlay(move);
+                                    Move move = new Move(x, trueY, false, word, this);
+                                    Object[] result = validator.isValidPlaySkyCat(move);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
-                                        possibleMoves.add((Move) result[1]);
+                                        possibleMoves.add(move);
                                     }
                                 }
                             }
@@ -460,52 +264,6 @@ public class SkyCat extends User {
 
         possibleMoves.toArray(toReturn);
         return toReturn;
-    }
-
-    /*
-        Method to count clear spaces
-        @return number of clear spaces
-     */
-    private int countClearSpaces(Direction d, int x, int y) {
-        int count = 0;
-        switch (d) {
-            case FORWARD:
-                x++;
-                break;
-            case BACKWARD:
-                x--;
-                break;
-            case UPWARD:
-                y++;
-                break;
-            case DOWNWARD:
-                y--;
-                break;
-        }
-        while (x < boardLocal.length && x >= 0
-                && y < boardLocal[0].length && y >= 0) {
-            if (boardLocal[x][y].getTile() != null) {
-                break;
-            } else {
-                count++;
-            }
-            switch (d) {
-                case FORWARD:
-                    x++;
-                    break;
-                case BACKWARD:
-                    x--;
-                    break;
-                case UPWARD:
-                    y++;
-                    break;
-                case DOWNWARD:
-                    y--;
-                    break;
-            }
-        }
-
-        return count;
     }
 
     /*
