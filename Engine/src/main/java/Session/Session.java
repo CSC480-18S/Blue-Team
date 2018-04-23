@@ -458,7 +458,7 @@ public class Session {
             hand[i] = tg.exchangeTile(hand[i]);
         }
         user.setHand(hand);
-        gui.updateBoard(board.getBoard());
+        gui.updateHand(users);
         gui.printGameLog(user.getUsername() + " exchanged all tiles");
         skippedTimes ++;
         nextTurn();
