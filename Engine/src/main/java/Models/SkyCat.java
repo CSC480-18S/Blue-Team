@@ -154,12 +154,13 @@ public class SkyCat extends User {
                                     }
                                     else if(xIndex < boardLocal[0].length && boardLocal[xIndex][y].getTile() == null && handCount > 0){
                                         boolean found = false;
-                                        for(Tile tileInHand : handCopy){
-                                            if(tileInHand != null && tileInHand.getLetter() == letterInWord){
-                                                if(handCount == 7)
+                                        for(int z = 0; z < handCopy.length; z++){
+                                            if(handCopy[z] != null && handCopy[z].getLetter() == letterInWord){
+                                                if(handCount == 7) {
                                                     trueX = xIndex;
-                                                tilesFromHand.add(tileInHand);
-                                                tileInHand = null;
+                                                }
+                                                tilesFromHand.add(handCopy[z]);
+                                                handCopy[z] = null;
                                                 handCount--;
                                                 found = true;
                                                 xIndex++;
@@ -181,8 +182,9 @@ public class SkyCat extends User {
                                     for(int i = 0; i < tilesFromHand.size(); i ++){
                                         word[i] = tilesFromHand.get(i);
                                     }
+                                    Tile[]wordForValidation = word.clone();
                                     Move move = new Move(trueX, y, true, word, this);
-                                    Move validatorMove = new Move(trueX, y, true, word, this);
+                                    Move validatorMove = new Move(trueX, y, true, wordForValidation, this);
                                     Object[] result = validator.isValidPlay(validatorMove);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
@@ -220,12 +222,13 @@ public class SkyCat extends User {
                                     }
                                     else if(yIndex < boardLocal[0].length && boardLocal[x][yIndex].getTile() == null && handCount > 0){
                                         boolean found = false;
-                                        for(Tile tileInHand : handCopy){
-                                            if(tileInHand != null && tileInHand.getLetter() == letterInWord){
-                                                if(handCount == 7)
+                                        for(int z = 0; z < handCopy.length; z++){
+                                            if(handCopy[z] != null && handCopy[z].getLetter() == letterInWord){
+                                                if(handCount == 7) {
                                                     trueY = yIndex;
-                                                tilesFromHand.add(tileInHand);
-                                                tileInHand = null;
+                                                }
+                                                tilesFromHand.add(handCopy[z]);
+                                                handCopy[z] = null;
                                                 handCount--;
                                                 found = true;
                                                 yIndex++;
@@ -247,8 +250,9 @@ public class SkyCat extends User {
                                     for(int i = 0; i < tilesFromHand.size(); i ++) {
                                         word[i] = tilesFromHand.get(i);
                                     }
+                                    Tile[] wordForValidation = word.clone();
                                     Move move = new Move(x, trueY, false, word, this);
-                                    Move validatorMove = new Move(x, trueY, false, word, this);
+                                    Move validatorMove = new Move(x, trueY, false, wordForValidation, this);
                                     Object[] result = validator.isValidPlay(validatorMove);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
