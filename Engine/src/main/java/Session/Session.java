@@ -243,6 +243,12 @@ public class Session {
 
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
+        //restart players timer
+        if(user.getClass() == Player.class){
+            timer.cancel();
+            setPlayerTimer();
+        }
+
         String initialLetters = word;
         TileGenerator tg = TileGenerator.getInstance();
         // Check if word length is less than 11,
