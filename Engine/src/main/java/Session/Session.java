@@ -281,9 +281,10 @@ public class Session {
                 tilesForChecking.append("-");
                 wildCard = false;
             }
-            else
+            else {
                 wordTileBuilder.add(tg.getTile(each));
-            tilesForChecking.append(Character.toString(each));
+                tilesForChecking.append(Character.toString(each));
+            }
         }
 
         //check if user has enough tiles
@@ -324,7 +325,7 @@ public class Session {
                 Player temp = (Player) user;
                 updateTeamScore(score, temp.getTeam());
             }
-            replaceTiles(user, initialLetters);
+            replaceTiles(user, tilesForChecking.toString());
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             skippedTimes = 0;
@@ -334,7 +335,7 @@ public class Session {
             nextTurn();
             return "VALID";
         } else if ((int) result[0] == 2) {
-            board.placeWord(startX, startY, horizontal, word);
+            board.placeWord(validMove.getStartX(), validMove.getStartY(), horizontal, word);
             int score = calculateMovePoints((Move)result[1]) * 2;
             displayMoveStats((Move) result[1], score);
             user.setScore(user.getScore() + score);
@@ -342,7 +343,7 @@ public class Session {
                 Player temp = (Player) user;
                 updateTeamScore(score, temp.getTeam());
             }
-            replaceTiles(user, initialLetters);
+            replaceTiles(user, tilesForChecking.toString());
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             skippedTimes = 0;
