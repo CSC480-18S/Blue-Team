@@ -49,12 +49,13 @@ public class SkyCat extends User {
         Move[] possibleMoves = getAllMoves();
         int upperBound = possibleMoves.length;
         int lowerBound = 0;
-        switch(difficulty){
-            case "EASY": upperBound = (possibleMoves.length/3); lowerBound = 0; break;
-            case "MEDIUM": upperBound = (possibleMoves.length/3)*2; lowerBound = 0; break;
-            case "HARD": upperBound = possibleMoves.length; lowerBound = (possibleMoves.length*(1/3)); break;
-            default: upperBound = (possibleMoves.length/3)*2; lowerBound = 0; break;
-        }
+        if(possibleMoves.length >= 3)
+            switch(difficulty){
+                case "EASY": upperBound = (possibleMoves.length/3); lowerBound = 0; break;
+                case "MEDIUM": upperBound = possibleMoves.length; lowerBound = 0; break;
+                case "HARD": upperBound = possibleMoves.length; lowerBound = (possibleMoves.length/3)*2; break;
+                default: upperBound = possibleMoves.length; lowerBound = 0; break;
+            }
         if(possibleMoves.length == 0){
             return null;
         }
