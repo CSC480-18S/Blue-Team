@@ -11,6 +11,34 @@
     cursor: pointer; /* Add a pointer on hover */
 }
 
+#waitOverlay {
+    position: fixed; /* Sit on top of the page content */
+    z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+#welcomeOverlay {
+    position: fixed; /* Sit on top of the page content */
+    z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+.wrap { display:table;width:100%}
+
 .loginbox {
     position: absolute;
     z-index: 0;
@@ -32,10 +60,45 @@
     left: calc(50% - 50px);
     border-radius: 0px;
 }
+
 .loginbox p[id="usernameLbl"]{
     margin:0;
     padding: 0;
     font-weight: bold;
+}
+
+.loginbox p[id="wUsernameLbl"]{
+    text-align: left;
+    margin:0;
+    padding: 0;
+    font-weight: bold;
+    display: table-cell;
+}
+
+.loginbox p[id="teamLbl"]{
+    display: inline-block;
+    font-size: 18px;
+    vertical-align: center;
+    position: relative;
+    left: 5%;
+}
+
+.loginbox p[id="wTeamLbl"]{
+    text-align: left;
+    margin:0;
+    padding: 0;
+    font-weight: bold;
+    display: table-cell;
+}
+
+.loginbox p[id="wUsername"]
+{
+    text-align: right;
+}
+
+.loginbox p[id="wTeam"]
+{
+    text-align: right;
 }
 
 .loginbox input {
@@ -64,16 +127,6 @@
 .loginbox button:hover{
     cursor: pointer;
     background: lawngreen;
-}
-
-
-
-.loginbox p[id="teamLbl"]{
-    display: inline-block;
-    font-size: 18px;
-    vertical-align: center;
-    position: relative;
-    left: 5%;
 }
 
 .loginbox input[type=checkbox].toggle-switch{
