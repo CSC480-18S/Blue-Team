@@ -301,22 +301,22 @@ public class Session {
         }
 
         //check if user has enough tiles
-            if(!hasEnoughTiles(user, tilesForChecking.toString())){
-                System.out.println(user.getUsername() + " doesn't have required tiles");
-                System.out.println("Word trying to play: " + tilesForChecking.toString());
-                System.out.println("X:Y " + startX + ":" + startY);
-                System.out.print("Tiles on hand: ");
-                Tile[] hand = user.getHand();
-                for(Tile tile : hand){
-                    System.out.print(tile.getLetter() + " ");
-                }
-                //if ai tries to use extra tiles - exchange all and skip
-                if(user.getClass() == SkyCat.class){
-                    timer.cancel();
-                    exchangeAllTiles(user);
-                }
-                return "You don't have required tiles";
+        if(!hasEnoughTiles(user, tilesForChecking.toString())){
+            System.out.println(user.getUsername() + " doesn't have required tiles");
+            System.out.println("Word trying to play: " + tilesForChecking.toString());
+            System.out.println("X:Y " + startX + ":" + startY);
+            System.out.print("Tiles on hand: ");
+            Tile[] hand = user.getHand();
+            for(Tile tile : hand){
+                System.out.print(tile.getLetter() + " ");
             }
+            //if ai tries to use extra tiles - exchange all and skip
+            if(user.getClass() == SkyCat.class){
+                timer.cancel();
+                exchangeAllTiles(user);
+            }
+            return "You don't have required tiles";
+        }
 
         Tile[] wordTiles = new Tile[wordTileBuilder.size()];
         String wordToPlaceOnBoard = "";
