@@ -182,8 +182,10 @@ public class Session {
 
         //check if any users are not initialized yet
         for (int i = 0; i < users.length; i++) {
-            if ((users[i] == null || users[i].getClass() == SkyCat.class) && ((i == 0 || i == 2) && team.toUpperCase().equals("GREEN"))
-                    || ((i == 1 || i == 3) && team.toUpperCase().equals("GOLD"))) {
+            if ((users[i] == null || users[i].getClass() == SkyCat.class)
+                    && (((i == 0 || i == 2) && team.toUpperCase().equals("GREEN"))
+                    || ((i == 1 || i == 3) && team.toUpperCase().equals("GOLD"))))
+            {
                 //cancel ai timer
                 if(i == currentTurn && users[currentTurn] != null && users[i].getClass() == SkyCat.class){
                     timer.cancel();
@@ -202,7 +204,32 @@ public class Session {
             }
         }
 
-        return "Could not join game.";
+        // Try adding to opposite team
+        //check if any users are not initialized yet
+        for (int i = 0; i < users.length; i++) {
+            if ((users[i] == null || users[i].getClass() == SkyCat.class)
+                    && (((i == 0 || i == 2) && team.toUpperCase().equals("GOLD"))
+                    || ((i == 1 || i == 3) && team.toUpperCase().equals("GREEN"))))
+            {
+                //cancel ai timer
+                if(i == currentTurn && users[currentTurn] != null && users[i].getClass() == SkyCat.class){
+                    timer.cancel();
+                }
+                if(users[currentTurn] != null && users[i].getClass() == SkyCat.class) {
+                    //return generated tiles back in bag
+                    TileGenerator.getInstance().putInBag(newPlayer.getHand());
+                    Tile[] hand = users[i].getHand();
+                    newPlayer.setHand(hand);
+                }
+                users[i] = newPlayer;
+                setPlayerTimer();
+                gui.updateUsers(users);
+                gui.printGameLog(newPlayer.getUsername() + " has joined " + team + " Team");
+                return "JOINED";
+            }
+        }
+
+        return "Sorry - Game is full.";
     }
 
     // Check if this is the first move
