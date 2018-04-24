@@ -6,12 +6,10 @@
 package Models;
 
 import java.util.ArrayList;
-
 /**
  * Its a record of a move played (Or attempted to be played)
- * @author wcook
  */
-public class Move {
+public class Move implements Comparable<Move>{
 
     private int startX;
     private int startY;
@@ -19,6 +17,7 @@ public class Move {
     private Tile[] word;
     private User user;
     private ArrayList<Move> offshootMoves;
+    private int score;
 
     public Move(int startX, int startY, boolean horizontal, Tile[] word, User user) {
         this.user = user;
@@ -28,6 +27,7 @@ public class Move {
         this.word = word;
         this.user = user;
         offshootMoves = null;
+        score = 0;
     }
 
     /**
@@ -103,4 +103,24 @@ public class Move {
         this.startY = start[1];
     }
 
+    public void setScore(int score){this.score = score;}
+
+    public int getScore(){return this.score;}
+
+
+    @Override
+    public int compareTo(Move moveToCompare){
+        int scoreToCompare = moveToCompare.getScore();
+        return this.score - scoreToCompare;
+    }
+
+    @Override
+    public String toString(){
+        String output =  "[ Start X = " + startX + ", Start Y = " + startY + ", Main word = " + getWordString() + ", offshoot moves = ";
+        for(Move each : this.offshootMoves){
+            output += each.getWordString() + ", ";
+        }
+        output += " Score = " + this.score;
+        return output;
+    }
 }
