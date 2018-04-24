@@ -167,6 +167,19 @@ public class SkyCat extends User {
                                                 break;
                                             }
                                         }
+                                        for(int z = 0; z < handCopy.length; z++){
+                                            if(handCopy[z] != null && handCopy[z].getLetter() == '-'){
+                                                if(handCount == 7) {
+                                                    trueX = xIndex;
+                                                }
+                                                tilesFromHand.add(new Tile(letterInWord, 0));
+                                                handCopy[z] = null;
+                                                handCount--;
+                                                found = true;
+                                                xIndex++;
+                                                break;
+                                            }
+                                        }
                                         if(!found) {
                                             inHand = false;
                                             break;
@@ -228,6 +241,19 @@ public class SkyCat extends User {
                                                     trueY = yIndex;
                                                 }
                                                 tilesFromHand.add(handCopy[z]);
+                                                handCopy[z] = null;
+                                                handCount--;
+                                                found = true;
+                                                yIndex++;
+                                                break;
+                                            }
+                                        }
+                                        for(int z = 0; z < handCopy.length; z++){
+                                            if(handCopy[z] != null && handCopy[z].getLetter() == '-'){
+                                                if(handCount == 7) {
+                                                    trueY = yIndex;
+                                                }
+                                                tilesFromHand.add(new Tile(letterInWord, 0));
                                                 handCopy[z] = null;
                                                 handCount--;
                                                 found = true;
