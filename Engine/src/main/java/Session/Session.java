@@ -243,6 +243,12 @@ public class Session {
 
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
+        //restart players timer
+        if(user.getClass() == Player.class){
+            timer.cancel();
+            setPlayerTimer();
+        }
+
         String initialLetters = word;
         TileGenerator tg = TileGenerator.getInstance();
         // Check if word length is less than 11,
@@ -270,6 +276,7 @@ public class Session {
 
         }
         ArrayList<Tile> wordTileBuilder = new ArrayList<>();
+        StringBuilder tilesForChecking = new StringBuilder();
         boolean wildCard = false;
         for(char each : word.toCharArray()){
             if(each == '_'){
@@ -277,30 +284,56 @@ public class Session {
             }
             else if(wildCard){
                 wordTileBuilder.add(new Tile(each, 0));
+                tilesForChecking.append("-");
                 wildCard = false;
             }
-            else
+            else {
                 wordTileBuilder.add(tg.getTile(each));
+                tilesForChecking.append(Character.toString(each));
+            }
+        }
+
+        //check if user has enough tiles
+        if(!hasEnoughTiles(user, tilesForChecking.toString())){
+            System.out.println(user.getUsername() + " doesn't have required tiles");
+            System.out.println("Word trying to play: " + tilesForChecking.toString());
+            System.out.println("X:Y " + startX + ":" + startY);
+            System.out.print("Tiles on hand: ");
+            Tile[] hand = user.getHand();
+            for(Tile tile : hand){
+                System.out.print(tile.getLetter() + " ");
+            }
+            //if ai tries to use extra tiles - exchange all and skip
+            if(user.getClass() == SkyCat.class){
+                timer.cancel();
+                exchangeAllTiles(user);
+            }
+            return "You don't have required tiles";
         }
 
         Tile[] wordTiles = new Tile[wordTileBuilder.size()];
+        String wordToPlaceOnBoard = "";
         for(int i = 0; i < wordTileBuilder.size(); i++){
             wordTiles[i] = wordTileBuilder.get(i);
+            wordToPlaceOnBoard += wordTileBuilder.get(i).getLetter();
         }
 
         Object[] result = validator.isValidPlay(new Move(startX, startY, horizontal, wordTiles, user));
 
-        word = ((Move) result[1]).getWordString();
+        Move validMove = (Move)result[1];
+        word = validMove.getWordString();
         if ((int) result[0] == 1) {
-            board.placeWord(startX, startY, horizontal, word);
+            board.placeWord(validMove.getStartX(), validMove.getStartY(), horizontal, word);
             int score = calculateMovePoints((Move)result[1]);
             displayMoveStats((Move) result[1], score);
             user.setScore(user.getScore() + score);
             if (user instanceof Player) {
                 Player temp = (Player) user;
                 updateTeamScore(score, temp.getTeam());
+                updateTeamHighestWordScore(temp.getTeam(), score);
+                updateLongestWord(temp.getTeam(), (Move) result[1]);
             }
-            replaceTiles(user, initialLetters);
+            replaceTiles(user, tilesForChecking.toString());
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             skippedTimes = 0;
@@ -310,15 +343,18 @@ public class Session {
             nextTurn();
             return "VALID";
         } else if ((int) result[0] == 2) {
-            board.placeWord(startX, startY, horizontal, word);
+            board.placeWord(validMove.getStartX(), validMove.getStartY(), horizontal, word);
             int score = calculateMovePoints((Move)result[1]) * 2;
             displayMoveStats((Move) result[1], score);
             user.setScore(user.getScore() + score);
             if (user instanceof Player) {
                 Player temp = (Player) user;
                 updateTeamScore(score, temp.getTeam());
+                updateBonusWord(temp.getTeam());
+                updateTeamHighestWordScore(temp.getTeam(), score);
+                updateLongestWord(temp.getTeam(), (Move) result[1]);
             }
-            replaceTiles(user, initialLetters);
+            replaceTiles(user, tilesForChecking.toString());
             gui.updateBoard(board.getBoard());
             playedMoves.add((Move) result[1]);
             skippedTimes = 0;
@@ -509,7 +545,6 @@ public class Session {
         //if skipped 4 times - game ended
         if(skippedTimes >= 4){
             System.out.println("Game Ended");
-            // TEAM STATS HERE
             restartGame();
             return;
         }
@@ -538,10 +573,13 @@ public class Session {
 
     private void setPlayerTimer(){
         timer = new Timer();
-        timer.schedule(new playerTimerTask(session), turnTimeSec * 1000);
+        timer.schedule(new playerTimerTask(session, turnTimeSec), 0, 1000);
     }
 
     private void setAiTimer(){
+        //clear user timer
+        gui.setTimerText(4,0);
+
         //get the right delay for AI
         //default - no players
         int delay = aiWaitNoPlayers;
@@ -557,7 +595,7 @@ public class Session {
             delay = aiWaitSec;
         }
         timer = new Timer();
-        timer.schedule(new aiTimerTask(session), delay * 1000);
+        timer.schedule(new aiTimerTask(session),delay * 1000);
     }
 
     private void replaceTiles(User user, String letters) {
@@ -640,6 +678,8 @@ public class Session {
     }
 
     private static void restartGame(){
+        session.sendTeamStat();
+        session.updateWTLCount();
         session.gui.closeFrame();
         session = null;
         Session.getSession();
@@ -652,9 +692,34 @@ public class Session {
         System.out.println(player.getUsername() + " " + player.getScore());
     }
 
-    private void sendTeamStat(int [] ts) {
-        dbQueries.addNewToGameTable(ts[0], ts[1]);
+    private void sendTeamStat() {
+        int[] ts;
+        ts = getTeamScores();
+        System.out.println("What is being sent to db: " + ts[1] + "  " + ts[0]);
+        dbQueries.addNewToGameTable(ts[1], ts[0]);
+        dbQueries.updateTeamCumulative("green", ts[0]);
+        dbQueries.updateTeamCumulative("gold", ts[1]);
     }
+
+    private void updateWTLCount() {
+        int[] ts;
+        ts = getTeamScores();
+        if(ts[1] > ts[0]) {
+            dbQueries.updateWin("gold");
+            dbQueries.updateLose("green");
+        } else if(ts[0] > ts[1]) {
+            dbQueries.updateWin("green");
+            dbQueries.updateLose("gold");
+        } else if(ts[0] == ts[1]) {
+            dbQueries.updateTie();
+        }
+    }
+
+    private void updateTeamHighestWordScore(String team, int score) { dbQueries.updateHighestWordScore(team, score); }
+
+    private void updateLongestWord(String team, Move move) { dbQueries.updateTeamLongestWord(team, move.getWordString()); }
+
+    private void updateBonusWord(String team) { dbQueries.updateTeamBonusCount(team, 1); }
 
     private void aiRun(){
         SkyCat skyCat = (SkyCat) session.users[currentTurn];
@@ -669,6 +734,8 @@ public class Session {
     }
 
     private void playerTimeExpired(){
+        //cancel looping timer
+        timer.cancel();
         skippedTimes ++;
         //check if player skipped 3 times
         if (users[currentTurn].getSkipped() == 2) {
@@ -692,16 +759,43 @@ public class Session {
         }
     }
 
+    private boolean hasEnoughTiles(User user, String letters){
+        ArrayList<Character> replace = new ArrayList<>();
+        for (int i = 0; i < letters.length(); i++) {
+            replace.add(letters.charAt(i));
+        }
+
+        Tile[] userHand = user.getHand();
+
+        ArrayList<Character> hand = new ArrayList<>();
+        for (int i = 0; i < userHand.length; i++) {
+            hand.add(userHand[i].getLetter());
+        }
+
+        for(int i =0; i < replace.size(); i++){
+            if(hand.contains(replace.get(i))){
+                hand.remove(replace.get(i));
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * Checks if user with provided mac address exists in database
      * @param mac
      * @return
      */
     public String amIregistered(String mac){
-        if(dbQueries.findUser(mac) != null){
-            return "TRUE";
+        Gson gson = new Gson();
+        String[] result = dbQueries.findUser(mac);
+        if(result != null){
+            return gson.toJson(result);
         } else {
-            return "FALSE";
+            String[] response = {"FALSE"};
+            return gson.toJson(response);
         }
     }
 
@@ -713,19 +807,26 @@ public class Session {
         }
 
         public void run() {
-            session.aiRun();
+                session.aiRun();
         }
     }
 
     class playerTimerTask extends TimerTask {
         Session session;
+        int timeLeft;
 
-        playerTimerTask(Session session) {
+        playerTimerTask(Session session, int timeLeft) {
             this.session = session;
+            this.timeLeft = timeLeft;
         }
 
         public void run() {
-            session.playerTimeExpired();
+            if(timeLeft > 0){
+                session.gui.setTimerText(session.getCurrentTurn(), timeLeft);
+                timeLeft--;
+            }else {
+                session.playerTimeExpired();
+            }
         }
     }
 }

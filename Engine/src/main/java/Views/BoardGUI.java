@@ -16,15 +16,12 @@ import Session.Start;
 import Session.Session;
 import static Models.GameConstants.*;
 import java.awt.Color;
-import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.text.DecimalFormat;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.text.DefaultCaret;
 
 /**
  * @author mide_
@@ -51,6 +48,16 @@ public class BoardGUI implements Runnable {
     private javax.swing.JTextArea jTextArea2;
 
     private javax.swing.JTextArea gameLogArea;
+    private javax.swing.JLabel timeLabel2;
+    private javax.swing.JLabel timeLabel1;
+    private javax.swing.JLabel timeLabel3;
+    private javax.swing.JLabel timeLabel4;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel label;
     private javax.swing.JLabel label2;
@@ -61,6 +68,10 @@ public class BoardGUI implements Runnable {
     private javax.swing.JLabel player3Label;
     private javax.swing.JLabel player4Label;
     private javax.swing.JPanel qrCode;
+    private javax.swing.JLabel timer1;
+    private javax.swing.JLabel timer2;
+    private javax.swing.JLabel timer3;
+    private javax.swing.JLabel timer4;
 
     int length13 = 7;
     int length24 = 1;
@@ -370,52 +381,227 @@ public class BoardGUI implements Runnable {
 
         //**********************Player names and game log*************************//
         label = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
         label2 = new javax.swing.JLabel();
-        label3 = new javax.swing.JLabel();
         player1Label = new javax.swing.JLabel();
-        player2Label = new javax.swing.JLabel();
+        timeLabel1 = new javax.swing.JLabel();
+        timer1 = new javax.swing.JLabel();
         player3Label = new javax.swing.JLabel();
+        timeLabel3 = new javax.swing.JLabel();
+        timer3 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        label3 = new javax.swing.JLabel();
+        player2Label = new javax.swing.JLabel();
+        timeLabel2 = new javax.swing.JLabel();
+        timer2 = new javax.swing.JLabel();
         player4Label = new javax.swing.JLabel();
+        timer4 = new javax.swing.JLabel();
+        timeLabel4 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        logLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         gameLogArea = new javax.swing.JTextArea();
-        logLabel = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
         qrCode = new javax.swing.JPanel();
 
         label.setBackground(new java.awt.Color(243, 243, 243));
+        label.setPreferredSize(new Dimension(310, 570));
         label.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jPanel2.setBackground(new java.awt.Color(243, 243, 243));
+        jPanel2.setPreferredSize(new Dimension(300, 190));
+
+        jPanel5.setBackground(new java.awt.Color(243, 243, 243));
+        jPanel5.setPreferredSize(new Dimension(120, 170));
 
         label2.setFont(new java.awt.Font("Serif", 1, 17)); // NOI18N
         label2.setForeground(new java.awt.Color(42, 99, 66));
         label2.setText("Team Green");
 
+        player1Label.setFont(new java.awt.Font("Serif", 1, 15)); // NOI18N
+        player1Label.setText("Player 1");
+
+        timeLabel1.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        timeLabel1.setText("Time:");
+
+        timer1.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        timer1.setText("00");
+
+        player3Label.setFont(new java.awt.Font("Serif", 1, 15)); // NOI18N
+        player3Label.setText("Player 3");
+
+        timeLabel3.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        timeLabel3.setText("Time:");
+
+        timer3.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        timer3.setText("00");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(label2)
+                                        .addComponent(player1Label)
+                                        .addGroup(jPanel5Layout.createSequentialGroup()
+                                                .addComponent(timeLabel1)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(timer1))
+                                        .addComponent(player3Label)
+                                        .addGroup(jPanel5Layout.createSequentialGroup()
+                                                .addComponent(timeLabel3)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(timer3)))
+                                .addGap(0, 14, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                                .addComponent(label2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(player1Label)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(timeLabel1)
+                                        .addComponent(timer1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(player3Label)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(timeLabel3)
+                                        .addComponent(timer3))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel6.setBackground(new java.awt.Color(243, 243, 243));
+        jPanel6.setPreferredSize(new Dimension(120, 170));
+
         label3.setFont(new java.awt.Font("Serif", 1, 17)); // NOI18N
         label3.setForeground(new java.awt.Color(255, 204, 51));
         label3.setText("Team Gold");
 
-        player1Label.setFont(new java.awt.Font("Serif", 1, 17)); // NOI18N
-        player1Label.setText("Player 1");
-
-        player2Label.setFont(new java.awt.Font("Serif", 1, 17)); // NOI18N
+        player2Label.setFont(new java.awt.Font("Serif", 1, 15)); // NOI18N
         player2Label.setText("Player 2");
 
-        player3Label.setFont(new java.awt.Font("Serif", 1, 17)); // NOI18N
-        player3Label.setText("Player 3");
+        timeLabel2.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        timeLabel2.setText("Time:");
 
-        player4Label.setFont(new java.awt.Font("Serif", 1, 17)); // NOI18N
+        timer2.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        timer2.setText("00");
+
+        player4Label.setFont(new java.awt.Font("Serif", 1, 15)); // NOI18N
         player4Label.setText("Player 4");
 
-        gameLogArea.setColumns(20);
-        gameLogArea.setFont(new java.awt.Font("Comic Sans MS", 1, 16)); // NOI18N
-        gameLogArea.setRows(5);
+        timer4.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        timer4.setText("00");
 
-        DefaultCaret caret = (DefaultCaret)gameLogArea.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        timeLabel4.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        timeLabel4.setText("Time:");
 
-        jScrollPane1.setViewportView(gameLogArea);
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(label3)
+                                        .addComponent(player2Label)
+                                        .addGroup(jPanel6Layout.createSequentialGroup()
+                                                .addComponent(timeLabel2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(timer2)))
+                                .addGap(0, 27, Short.MAX_VALUE))
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel6Layout.createSequentialGroup()
+                                                .addComponent(timeLabel4)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(timer4))
+                                        .addComponent(player4Label))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(label3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(player2Label)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(timeLabel2)
+                                        .addComponent(timer2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(player4Label)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(timer4)
+                                        .addComponent(timeLabel4))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30))
+        );
+        jPanel2Layout.setVerticalGroup(
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(27, 27, 27))
+        );
+
+        jPanel3.setBackground(new java.awt.Color(243, 243, 243));
+        jPanel3.setPreferredSize(new Dimension(300, 142));
 
         logLabel.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         logLabel.setForeground(new java.awt.Color(185, 39, 39));
         logLabel.setText("Game Log");
+
+        gameLogArea.setColumns(20);
+        gameLogArea.setFont(new java.awt.Font("Comic Sans MS", 1, 11)); // NOI18N
+        gameLogArea.setRows(5);
+        jScrollPane1.setViewportView(gameLogArea);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addComponent(logLabel)
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                        .addComponent(jScrollPane1))
+                                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(logLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel4.setBackground(new java.awt.Color(243, 243, 243));
+        jPanel4.setPreferredSize(new Dimension(300, 205));
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel9.setText("Scan QR Code To Play");
 
         final ImageIcon qrIcon = new ImageIcon(Start.qrFile.getPath());
         JPanel qrBackground = new JPanel(new BorderLayout()) {
@@ -439,64 +625,53 @@ public class BoardGUI implements Runnable {
         );
         qrCodeLayout.setVerticalGroup(
                 qrCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 150, Short.MAX_VALUE)
+                        .addGap(0, 148, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel4Layout.createSequentialGroup()
+                                                .addGap(48, 48, 48)
+                                                .addComponent(jLabel9))
+                                        .addGroup(jPanel4Layout.createSequentialGroup()
+                                                .addGap(72, 72, 72)
+                                                .addComponent(qrBackground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(54, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(qrBackground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout labelLayout = new javax.swing.GroupLayout(label);
         label.setLayout(labelLayout);
         labelLayout.setHorizontalGroup(
                 labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, labelLayout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(qrBackground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(110, 110, 110))
-                        .addGroup(labelLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(labelLayout.createSequentialGroup()
-                                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(logLabel)
-                                                        .addGroup(labelLayout.createSequentialGroup()
-                                                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(player1Label)
-                                                                        .addComponent(player3Label))
-                                                                .addGap(85, 85, 85)
-                                                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(label3)
-                                                                        .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                                .addComponent(player2Label)
-                                                                                .addComponent(player4Label)))))
-                                                .addContainerGap(36, Short.MAX_VALUE))
-                                        .addGroup(labelLayout.createSequentialGroup()
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                                .addContainerGap())
-                                        .addGroup(labelLayout.createSequentialGroup()
-                                                .addComponent(label2)
-                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         labelLayout.setVerticalGroup(
                 labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(labelLayout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(label2)
-                                        .addComponent(label3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(player1Label)
-                                        .addComponent(player2Label))
-                                .addGap(34, 34, 34)
-                                .addGroup(labelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(player3Label)
-                                        .addComponent(player4Label))
-                                .addGap(36, 36, 36)
-                                .addComponent(logLabel)
-                                .addGap(3, 3, 3)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                                .addComponent(qrBackground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
+                                .addGap(6, 6, 6)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
 
         c.gridx = 50;
         c.gridy = 5;
@@ -504,6 +679,9 @@ public class BoardGUI implements Runnable {
         panel.add(label, c);
 
 
+
+//        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//        frame.setUndecorated(true);
         frame.setSize(1920, 1080);
         frame.setVisible(true);
 
@@ -552,7 +730,7 @@ public class BoardGUI implements Runnable {
 
                 },
                 new String[]{
-                        "Team", "Cumulative", "Longest Word", "Wins", "Tiles", "Losses", "Highest Word Score", "B-Word Count"
+                        "Team", "Cumulative", "Longest Word", "Wins", "Ties", "Losses", "Highest Word Score", "B-Word Count"
                 }
         ));
         jTable3.setRowHeight(35);
@@ -624,7 +802,7 @@ public class BoardGUI implements Runnable {
 
         jTextArea2.setBackground(new java.awt.Color(255, 204, 51));
         jTextArea2.setColumns(20);
-        jTextArea2.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        jTextArea2.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
         jTextArea2.setRows(5);
         jScrollPane4.setViewportView(jTextArea2);
 
@@ -704,6 +882,8 @@ public class BoardGUI implements Runnable {
         );
 
         frame2.pack();
+//        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//        frame.setUndecorated(true);
         frame2.setSize(1440, 900);
         frame2.setVisible(true);
 
@@ -801,18 +981,26 @@ public class BoardGUI implements Runnable {
 
     public void setTurn(int id) {
         player1Label.setForeground(Color.BLACK);
+        timer1.setForeground(Color.BLACK);
         player2Label.setForeground(Color.BLACK);
+        timer2.setForeground(Color.BLACK);
         player3Label.setForeground(Color.BLACK);
+        timer3.setForeground(Color.BLACK);
         player4Label.setForeground(Color.BLACK);
+        timer4.setForeground(Color.BLACK);
 
         if (id == 0) {
             player1Label.setForeground(new Color(26, 63, 40));
+            timer1.setForeground(new Color(26, 63, 40));
         } else if (id == 1) {
             player2Label.setForeground(new Color(255, 204, 51));
+            timer2.setForeground(new Color(255, 204, 51));
         } else if (id == 2) {
             player3Label.setForeground(new Color(42, 99, 66));
+            timer3.setForeground(new Color(42, 99, 66));
         } else if (id == 3) {
             player4Label.setForeground(new Color(193, 154, 36));
+            timer4.setForeground(new Color(193, 154, 36));
         }
 
     }
@@ -833,25 +1021,50 @@ public class BoardGUI implements Runnable {
         }
     }
 
+    public void setTimerText(int turn, int sec) {
+        timer1.setVisible(false);
+        timer2.setVisible(false);
+        timer3.setVisible(false);
+        timer4.setVisible(false);
+        timeLabel1.setText("      ");
+        timeLabel2.setText("      ");
+        timeLabel3.setText("      ");
+        timeLabel4.setText("      ");
+        if(turn == 0){
+            timer1.setText(Integer.toString(sec));
+            timer1.setVisible(true);
+            timeLabel1.setText("Time: ");
+        } else if(turn == 1){
+            timer2.setText(Integer.toString(sec));
+            timer2.setVisible(true);
+            timeLabel2.setText("Time: ");
+        } else if (turn == 2){
+            timer3.setText(Integer.toString(sec));
+            timer3.setVisible(true);
+            timeLabel3.setText("Time: ");
+        } else if(turn == 3){
+            timer4.setText(Integer.toString(sec));
+            timer4.setVisible(true);
+            timeLabel4.setText("Time: ");
+        }
+    }
+
 
     //**************************** This is a test class*************************//
     public class testUser {
 
         String name;
+        String value;
         String longestWord;
         String team;
         String totalScore;
-        String plongestWord;
-        int pbonusWordCount;
         int teamCmuScore;
-        int teamCumAverage;
         int wins;
         int tiles;
         int losses;
         int highestPerGame;
         int bonusWordCount;
         int rank;
-        String value;
 
         public testUser(int r, String n, String ts) {
             rank = r;
@@ -886,7 +1099,7 @@ public class BoardGUI implements Runnable {
         temp = dbCall.getTopPlayersByTeam(5, teamName);
         testUser[] statList = new testUser[temp.length];
         for(int i = 0; i < temp.length; i++) {
-            testUser t = new testUser(i, temp[i][0], temp[i][2]);
+            testUser t = new testUser(i + 1, temp[i][0], temp[i][2]);
             statList[i] = t;
         }
         for(int i = 0; i < temp.length; i++) {
@@ -903,6 +1116,9 @@ public class BoardGUI implements Runnable {
         testUser t1 = new testUser(teamName,dbCall.getTeamCumulative(teamName), dbCall.getTeamLongestWord(teamName),dbCall.getTeamWinCount(teamName), dbCall.getTeamTieCount(teamName), dbCall.getTeamLoseCount(teamName), dbCall.getHighestGameSessionScore(teamName), dbCall.getTeamBonuses(teamName));
         testUser t2 = new testUser(teamName2,dbCall.getTeamCumulative(teamName2), dbCall.getTeamLongestWord(teamName2),dbCall.getTeamWinCount(teamName2), dbCall.getTeamTieCount(teamName2), dbCall.getTeamLoseCount(teamName2), dbCall.getHighestGameSessionScore(teamName2), dbCall.getTeamBonuses(teamName2));
 
+        System.out.println("At Stats Dispaly: Green: " + dbCall.getTeamCumulative("green"));
+        System.out.println("At stats display: Gold: " + dbCall.getTeamCumulative("gold"));
+
         list.add(t1);
         list.add(t2);
         return list;
@@ -913,14 +1129,17 @@ public class BoardGUI implements Runnable {
         ArrayList<testUser> list = new ArrayList<>();
         QueryClass dbCalls = new QueryClass();
         if(dbCalls.getTotalGameScoreAverageForTeam("gold").isNaN() || dbCalls.getTotalGameScoreAverageForTeam("green").isNaN()) {
-            testUser t1 = new testUser("gold", "0");
-            testUser t2 = new testUser("green", "0");
+            testUser t1 = new testUser("Gold", "0");
+            testUser t2 = new testUser("Green", "0");
             list.add(t1);
             list.add(t2);
             return list;
         } else {
-            testUser t1 = new testUser("Gold", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("gold")));
-            testUser t2 = new testUser("Green", Double.toString(dbCalls.getTotalGameScoreAverageForTeam("green")));
+            DecimalFormat df = new DecimalFormat("#.##");
+            String formatAvg = df.format(dbCalls.getTotalGameScoreAverageForTeam("gold"));
+            String formatAvg2 = df.format(dbCalls.getTotalGameScoreAverageForTeam("green"));
+            testUser t1 = new testUser("Gold", formatAvg);
+            testUser t2 = new testUser("Green", formatAvg2);
 
             list.add(t1);
             list.add(t2);
@@ -955,7 +1174,7 @@ public class BoardGUI implements Runnable {
 
     public void addRowToTable1() {
         DefaultTableModel modelTest = (DefaultTableModel) jTable1.getModel();
-        ArrayList<testUser> list = TopPlayer("Gold");
+        ArrayList<testUser> list = TopPlayer("Green");
         Object rowData[] = new Object[5];
         for (int i = 0; i < list.size(); i++) {
             //**rowData[0] = list.get(i).methodName;
@@ -968,7 +1187,7 @@ public class BoardGUI implements Runnable {
 
     public void addRowToTable2() {
         DefaultTableModel modelTest = (DefaultTableModel) jTable2.getModel();
-        ArrayList<testUser> list = TopPlayer("Green");
+        ArrayList<testUser> list = TopPlayer("Gold");
         Object rowData[] = new Object[5];
         for (int i = 0; i < list.size(); i++) {
             rowData[0] = list.get(i).rank;
