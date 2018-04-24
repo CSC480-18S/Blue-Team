@@ -258,7 +258,14 @@ public class Session {
     private boolean aiPlayWord(SkyCat skyCat) {
         Move move = skyCat.chooseMove();
         if (move != null) {
-            String temp = session.playWord(move.getStartX(), move.getStartY(), move.isHorizontal(), move.getWordString(), skyCat);
+            String wordToPlay = "";
+            for(Tile each : move.getWord()){
+                if(each.getValue() == 0)
+                    wordToPlay += "_" + each.getLetter();
+                else
+                    wordToPlay += each.getLetter();
+            }
+            String temp = session.playWord(move.getStartX(), move.getStartY(), move.isHorizontal(), wordToPlay, skyCat);
             if(temp.compareTo("Invalid") == 0){
                 return false;
             }
