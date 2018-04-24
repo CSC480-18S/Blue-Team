@@ -9,17 +9,18 @@ import Components.Dictionaries;
 import Components.Validator;
 import Session.Session;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
- * @author wcook
  */
 public class SkyCat extends User {
 
     private static int aiCount = 0;
     private Space[][] boardLocal;
+    private ArrayList<Move> moveList;
 
     public SkyCat(Session session) {
         super("SkyCat" + ++aiCount);
@@ -44,12 +45,21 @@ public class SkyCat extends User {
         Chooses a move to play randomly
         @return the coshosen Move
      */
-    public Move chooseMove() {
+    public Move chooseMove(String difficulty) {
         Move[] possibleMoves = getAllMoves();
+        int upperBound = possibleMoves.length;
+        int lowerBound = 0;
+        if(possibleMoves.length >= 3)
+            switch(difficulty){
+                case "EASY": upperBound = (possibleMoves.length/3); lowerBound = 0; break;
+                case "MEDIUM": upperBound = possibleMoves.length; lowerBound = 0; break;
+                case "HARD": upperBound = possibleMoves.length; lowerBound = (possibleMoves.length/3)*2; break;
+                default: upperBound = possibleMoves.length; lowerBound = 0; break;
+            }
         if(possibleMoves.length == 0){
             return null;
         }
-        int indx = ThreadLocalRandom.current().nextInt(0, possibleMoves.length);
+        int indx = ThreadLocalRandom.current().nextInt(lowerBound,upperBound);
         return possibleMoves[indx];
     }
 
@@ -201,6 +211,7 @@ public class SkyCat extends User {
                                     Object[] result = validator.isValidPlay(validatorMove);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
+                                        move.setScore(Session.getSession().calculateMovePoints(validatorMove));
                                         possibleMoves.add(move);
                                         }
                                 }
@@ -282,6 +293,7 @@ public class SkyCat extends User {
                                     Object[] result = validator.isValidPlay(validatorMove);
                                     if ((int) result[0] == 1
                                             || (int) result[0] == 2) {
+                                        move.setScore(Session.getSession().calculateMovePoints(validatorMove));
                                         possibleMoves.add(move);
                                     }
                                 }
@@ -291,7 +303,7 @@ public class SkyCat extends User {
                 }
             }
         }
-
+        sortMoveListByScore(possibleMoves);
         Move toReturn[] = new Move[possibleMoves.size()];
 
         possibleMoves.toArray(toReturn);
@@ -354,6 +366,10 @@ public class SkyCat extends User {
             toReturn[i] = TileGenerator.getInstance().getTile(word.charAt(i));
         }
         return toReturn;
+    }
+
+    private void sortMoveListByScore(ArrayList<Move> possibleMoves){
+        Collections.sort(possibleMoves);
     }
 
 }
