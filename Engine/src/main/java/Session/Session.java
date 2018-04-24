@@ -250,8 +250,6 @@ public class Session {
 
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
-        if(word.contains("_"))
-            System.out.println("Using a Blank Tile *****************************");
         //restart players timer
         if(user.getClass() == Player.class){
             timer.cancel();
