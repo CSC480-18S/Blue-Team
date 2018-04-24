@@ -231,7 +231,14 @@ public class Session {
     private boolean aiPlayWord(SkyCat skyCat) {
         Move move = skyCat.chooseMove();
         if (move != null) {
-            String temp = session.playWord(move.getStartX(), move.getStartY(), move.isHorizontal(), move.getWordString(), skyCat);
+            String wordToPlay = "";
+            for(Tile each : move.getWord()){
+                if(each.getValue() == 0)
+                    wordToPlay += "_" + each.getLetter();
+                else
+                    wordToPlay += each.getLetter();
+            }
+            String temp = session.playWord(move.getStartX(), move.getStartY(), move.isHorizontal(), wordToPlay, skyCat);
             if(temp.compareTo("Invalid") == 0){
                 return false;
             }
@@ -243,6 +250,8 @@ public class Session {
 
     // Validate word and place on board
     public String playWord(int startX, int startY, boolean horizontal, String word, User user) {
+        if(word.contains("_"))
+            System.out.println("Using a Blank Tile *****************************");
         //restart players timer
         if(user.getClass() == Player.class){
             timer.cancel();
@@ -294,22 +303,22 @@ public class Session {
         }
 
         //check if user has enough tiles
-        if(!hasEnoughTiles(user, tilesForChecking.toString())){
-            System.out.println(user.getUsername() + " doesn't have required tiles");
-            System.out.println("Word trying to play: " + tilesForChecking.toString());
-            System.out.println("X:Y " + startX + ":" + startY);
-            System.out.print("Tiles on hand: ");
-            Tile[] hand = user.getHand();
-            for(Tile tile : hand){
-                System.out.print(tile.getLetter() + " ");
+            if(!hasEnoughTiles(user, tilesForChecking.toString())){
+                System.out.println(user.getUsername() + " doesn't have required tiles");
+                System.out.println("Word trying to play: " + tilesForChecking.toString());
+                System.out.println("X:Y " + startX + ":" + startY);
+                System.out.print("Tiles on hand: ");
+                Tile[] hand = user.getHand();
+                for(Tile tile : hand){
+                    System.out.print(tile.getLetter() + " ");
+                }
+                //if ai tries to use extra tiles - exchange all and skip
+                if(user.getClass() == SkyCat.class){
+                    timer.cancel();
+                    exchangeAllTiles(user);
+                }
+                return "You don't have required tiles";
             }
-            //if ai tries to use extra tiles - exchange all and skip
-            if(user.getClass() == SkyCat.class){
-                timer.cancel();
-                exchangeAllTiles(user);
-            }
-            return "You don't have required tiles";
-        }
 
         Tile[] wordTiles = new Tile[wordTileBuilder.size()];
         String wordToPlaceOnBoard = "";
