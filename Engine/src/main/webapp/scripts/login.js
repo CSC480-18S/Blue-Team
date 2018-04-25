@@ -2,6 +2,44 @@
 var currentImg = null;
 var blankReplacement = null;
 
+// Figure out what screen to show at load up
+// Send post request when HTML is loaded incase user already has been added
+$.post("Servlet", {request: "join", username: "", team: ""}, function (responsetext) {   // execute ajax get request on url of "someservlet" and execute the following function with ajax response text...
+    // if success, show board, otherwise displayed message
+    if (responsetext.toUpperCase() == "JOINED") {
+        // Remove Wait box
+        waitBoxOff();
+        // Switch joined flag and set hand
+        joined = true;
+        setHand();
+    }
+    else
+    {
+        // Check if user is already registered
+        $.post("Servlet", {request: "amiregistered"}, function (response)
+        {
+            var strArray = $.parseJSON(response);
+           if (strArray != null && strArray != "")
+           {
+               if (strArray[0].toUpperCase()== "FALSE")
+               {
+                   // Remove wait box
+                   waitBoxOff();
+                   // Show Login Box
+                   loginBoxOn();
+               }
+               else
+               {
+                   // Remove wait box
+                   waitBoxOff();
+                   // Show Welcome screen with username and team
+                   welcomeBoxOn(strArray[0], strArray[1]);
+               }
+           }
+        });
+    }
+});
+
 function isBlankTile(el) {
     var currentImgSrc = el.getElementsByTagName('img')[0].src;
     var s = currentImgSrc.search(/.png/i);
@@ -136,17 +174,37 @@ $(".drop").click(function () {
     }
 });
 
-// Send post request when HTML is loaded incase user already has been added
-$.post("Servlet", {request: "join", username: "", team: ""}, function (responsetext) {   // execute ajax get request on url of "someservlet" and execute the following function with ajax response text...
-                                                                                         // if success, show board, otherwise displayed message
-    if (responsetext.toUpperCase() == "JOINED") {
-        // Remove the Login Box and Display the board
-        loginBoxOff();
-        // Switch joined flag and set hand
-        joined = true;
-        setHand()
+function joinFromWelcome()
+{
+    var uname = $("#wUsername").text();
+    var team = $("#wTeam").text();
+
+    if (uname !== null && team !== null)
+    {
+        $.post("Servlet", {request: "join", username: uname, team: team}, function (responsetext) {   // execute ajax get request on url of "someservlet" and execute the following function with ajax response text...
+            // if success, show board, otherwise displayed message
+
+            if (responsetext.toUpperCase() == "JOINED") {
+                welcomeBoxOff();
+                waitBoxOff();
+
+                // Switch joined flag and set hand
+                joined = true;
+                setHand()
+            }
+            else {
+                // Display to user why they couldn't join.
+                $("#joinResult").text(responsetext);
+            }
+        });
     }
-});
+    else
+    {
+        // Not sure how this would happen refresh the page I guess ?
+        location.reload();
+    }
+
+}
 
 function join() {
     var uname = document.getElementById('txtUserName').value;
@@ -161,6 +219,8 @@ function join() {
 
         if (responsetext.toUpperCase() == "JOINED") {
             loginBoxOff();
+            waitBoxOff();
+
             // Switch joined flag and set hand
             joined = true;
             setHand()
@@ -220,5 +280,27 @@ function cancelSpecialTile()
     document.getElementById("specialOverlay").style.display = "none";
     currentImg.style.border = "";
     currentImg = null;
+}
+
+function welcomeBoxOn(user, team)
+{
+    $("#wUsername").text(user);
+    $("#wTeam").text(team);
+    document.getElementById("welcomeOverlay").style.display = "block";
+}
+
+function welcomeBoxOff()
+{
+    document.getElementById("welcomeOverlay").style.display = "none";
+}
+
+function waitBoxOn()
+{
+    document.getElementById("waitOverlay").style.display = "block";
+}
+
+function waitBoxOff()
+{
+    document.getElementById("waitOverlay").style.display = "none";
 }
 

@@ -38,6 +38,11 @@ public class Session {
     private int aiWaitNoPlayers;
     private int skippedTimes;
     private static boolean aiRun = true;
+    private Difficulty difficultySetting = Difficulty.MEDIUM;
+
+    private enum Difficulty{
+        EASY, MEDIUM, HARD
+    }
 
     private Session() {
         //Session.LogInfo("Initializing objects");
@@ -73,6 +78,14 @@ public class Session {
                     }else if(param[1].equals("false")){
                         aiRun = false;
                     }
+                }
+                else if(param[0].equals("difficulty")){
+                    if(param[1].equalsIgnoreCase("EASY"))
+                        difficultySetting = Difficulty.EASY;
+                    else if(param[1].equalsIgnoreCase("MEDIUM"))
+                        difficultySetting = Difficulty.MEDIUM;
+                    else if(param[1].equalsIgnoreCase("HARD"))
+                        difficultySetting = Difficulty.HARD;
                 }
             }
         } catch (Exception e ){
@@ -182,8 +195,10 @@ public class Session {
 
         //check if any users are not initialized yet
         for (int i = 0; i < users.length; i++) {
-            if ((users[i] == null || users[i].getClass() == SkyCat.class) && ((i == 0 || i == 2) && team.toUpperCase().equals("GREEN"))
-                    || ((i == 1 || i == 3) && team.toUpperCase().equals("GOLD"))) {
+            if ((users[i] == null || users[i].getClass() == SkyCat.class)
+                    && (((i == 0 || i == 2) && team.toUpperCase().equals("GREEN"))
+                    || ((i == 1 || i == 3) && team.toUpperCase().equals("GOLD"))))
+            {
                 //cancel ai timer
                 if(i == currentTurn && users[currentTurn] != null && users[i].getClass() == SkyCat.class){
                     timer.cancel();
@@ -202,7 +217,32 @@ public class Session {
             }
         }
 
-        return "Could not join game.";
+        // Try adding to opposite team
+        //check if any users are not initialized yet
+        for (int i = 0; i < users.length; i++) {
+            if ((users[i] == null || users[i].getClass() == SkyCat.class)
+                    && (((i == 0 || i == 2) && team.toUpperCase().equals("GOLD"))
+                    || ((i == 1 || i == 3) && team.toUpperCase().equals("GREEN"))))
+            {
+                //cancel ai timer
+                if(i == currentTurn && users[currentTurn] != null && users[i].getClass() == SkyCat.class){
+                    timer.cancel();
+                }
+                if(users[currentTurn] != null && users[i].getClass() == SkyCat.class) {
+                    //return generated tiles back in bag
+                    TileGenerator.getInstance().putInBag(newPlayer.getHand());
+                    Tile[] hand = users[i].getHand();
+                    newPlayer.setHand(hand);
+                }
+                users[i] = newPlayer;
+                setPlayerTimer();
+                gui.updateUsers(users);
+                gui.printGameLog(newPlayer.getUsername() + " has joined " + team + " Team");
+                return "JOINED";
+            }
+        }
+
+        return "Sorry - Game is full.";
     }
 
     // Check if this is the first move
@@ -229,9 +269,23 @@ public class Session {
     }
 
     private boolean aiPlayWord(SkyCat skyCat) {
-        Move move = skyCat.chooseMove();
+        String difficulty =  "";
+        switch(difficultySetting){
+            case EASY: difficulty = "EASY"; break;
+            case MEDIUM: difficulty = "MEDIUM"; break;
+            case HARD: difficulty = "HARD"; break;
+            default: difficulty = "MEDIUM"; break;
+        }
+        Move move = skyCat.chooseMove(difficulty);
         if (move != null) {
-            String temp = session.playWord(move.getStartX(), move.getStartY(), move.isHorizontal(), move.getWordString(), skyCat);
+            String wordToPlay = "";
+            for(Tile each : move.getWord()){
+                if(each.getValue() == 0)
+                    wordToPlay += "_" + each.getLetter();
+                else
+                    wordToPlay += each.getLetter();
+            }
+            String temp = session.playWord(move.getStartX(), move.getStartY(), move.isHorizontal(), wordToPlay, skyCat);
             if(temp.compareTo("Invalid") == 0){
                 return false;
             }
@@ -798,6 +852,8 @@ public class Session {
             return gson.toJson(response);
         }
     }
+
+    private Difficulty getDifficultySetting(){return this.difficultySetting;}
 
     class aiTimerTask extends TimerTask {
         Session session;
