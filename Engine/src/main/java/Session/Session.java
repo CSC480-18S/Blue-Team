@@ -237,7 +237,9 @@ public class Session {
                     newPlayer.setHand(hand);
                 }
                 users[i] = newPlayer;
-                setPlayerTimer();
+                if(currentTurn == i) {
+                    setPlayerTimer();
+                }
                 gui.updateUsers(users);
                 gui.printGameLog(newPlayer.getUsername() + " has joined " + team + " Team");
                 return "JOINED";
