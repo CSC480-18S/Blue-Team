@@ -301,6 +301,11 @@ public class BoardGUI implements Runnable {
             }
         };
 
+        Dimension minSize = new Dimension();
+        minSize.setSize(550,550);
+        background.setMinimumSize(minSize);
+
+
         // ***
         model = new DefaultTableModel(data, column) {
             //  Returning the Class of each column will allow different
