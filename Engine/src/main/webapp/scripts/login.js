@@ -268,7 +268,26 @@ function loginBoxOff() {
 }
 
 function specialTileOn() {
-    document.getElementById("specialOverlay").style.display = "block";
+    try {
+        // Check each img in the pop up, if there's a blank re-add the img
+        $('.special').each(function () {
+            if ($(this).find('img').length < 1)
+            {
+                // get id so we know what letter
+                var id = $(this).attr('id');
+                var letter = id.slice(id.length-1, id.length);
+                // append the appropriate image to the div
+                var imgFile = "imgs/blankletters/_" + letter + ".png";;
+                $(this).append('<img src=' + imgFile + ' onclick="specialTileBorder(this)" width="55" height="55"/>');
+            }
+        });
+        document.getElementById("specialOverlay").style.display = "block";
+    }
+    catch (e) {}
+    finally {
+        // show popup
+        document.getElementById("specialOverlay").style.display = "block";
+    }
 }
 
 function specialTileOff() {
