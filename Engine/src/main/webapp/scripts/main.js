@@ -337,11 +337,3 @@ function confirmed() {
 function showMessage(str) {
     alert(str);
 }
-
-// Send leave game post request on browser close
-window.onbeforeunload = function () {
-    $.post("Servlet", {
-        request: "leave",
-    });
-};
-
