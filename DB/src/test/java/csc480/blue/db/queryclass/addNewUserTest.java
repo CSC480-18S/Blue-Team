@@ -146,7 +146,7 @@ public class addNewUserTest {
     @Test  // no exception thrown but no user added so passes.
     public void t19() {
         assertThrows(MySQLSyntaxErrorException.class, () -> {
-			qc.addNewUser("tenbergen99", "20-19-82-11-23-49", "c");
+			qc.addNewUser("tenbergen98", "20-19-82-11-23-49", "c");
 		});
     } 
 
