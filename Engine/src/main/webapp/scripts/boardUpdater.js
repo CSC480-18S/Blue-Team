@@ -83,7 +83,7 @@ function updateBoard() {
                             $('#' + coord + " img").remove();
                             $('#' + coord).append('<img src=' + imgFile + ' width="55" height="55"/>');
                             // add to global boardstate
-                            if (boardState != null) {
+                            if (boardState != null && !boardState.includes(coord)) {
                                 boardState.push(coord);
                             }
 

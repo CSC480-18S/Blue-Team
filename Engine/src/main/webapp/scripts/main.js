@@ -292,9 +292,15 @@ function confirmed() {
         }, function (responsetext) {
             var result = responsetext.toUpperCase();
             if (result == "VALID") {
+                // Deep copy new board state global array * only if the play was a success
+                boardState = null;
+                boardState = [...xyCoord];
                 showMessage("Success");
             }
             else if (result == "BONUS") {
+                // Deep copy new board state global array * only if the play was a success
+                boardState = null;
+                boardState = [...xyCoord];
                 showMessage("Bonus word !!");
             }
             else if (result == "PROFANE") {
@@ -317,10 +323,6 @@ function confirmed() {
         });
         // Reset current tile select
         currentImg = null;
-        // Deep copy new board state global array
-        boardState = [...xyCoord
-    ]
-        ;
 
     } catch (e) {
     }
