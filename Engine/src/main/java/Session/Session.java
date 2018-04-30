@@ -38,6 +38,11 @@ public class Session {
     private int aiWaitNoPlayers;
     private int skippedTimes;
     private static boolean aiRun = true;
+    private Difficulty difficultySetting = Difficulty.MEDIUM;
+
+    private enum Difficulty{
+        EASY, MEDIUM, HARD
+    }
 
     private Session() {
         //Session.LogInfo("Initializing objects");
@@ -73,6 +78,14 @@ public class Session {
                     }else if(param[1].equals("false")){
                         aiRun = false;
                     }
+                }
+                else if(param[0].equals("difficulty")){
+                    if(param[1].equalsIgnoreCase("EASY"))
+                        difficultySetting = Difficulty.EASY;
+                    else if(param[1].equalsIgnoreCase("MEDIUM"))
+                        difficultySetting = Difficulty.MEDIUM;
+                    else if(param[1].equalsIgnoreCase("HARD"))
+                        difficultySetting = Difficulty.HARD;
                 }
             }
         } catch (Exception e ){
@@ -197,7 +210,9 @@ public class Session {
                     newPlayer.setHand(hand);
                 }
                 users[i] = newPlayer;
-                setPlayerTimer();
+                if(currentTurn == i) {
+                    setPlayerTimer();
+                }
                 gui.updateUsers(users);
                 gui.printGameLog(newPlayer.getUsername() + " has joined " + team + " Team");
                 return "JOINED";
@@ -222,7 +237,9 @@ public class Session {
                     newPlayer.setHand(hand);
                 }
                 users[i] = newPlayer;
-                setPlayerTimer();
+                if(currentTurn == i) {
+                    setPlayerTimer();
+                }
                 gui.updateUsers(users);
                 gui.printGameLog(newPlayer.getUsername() + " has joined " + team + " Team");
                 return "JOINED";
@@ -256,7 +273,14 @@ public class Session {
     }
 
     private boolean aiPlayWord(SkyCat skyCat) {
-        Move move = skyCat.chooseMove();
+        String difficulty =  "";
+        switch(difficultySetting){
+            case EASY: difficulty = "EASY"; break;
+            case MEDIUM: difficulty = "MEDIUM"; break;
+            case HARD: difficulty = "HARD"; break;
+            default: difficulty = "MEDIUM"; break;
+        }
+        Move move = skyCat.chooseMove(difficulty);
         if (move != null) {
             String wordToPlay = "";
             for(Tile each : move.getWord()){
@@ -832,6 +856,8 @@ public class Session {
             return gson.toJson(response);
         }
     }
+
+    private Difficulty getDifficultySetting(){return this.difficultySetting;}
 
     class aiTimerTask extends TimerTask {
         Session session;

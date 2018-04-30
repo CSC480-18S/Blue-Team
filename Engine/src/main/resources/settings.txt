@@ -3,3 +3,4 @@ turnTimeSec = 60
 aiWaitSec = 5
 aiWaitNoPlayers = 60
 aiRun = true
+difficulty = MEDIUM
