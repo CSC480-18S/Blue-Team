@@ -14,6 +14,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static Models.GameConstants.BOARD_WIDTH;
 
 /**
@@ -146,6 +149,16 @@ public class Session {
     public String addPlayer(String username, String macAddress, String team) {
         Player newPlayer = null;
 
+        //Validating Username
+        String pattern = "^[a-zA-Z]{3,15}$";
+        Pattern re;
+        Matcher matcher;
+        re = Pattern.compile(pattern);
+        matcher = re.matcher(username);
+
+        if(!matcher.matches()) {
+            return "Invalid Username";
+        }
         //validating the team name
         if (team.toUpperCase().compareTo("GREEN") != 0 && team.toUpperCase().compareTo("GOLD") != 0
                 && team != "" && team != null) {
