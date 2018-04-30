@@ -22,7 +22,7 @@ public class userAlreadyExistsTest {
 
     @Test // changed to ken from tenbergen to match dummy data, passes tho
     public void t0() {
-        assertTrue(qc.userAlreadyExists("ken"));
+        assertTrue(qc.userAlreadyExists("tenbergen"));
     }
 
     @Test // returns true cause char in table, but shouldn't be...
