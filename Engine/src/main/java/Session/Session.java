@@ -7,11 +7,8 @@ import Components.Log;
 import com.google.gson.Gson;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.*;
 
-import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 
 import java.util.regex.Matcher;
@@ -150,15 +147,20 @@ public class Session {
         Player newPlayer = null;
 
         //Validating Username
-        String pattern = "^[a-zA-Z]{3,15}$";
+        String pattern = "^[a-zA-Z]{3,12}$";
         Pattern re;
         Matcher matcher;
         re = Pattern.compile(pattern);
         matcher = re.matcher(username);
 
+        HashSet<String> badWords;
+        badWords = Dictionaries.getDictionaries().getBadWords();
         if(!matcher.matches()) {
             return "Invalid Username";
+        } else if (badWords.contains(username.toUpperCase())) {
+            return "Dirty words not allowed";
         }
+
         //validating the team name
         if (team.toUpperCase().compareTo("GREEN") != 0 && team.toUpperCase().compareTo("GOLD") != 0
                 && team != "" && team != null) {
