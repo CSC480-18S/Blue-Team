@@ -36,6 +36,7 @@ public class BoardGUI implements Runnable {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane statsScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -45,6 +46,7 @@ public class BoardGUI implements Runnable {
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
+    private javax.swing.JTextArea statsTextArea;
     private javax.swing.JTextArea jTextArea2;
 
     private javax.swing.JTextArea gameLogArea;
@@ -109,6 +111,7 @@ public class BoardGUI implements Runnable {
         addRowToTable3();
         addRowToTable4();
         setTTestConclusion();
+        setStatsTextArea();
     }
 
     public void gui() {
@@ -203,8 +206,9 @@ public class BoardGUI implements Runnable {
         c.gridx = 0;
         c.gridy = 5;
         c.anchor = GridBagConstraints.LINE_START;
-        c.insets = new Insets(10, 10, 10, 10);
+        c.insets = new Insets(15, 15, 15, 15);
         panel.add(background5, c);
+
 
         final ImageIcon icon4 = new ImageIcon(classloader.getResource("Rack3.png"));
         JPanel background4 = new JPanel(new BorderLayout()) {
@@ -707,6 +711,8 @@ public class BoardGUI implements Runnable {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
+        statsScrollPane1 = new javax.swing.JScrollPane();
+        statsTextArea = new javax.swing.JTextArea();
 
         frame2.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         frame2.getContentPane().setBackground(new java.awt.Color(42, 99, 66));
@@ -714,10 +720,10 @@ public class BoardGUI implements Runnable {
 
         jTable2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
+                new Object [][] {
 
                 },
-                new String[]{
+                new String [] {
                         "Rank", "Player", "Total Score"
                 }
         ));
@@ -731,11 +737,11 @@ public class BoardGUI implements Runnable {
 
         jTable3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
+                new Object [][] {
 
                 },
-                new String[]{
-                        "Team", "Cumulative", "Longest Word", "Wins", "Ties", "Losses", "Highest Word Score", "B-Word Count"
+                new String [] {
+                        "Team", "Cumulative", "Longest Word", "Wins", "Tiles", "Losses", "Highest Word Score", "B-Word Count"
                 }
         ));
         jTable3.setRowHeight(35);
@@ -748,11 +754,11 @@ public class BoardGUI implements Runnable {
 
         jTable4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTable4.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
+                new Object [][] {
 
                 },
-                new String[]{
-                        "Team", "Average Score"
+                new String [] {
+                        "Team", "Stats"
                 }
         ));
         jTable4.setRowHeight(35);
@@ -764,19 +770,17 @@ public class BoardGUI implements Runnable {
         jScrollPane5.setViewportView(jTable4);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 204, 51));
         jLabel1.setText("Green");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 204, 51));
         jLabel3.setText("Statistics");
 
         jTable1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
+                new Object [][] {
 
                 },
-                new String[]{
+                new String [] {
                         "Rank", "Player", "Total Score"
                 }
         ));
@@ -790,26 +794,28 @@ public class BoardGUI implements Runnable {
         jScrollPane6.setViewportView(jTable1);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 204, 51));
         jLabel4.setText("T Test:");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 204, 51));
         jLabel2.setText("Gold");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 204, 51));
         jLabel6.setText("Leaderboard");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 204, 51));
         jLabel5.setText("Conclusion:");
 
         jTextArea2.setBackground(new java.awt.Color(255, 204, 51));
         jTextArea2.setColumns(20);
-        jTextArea2.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
+        jTextArea2.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         jTextArea2.setRows(5);
         jScrollPane4.setViewportView(jTextArea2);
+
+        statsTextArea.setBackground(new java.awt.Color(255, 204, 51));
+        statsTextArea.setColumns(20);
+        statsTextArea.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        statsTextArea.setRows(5);
+        statsScrollPane1.setViewportView(statsTextArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(frame2.getContentPane());
         frame2.getContentPane().setLayout(layout);
@@ -827,38 +833,40 @@ public class BoardGUI implements Runnable {
                                 .addContainerGap())
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jLabel6)
-                                                .addGap(626, 626, 626))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jLabel3)
-                                                .addGap(626, 626, 626))))
+                                .addComponent(jLabel6)
+                                .addGap(602, 602, 602))
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 680, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 680, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(636, 636, 636)
+                                .addComponent(jLabel3)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(53, 53, 53)
+                                                .addGap(210, 210, 210)
                                                 .addComponent(jLabel4)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
                                                 .addGap(44, 44, 44)
                                                 .addComponent(jLabel5)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 0, Short.MAX_VALUE))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap())
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(statsScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(75, 75, 75))
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(jLabel6)
-                                .addGap(45, 45, 45)
+                                .addGap(22, 22, 22)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel2)
                                         .addComponent(jLabel1))
@@ -866,27 +874,33 @@ public class BoardGUI implements Runnable {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
                                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
+                                .addGap(38, 38, 38)
                                 .addComponent(jLabel3)
-                                .addGap(39, 39, 39)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 144, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jLabel4)
-                                                .addGap(81, 81, 81))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(54, 54, 54))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jLabel5)
-                                                .addGap(81, 81, 81))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGap(60, 60, 60)
+                                                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGap(85, 85, 85)
+                                                                .addComponent(jLabel4)))
+                                                .addGap(61, 61, 61)
                                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(63, 63, 63))))
+                                                .addContainerGap())
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                .addComponent(jLabel5)
+                                                                .addGap(95, 95, 95))
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                .addComponent(statsScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(61, 61, 61))))))
         );
 
-        frame2.pack();
 //        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 //        frame.setUndecorated(true);
         frame2.setSize(1440, 900);
@@ -902,6 +916,7 @@ public class BoardGUI implements Runnable {
 
     public void updateBoard(Space[][] board) {
         updateHand(Session.getSession().getUsers());
+        updateTeamScore(Session.getSession().getUsers());
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_WIDTH; y++) {
                 if (board[x][y].getTile() != null) {
@@ -995,8 +1010,8 @@ public class BoardGUI implements Runnable {
         timer4.setForeground(Color.BLACK);
 
         if (id == 0) {
-            player1Label.setForeground(new Color(26, 63, 40));
-            timer1.setForeground(new Color(26, 63, 40));
+            player1Label.setForeground(new Color(42, 99, 66));
+            timer1.setForeground(new Color(42, 99, 66));
         } else if (id == 1) {
             player2Label.setForeground(new Color(255, 204, 51));
             timer2.setForeground(new Color(255, 204, 51));
@@ -1004,8 +1019,8 @@ public class BoardGUI implements Runnable {
             player3Label.setForeground(new Color(42, 99, 66));
             timer3.setForeground(new Color(42, 99, 66));
         } else if (id == 3) {
-            player4Label.setForeground(new Color(193, 154, 36));
-            timer4.setForeground(new Color(193, 154, 36));
+            player4Label.setForeground(new Color(255, 204, 51));
+            timer4.setForeground(new Color(255, 204, 51));
         }
 
     }
@@ -1024,6 +1039,24 @@ public class BoardGUI implements Runnable {
                 }
             }
         }
+    }
+
+    public void updateTeamScore(User[] users){
+        int greenScore = 0;
+        int goldScore = 0;
+        if (users[0].getClass() == Player.class){
+            greenScore += users[0].getScore();
+        } if (users[1].getClass() == Player.class) {
+            goldScore += users[1].getScore();
+        }
+        if (users[2].getClass() == Player.class) {
+            greenScore += users[2].getScore();
+        }
+        if (users[3].getClass() == Player.class){
+            greenScore += users[3].getScore();
+        }
+        label2.setText("Team Green: " + greenScore);
+        label3.setText("Team Green: " + goldScore);
     }
 
     public void setTimerText(int turn, int sec) {
@@ -1174,6 +1207,12 @@ public class BoardGUI implements Runnable {
         }
     }
 
+    public String TextInformationBox() {
+        String text;
+        text = "Hello";
+        return text;
+    }
+
 
     //*******************This are the methods to edit each table*********************//
 
@@ -1233,6 +1272,11 @@ public class BoardGUI implements Runnable {
     public void setTTestConclusion() {
         String word = TestConclusion();
         jTextArea2.append(word);
+    }
+
+    public void setStatsTextArea( ) {
+        String info = TextInformationBox();
+        statsTextArea.append(info);
     }
 
     public void printGameLog(String message){
