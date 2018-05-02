@@ -156,20 +156,21 @@ public class Session {
         matcher = lengthNoNumber.matcher(username);
 
         if(!matcher.matches()) {
-            return "Invalid Username";
+            return "Must be 12 characters or less and contain only upper and lower case letters.";
         }
 
         HashSet<String> badWords;
         badWords = Dictionaries.getDictionaries().getBadWords();
         Iterator<String> badWordIterator = badWords.iterator();
-        
+        String uN = username.toUpperCase();
+
         while(badWordIterator.hasNext()) {
-            String badWordFromList = badWordIterator.toString();
-            String badWordPattern ="^.*" + badWordFromList + ".*$";
+            String badWordFromList = badWordIterator.next();
+            String badWordPattern =".*(" + badWordFromList + ").*";
             Pattern badWordInUsername;
             Matcher matcher2;
             badWordInUsername = Pattern.compile(badWordPattern);
-            matcher2 = badWordInUsername.matcher(username);
+            matcher2 = badWordInUsername.matcher(uN);
 
             if(matcher2.matches()) {
                 return "Bad Word Detected";
