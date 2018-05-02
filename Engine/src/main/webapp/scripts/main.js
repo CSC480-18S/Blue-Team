@@ -1,6 +1,7 @@
 //var letters = new Array();
 var currentHand = new Array();
 var joined = false;
+var currentTurn = "";
 
 //random number for shuffle
 //var numRand = Math.floor(Math.random() * 7);
@@ -50,6 +51,10 @@ function getSelectedTilesAsString() {
 }
 
 function exchange(el) {
+    // If its not your turn get out
+    if (currentTurn != "You!")
+        return;
+
     // If no border add one and return
     if (el.style.border != "5px solid red") {
         el.style.border = "5px solid red";

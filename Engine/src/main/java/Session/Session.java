@@ -727,7 +727,7 @@ public class Session {
                 {
                     // Check if its this players turn
                     if (((Player)users[turn]).getMacAddress().equals(mac)) {
-                        return "You!";
+                        return "You!"; // fyi - this gets used in main.js to check if its the current users turn
                     }
                     // Must be another player, give their username
                     return users[turn].getUsername();
@@ -736,7 +736,7 @@ public class Session {
                 // Its Skycat's turn
                 else
                 {
-                    return "Skycat";
+                    return  users[currentTurn].getUsername();
                 }
             }
         } catch (Exception e) {
