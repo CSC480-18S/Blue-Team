@@ -162,8 +162,7 @@ public class Session {
         HashSet<String> badWords;
         badWords = Dictionaries.getDictionaries().getBadWords();
         Iterator<String> badWordIterator = badWords.iterator();
-
-        int matchCount = 0;
+        
         while(badWordIterator.hasNext()) {
             String badWordFromList = badWordIterator.toString();
             String badWordPattern ="^.*" + badWordFromList + ".*$";
@@ -173,12 +172,8 @@ public class Session {
             matcher2 = badWordInUsername.matcher(username);
 
             if(matcher2.matches()) {
-                matchCount++;
+                return "Bad Word Detected";
             }
-        }
-
-        if(matchCount > 0) {
-            return "Bad Word Detected";
         }
         //validating the team name
         if (team.toUpperCase().compareTo("GREEN") != 0 && team.toUpperCase().compareTo("GOLD") != 0
