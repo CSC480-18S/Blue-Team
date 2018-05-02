@@ -586,7 +586,7 @@ public class QueryClass {
         try {
             int game_id = this.getGameTableCount();
             Connection connection = DriverManager.getConnection(dbAddress, dbUser, dbPass);
-            if (!this.gameIDAlreadyExists(game_id)) { // if game_id doesnt exist
+            if (!this.gameIDAlreadyExists(game_id) && !(gold_team_score == 0 && green_team_score == 0)) { // if game_id doesnt exist
                 String sqlQuery = "INSERT INTO GAME_TABLE VALUES (?,?,?);";
                 PreparedStatement ps = connection.prepareStatement(sqlQuery);
 
