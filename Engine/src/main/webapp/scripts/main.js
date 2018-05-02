@@ -94,6 +94,9 @@ function exchange(el) {
                 $('#' + coord + " img").remove();
             })
 
+            // clear current img so user doesn't have access to it anymore
+            currentImg = null;
+
             break;
     }
 
@@ -337,3 +340,9 @@ function confirmed() {
 function showMessage(str) {
     alert(str);
 }
+
+// window.onunload = function () {
+//     $.post("Servlet", {
+//         request: "leave",
+//     });
+// };
