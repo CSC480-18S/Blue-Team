@@ -147,20 +147,39 @@ public class Session {
         Player newPlayer = null;
 
         //Validating Username
-        String pattern = "^[a-zA-Z]{3,12}$";
-        Pattern re;
+
+        //Validates Just Letters and Length from 3-12 chars
+        String lengthNoNumberPattern = "^[a-zA-Z]{3,12}$";
+        Pattern lengthNoNumber;
         Matcher matcher;
-        re = Pattern.compile(pattern);
-        matcher = re.matcher(username);
+        lengthNoNumber = Pattern.compile(lengthNoNumberPattern);
+        matcher = lengthNoNumber.matcher(username);
+
+        if(!matcher.matches()) {
+            return "Invalid Username";
+        }
 
         HashSet<String> badWords;
         badWords = Dictionaries.getDictionaries().getBadWords();
-        if(!matcher.matches()) {
-            return "Invalid Username";
-        } else if (badWords.contains(username.toUpperCase())) {
-            return "Dirty words not allowed";
+        Iterator<String> badWordIterator = badWords.iterator();
+
+        int matchCount = 0;
+        while(badWordIterator.hasNext()) {
+            String badWordFromList = badWordIterator.toString();
+            String badWordPattern ="^.*" + badWordFromList + ".*$";
+            Pattern badWordInUsername;
+            Matcher matcher2;
+            badWordInUsername = Pattern.compile(badWordPattern);
+            matcher2 = badWordInUsername.matcher(username);
+
+            if(matcher2.matches()) {
+                matchCount++;
+            }
         }
 
+        if(matchCount > 0) {
+            return "Bad Word Detected";
+        }
         //validating the team name
         if (team.toUpperCase().compareTo("GREEN") != 0 && team.toUpperCase().compareTo("GOLD") != 0
                 && team != "" && team != null) {
