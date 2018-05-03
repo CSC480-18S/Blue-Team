@@ -173,7 +173,21 @@ public class Session {
             matcher2 = badWordInUsername.matcher(uN);
 
             if(matcher2.matches()) {
-                return "Bad Word Detected";
+                if(uN.indexOf(badWordFromList) > 0) {
+                    boolean okayName = false;
+                    HashSet<String> engWords = Dictionaries.getDictionaries().getEnglishWords();
+                    String testWord = uN.charAt(uN.indexOf(badWordFromList) - 1) + badWordFromList;
+                    for(String word : engWords){
+                        if(word.contains(testWord)) {
+                            okayName = true;
+                            break;
+                        }
+                    }
+                    if(okayName == false)
+                        return "Bad Word Detected";
+                }
+                else
+                    return "Bad Word Detected";
             }
         }
         //validating the team name
@@ -320,7 +334,7 @@ public class Session {
                     wordToPlay += each.getLetter();
             }
             String temp = session.playWord(move.getStartX(), move.getStartY(), move.isHorizontal(), wordToPlay, skyCat);
-            if(temp.compareTo("Invalid") == 0){
+            if(temp.compareTo("VALID") != 0){
                 return false;
             }
             return true;
