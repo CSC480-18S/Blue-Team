@@ -1039,16 +1039,11 @@ public class BoardGUI implements Runnable {
     public void updateTeamScore(User[] users){
         int greenScore = 0;
         int goldScore = 0;
-        if (users[0].getClass() == Player.class){
-            greenScore += users[0].getScore();
-        } if (users[1].getClass() == Player.class) {
-            goldScore += users[1].getScore();
-        }
-        if (users[2].getClass() == Player.class) {
-            greenScore += users[2].getScore();
-        }
-        if (users[3].getClass() == Player.class){
-            greenScore += users[3].getScore();
+
+        for(User user : users){
+            if(user instanceof Player){
+                if(((Player) user).getTeam().compareTo("GREEN") == 0) greenScore += user.getScore(); else goldScore += user.getScore();
+            }
         }
         label2.setText("Team Green: " + greenScore);
         label3.setText("Team Green: " + goldScore);
@@ -1204,7 +1199,7 @@ public class BoardGUI implements Runnable {
 
     public String TextInformationBox() {
         String text;
-        text = "SkyCat is an artificial intelligence and does not influence statistics.\n";
+        text = "SkyCat is an artificial intelligence and \ndoes not influence statistics.\n";
         return text;
     }
 
