@@ -812,7 +812,7 @@ public class Session {
         } else if(ts[0] > ts[1]) {
             dbQueries.updateWin("green");
             dbQueries.updateLose("gold");
-        } else if(ts[0] == ts[1]) {
+        } else if(ts[0] == ts[1] && ts[0] != 0 && ts[1] != 0) {
             dbQueries.updateTie();
         }
     }
