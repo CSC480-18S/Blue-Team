@@ -808,7 +808,7 @@ public class BoardGUI implements Runnable {
 
         statsTextArea.setBackground(new java.awt.Color(255, 204, 51));
         statsTextArea.setColumns(20);
-        statsTextArea.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        statsTextArea.setFont(new java.awt.Font("Comic Sans MS", 1, 20)); // NOI18N
         statsTextArea.setRows(5);
         statsScrollPane1.setViewportView(statsTextArea);
 
@@ -1204,7 +1204,7 @@ public class BoardGUI implements Runnable {
 
     public String TextInformationBox() {
         String text;
-        text = "Hello";
+        text = "SkyCat is an artificial intelligence and does not influence statistics.\n";
         return text;
     }
 
