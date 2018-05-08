@@ -646,6 +646,11 @@ public class Session {
 
         //if skipped 4 times - game ended
         if(skippedTimes >= 4){
+			try {
+                gui.gameOver(users);
+                Thread.sleep(2000);
+            } catch (Exception e){
+            }
             System.out.println("Game Ended");
             restartGame();
             return;
