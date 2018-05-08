@@ -420,14 +420,14 @@ public class BoardGUI implements Runnable {
         logLink = new javax.swing.JLabel();
 
         logPanel.setBackground(new java.awt.Color(243, 243, 243));
-        logPanel.setPreferredSize(new Dimension(330, 570));
+        logPanel.setPreferredSize(new Dimension(350, 570));
         logPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         teamPanel.setBackground(new java.awt.Color(243, 243, 243));
         teamPanel.setPreferredSize(new Dimension(300, 190));
 
         teamGreenPanel.setBackground(new java.awt.Color(243, 243, 243));
-        teamGreenPanel.setPreferredSize(new Dimension(130, 150));
+        teamGreenPanel.setPreferredSize(new Dimension(100, 150));
 
         teamGreen.setFont(new java.awt.Font("Serif", 1, 17)); // NOI18N
         teamGreen.setForeground(new java.awt.Color(42, 99, 66));
@@ -490,7 +490,7 @@ public class BoardGUI implements Runnable {
         );
 
         teamGoldPanel.setBackground(new java.awt.Color(243, 243, 243));
-        teamGoldPanel.setPreferredSize(new Dimension(130, 150));
+        teamGoldPanel.setPreferredSize(new Dimension(100, 150));
 
         teamGold.setFont(new java.awt.Font("Serif", 1, 17)); // NOI18N
         teamGold.setForeground(new java.awt.Color(255, 204, 51));
@@ -695,7 +695,6 @@ public class BoardGUI implements Runnable {
         panel.add(logPanel, c);
 
         frame.setSize(1920, 1080);
-        frame.setVisible(true);
 
         // *********************************This is the start of Stats frame*********************************** //
         statsPanel = new javax.swing.JPanel();
@@ -837,6 +836,7 @@ public class BoardGUI implements Runnable {
         };
 
         statsPanel.setLayout(statsPanelLayout);
+        statsPanel.setPreferredSize(new Dimension(1440,900));
         statsPanel.setOpaque(false);
         background_stats.add(statsPanel);
         statsPanelLayout.setHorizontalGroup(
@@ -933,13 +933,14 @@ public class BoardGUI implements Runnable {
                         .addComponent(background_stats, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-//        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//        frame.setUndecorated(true);
-//        showOnScreen(1,frame);
-//        frame2.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//        frame2.setUndecorated(true);
-//        showOnScreen(2, frame2);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setUndecorated(true);
+        showOnScreen(0,frame);
+        frame2.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame2.setUndecorated(true);
+        showOnScreen(1, frame2);
         frame2.setSize(new Dimension(1440, 900));
+        frame.setVisible(true);
         frame2.setVisible(true);
 
     }
@@ -955,10 +956,6 @@ public class BoardGUI implements Runnable {
         GraphicsDevice[] gs = ge.getScreenDevices();
         if (screen > -1 && screen < gs.length) {
             gs[screen].setFullScreenWindow(frame);
-        } else if (gs.length > 0) {
-            gs[0].setFullScreenWindow(frame);
-        } else {
-            throw new RuntimeException("No Screens Found");
         }
     }
 

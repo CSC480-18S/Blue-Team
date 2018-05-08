@@ -2,7 +2,7 @@
 //letter:tiles,points;
 //'-' for blank tile letter
 //Total: 100 tiles, 187 points
--:20,0;
+-:2,0;
 A:9,1;
 B:2,3;
 C:2,3;
