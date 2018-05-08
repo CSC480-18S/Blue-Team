@@ -37,7 +37,10 @@
     cursor: pointer; /* Add a pointer on hover */
 }
 
-.wrap { display:table;width:100%}
+.wrap {
+    display: table;
+    width: 100%
+}
 
 .loginbox {
     position: absolute;
@@ -52,7 +55,8 @@
     box-sizing: border-box;
     padding: 70px 30px;
 }
-.loginbox img{
+
+.loginbox img {
     position: absolute;
     width: 100px;
     height: 100px;
@@ -61,21 +65,21 @@
     border-radius: 0px;
 }
 
-.loginbox p[id="usernameLbl"]{
-    margin:0;
+.loginbox p[id="usernameLbl"] {
+    margin: 0;
     padding: 0;
     font-weight: bold;
 }
 
-.loginbox p[id="wUsernameLbl"]{
+.loginbox p[id="wUsernameLbl"] {
     text-align: left;
-    margin:0;
+    margin: 0;
     padding: 0;
     font-weight: bold;
     display: table-cell;
 }
 
-.loginbox p[id="teamLbl"]{
+.loginbox p[id="teamLbl"] {
     display: inline-block;
     font-size: 18px;
     vertical-align: center;
@@ -83,21 +87,19 @@
     left: 5%;
 }
 
-.loginbox p[id="wTeamLbl"]{
+.loginbox p[id="wTeamLbl"] {
     text-align: left;
-    margin:0;
+    margin: 0;
     padding: 0;
     font-weight: bold;
     display: table-cell;
 }
 
-.loginbox p[id="wUsername"]
-{
+.loginbox p[id="wUsername"] {
     text-align: right;
 }
 
-.loginbox p[id="wTeam"]
-{
+.loginbox p[id="wTeam"] {
     text-align: right;
 }
 
@@ -115,31 +117,31 @@
     height: 40px;
 }
 
-.loginbox button{
+.loginbox button {
     border: none;
     outline: none;
     height: 40px;
-    width:100px;
-    background-color: limegreen;
+    width: 100px;
+    background-color: #3e8e41;
     font-size: 18px;
 }
 
-.loginbox button:hover{
+.loginbox button:hover {
     cursor: pointer;
-    background: lawngreen;
+    background: limegreen;
 }
 
-.loginbox input[type=checkbox].toggle-switch{
+.loginbox input[type=checkbox].toggle-switch {
     display: none;
 }
 
-.loginbox input[type=checkbox].toggle-switch + label{
+.loginbox input[type=checkbox].toggle-switch + label {
     display: inline-block;
     width: 60px;
     height: 30px;
     border-radius: 25px;
-    background-color: limegreen;
-    outline:none;
+    background-color: #3e8e41;
+    outline: none;
     cursor: pointer;
     transition: background-color 0.09s ease-in-out;
     position: relative;
@@ -147,11 +149,11 @@
     margin-top: 10px;
 }
 
-.loginbox input[type=checkbox].toggle-switch:checked + label{
-    background-color: gold;
+.loginbox input[type=checkbox].toggle-switch:checked + label {
+    background-color: #FFCC33;
 }
 
-.loginbox input[type=checkbox].toggle-switch + label::after{
+.loginbox input[type=checkbox].toggle-switch + label::after {
     content: '';
     width: 30px;
     height: 30px;
@@ -164,6 +166,6 @@
     box-shadow: 0 0.1em rgba(0, 0, 0, 0.5);
 }
 
-.loginbox input[type=checkbox].toggle-switch:checked + label::after{
+.loginbox input[type=checkbox].toggle-switch:checked + label::after {
     left: 30px;
 }
