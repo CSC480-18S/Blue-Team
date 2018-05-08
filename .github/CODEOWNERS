@@ -1,4 +1,0 @@
-# Codeowners file to ensure QA is the only group that can push to the Master branch.
-
-# Globals
-* @Dor-Ron @iblatnick @rlaub
