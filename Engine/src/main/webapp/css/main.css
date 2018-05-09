@@ -20,8 +20,9 @@
     float: left;
     border: none;
     text-align: center;
-    
+
 }
+
 /* Change background color of buttons on hover */
 .tab button:hover {
     background-color: #ddd;
@@ -38,22 +39,24 @@
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
-    float:left;
+    float: left;
 }
-	
-	#myProgress {
-  width: 100%;
-  background-color: #C19A24;
+
+#myProgress {
+    width: 100%;
+    background-color: #C19A24;
 }
+
 #myBar {
-  width: 5%;
-  height: 30px;
-  background-color: #F3F3F3;
-  text-align: center;
-  line-height: 30px;
-  color: #C19A24;
-  font-weight: bold;
+    width: 5%;
+    height: 30px;
+    background-color: #F3F3F3;
+    text-align: center;
+    line-height: 30px;
+    color: #C19A24;
+    font-weight: bold;
 }
+
 #overlay {
     position: fixed; /* Sit on top of the page content */
     z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
@@ -67,19 +70,19 @@
     cursor: pointer; /* Add a pointer on hover */
 }
 
-
 .black_overlay {
-  display: none;
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  width:100%;
-  height: 100%;
-  background-color: black;
-  -moz-opacity: 0.8;
-  opacity: .80;
-  filter: alpha(opacity=80);
+    display: none;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    -moz-opacity: 0.8;
+    opacity: .80;
+    filter: alpha(opacity=80);
 }
+
 .white_content {
     display: none;
     position: absolute;
@@ -96,8 +99,9 @@
     box-sizing: border-box;
     padding: 70px 30px;
 }
-#fade { 
- position: fixed; /* Sit on top of the page content */
+
+#fade {
+    position: fixed; /* Sit on top of the page content */
     z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
     width: 100%; /* Full width (cover the whole page) */
     height: 100%; /* Full height (cover the whole page) */
@@ -116,20 +120,17 @@
     text-align: center;
 }
 
-	.special
-	{
-		height:55px;
-		width: 55px;
-		border: 2px solid black;
-		float: left;
-		margin-top:20px;
-		margin-left: 20px;
-			
-		
-	}
-	
-	
-	#specialOverlay {
+.special {
+    height: 55px;
+    width: 55px;
+    border: 2px solid black;
+    float: left;
+    margin-top: 20px;
+    margin-left: 20px;
+
+}
+
+#specialOverlay {
     position: fixed; /* Sit on top of the page content */
     z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
     width: 100%; /* Full width (cover the whole page) */
@@ -142,8 +143,7 @@
     cursor: pointer; /* Add a pointer on hover */
 }
 
-
-	.specialBox {
+.specialBox {
     position: absolute;
     z-index: 0;
     width: 500px;
@@ -156,14 +156,16 @@
     transform: translate(-50%, -50%);
     box-sizing: border-box;
     padding: 20px 20px;
-  z-index: 1002;
-  overflow: auto;
+    z-index: 1002;
+    overflow: auto;
 }
-	.section1 {
+
+.section1 {
     color: #FFCC33;
     background-color: #1A3F28;
     text-align: center;
     height: 40px;
+    width: 650px;
     padding: 0px;
     margin: 0px;
 }
@@ -172,6 +174,7 @@
     background-color: #4D4D4D;
     text-align: center;
     height: 150px;
+    width: 650px;
     padding: 0px;
     margin: 0px;
 }
@@ -192,7 +195,7 @@
     height: 115px;
     padding: 0px;
     margin: 0px;
-    
+
 }
 
 .section5 {
@@ -203,82 +206,108 @@
     padding: 0px;
     margin: 0px;
 }
+
 .section7 {
     color: #FFCC33;
     background-color: #1A3F28;
     text-align: center;
-    height: "100%";
     padding: 0px;
     margin: 0px;
 }
-	.borderClass{
-    border-color:brown;
-    border-style:solid;
+
+.borderClass {
+    border-color: brown;
+    border-style: solid;
 }
 
-	.drag
-	{
-		height:55px;
-		width: 55px;
-		border: 2px solid black;
-		float: left;
-		margin-top:20px;
-		margin-left: 30px;
-		border-radius: 5px;
-		    background-color: #FFCC33;
-		
-		
-	}
-	#specialTilediv
-	{
-		height:55px;
-		width: auto;
-		float: left;
-		margin-top:100px;
-		
-		
-	}
-	.drop
-	{
-		height:55px;
-		width:55px;
-		border: 2px solid black;
-		float: left;
-		text-align: center;
-		vertical-align: middle;
-		line-height: 55px;
-		font-size: 25px;
-		font-weight: bold;
-		border-radius: 5px;
-/* 		    		    background-color: #d1d1d1; */
-		    
-		
-		
-	}
-		
-		.buttonss {
-			text-align: center;
-   font-size: 25px;
-		        font-weight: bold;
-	}
-		
-	img .drag{
-	max-width: 55px;
+.drag {
+    height: 55px;
+    width: 55px;
+    border: 2px solid black;
+    float: left;
+    margin-top: 20px;
+    margin-left: 30px;
+    border-radius: 5px;
+    background-color: #FFCC33;
+
+}
+
+#specialTilediv {
+    height: 55px;
+    width: auto;
+    float: left;
+    margin-top: 100px;
+
+}
+
+.drag {
+    height: 55px;
+    width: 55px;
+    border: 2px solid black;
+    float: left;
+    margin-top: 20px;
+    margin-left: 30px;
+    border-radius: 5px;
+    background-color: #FFCC33;
+    position: relative;
+
+}
+
+.drop {
+    height: 55px;
+    width: 55px;
+    border: 2px solid black;
+    float: left;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 55px;
+    font-size: 25px;
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: #d1d1d1;
+    position: relative;
+}
+
+.threeWord {
+    background: url("3W.png");
+}
+
+.twoWord {
+    background: url("2W.png");
+}
+
+.threeLatter {
+    background: url("3L.png");
+}
+
+.twoLatter {
+    background: url("2L.png");
+}
+
+.buttonss {
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+img .drag {
+    max-width: 55px;
     max-height: 55px;
-     border-radius: 5px;
-      
-    
-    
-	}
-	img .drop{
-	max-width: 55px;
+    border-radius: 5px;
+    position: absolute;
+    z-index: 1;
+
+}
+
+img .drop {
+    max-width: 55px;
     max-height: 55px;
-     border-radius: 5px;
-      
-    
-    
-	}
-	
+    border-radius: 5px;
+    position: absolute;
+    z-index: 1;
+
+}
+
 .content {
     margin: auto;
     background: white;
@@ -290,34 +319,35 @@
     border: none;
     text-align: center;
 }
-		
-	body{
+
+body {
+    background-image: url("background.png");
     margin: 0px;
     padding: 0px;
     max-width: 650px;
     margin: auto;
 }
-	
-	
-	
-body {font-family: Arial, Helvetica, sans-serif;}
-		
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
 
 .imgcontainer {
     text-align: center;
     margin: 24px 0 12px 0;
-    
+
 }
 
 img.avatar {
     width: 40%;
     border-radius: 100%;
-    
+
 }
 
-.container button{
+.container button {
     display: inline-block;
 }
+
 .handTiles button {
     display: inline-block;
 }
@@ -385,18 +415,33 @@ img.avatar {
     border-radius: 8px;
     float: right;
 }
+
 button:hover {
     opacity: 0.8;
 }
+
 button:active {
-  background-color: #3e8e41;
-  box-shadow:0  5px #666;
-  transform: translateY(4px);
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
 }
-button:focus, input:focus{
+
+button:focus, input:focus {
     outline: none !important;
 }
 
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
 
 .score-box {
     color: #FFCC33;
@@ -413,7 +458,6 @@ button:focus, input:focus{
     text-align: center;
 }
 
-
 .handTiles {
     float: left;
     border: none;
@@ -421,13 +465,13 @@ button:focus, input:focus{
 }
 
 #n {
-
-padding: 10px
+    padding: 10px
 }
+
 #t {
-
-padding: 10px
+    padding: 10px
 }
+
 #overlay {
     position: fixed; /* Sit on top of the page content */
     z-index: 1; /* Specify a stack order in case you're using a different order for other elements */

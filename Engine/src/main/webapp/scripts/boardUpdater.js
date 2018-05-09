@@ -41,7 +41,8 @@ if (window.Worker)
                         // check if turn is different
                         if (update[1] != getTurn())
                         {
-                            updateTurn(update[1]);
+                            currentTurn = update[1];
+                            updateTurn(currentTurn);
                         }
                         // update board
                         updateBoard();

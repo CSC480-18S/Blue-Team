@@ -646,6 +646,11 @@ public class Session {
 
         //if skipped 4 times - game ended
         if(skippedTimes >= 4){
+			try {
+                gui.gameOver(users);
+                Thread.sleep(2000);
+            } catch (Exception e){
+            }
             System.out.println("Game Ended");
             restartGame();
             return;
@@ -741,7 +746,7 @@ public class Session {
                 {
                     // Check if its this players turn
                     if (((Player)users[turn]).getMacAddress().equals(mac)) {
-                        return "You!";
+                        return "You!"; // fyi - this gets used in main.js to check if its the current users turn
                     }
                     // Must be another player, give their username
                     return users[turn].getUsername();
@@ -750,7 +755,7 @@ public class Session {
                 // Its Skycat's turn
                 else
                 {
-                    return "Skycat";
+                    return  users[currentTurn].getUsername();
                 }
             }
         } catch (Exception e) {
@@ -812,7 +817,7 @@ public class Session {
         } else if(ts[0] > ts[1]) {
             dbQueries.updateWin("green");
             dbQueries.updateLose("gold");
-        } else if(ts[0] == ts[1]) {
+        } else if(ts[0] == ts[1] && ts[0] != 0 && ts[1] != 0) {
             dbQueries.updateTie();
         }
     }
