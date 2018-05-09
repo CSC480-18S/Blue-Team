@@ -589,15 +589,14 @@ public class Session {
         int wordMult = 1;
         int letterMult = 1;
         Multiplier mult = Multiplier.NONE;
-        for (int i = 0; i < move.getWordString().length(); i++) {
-
+        for (int i = 0; i < move.getWord().length; i++) {
             Space current = null;
             if (horizontal && (move.getStartX() + i) < boardLocal.length) {
                 mult = boardLocal[move.getStartX() + i][move.getStartY()].
                         getMultiplier();
                 current = boardLocal[move.getStartX() + i][move.getStartY()];
                 usedSpaces.add(current);
-            } else if(move.getStartY() + i < boardLocal.length){
+            } else if(!horizontal && move.getStartY() + i < boardLocal.length){
                 mult = boardLocal[move.getStartX()][move.getStartY() + i].
                         getMultiplier();
                 current = boardLocal[move.getStartX()][move.getStartY() + i];
@@ -622,7 +621,10 @@ public class Session {
                         break;
                 }
             }
-            points += letterMult * move.getWord()[i].getValue();
+            else{
+                letterMult = 1;
+            }
+            points += letterMult * TileGenerator.getInstance().getTile(move.getWordString().charAt(i)).getValue();;
         }
         points *= wordMult;
         //calculating the total number of points from offshoot moves
@@ -633,12 +635,9 @@ public class Session {
                     points += calculateMovePoints(aMove);
             }
         }
-
         for (Space space : usedSpaces) {
             space.setUsed();
         }
-
-        
         return points;
     }
 
