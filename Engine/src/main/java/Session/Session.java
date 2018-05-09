@@ -467,7 +467,8 @@ public class Session {
             return "bonus";
         } else if ((int) result[0] == -1) {
             gui.printGameLog(user.getUsername() + " is uncultured");
-            if(users[currentTurn] instanceof SkyCat) {
+            if (users[currentTurn] instanceof SkyCat)
+            {
                 nextTurn();
             }
             return "profane";
