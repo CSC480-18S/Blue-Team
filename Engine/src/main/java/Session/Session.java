@@ -467,6 +467,10 @@ public class Session {
             return "bonus";
         } else if ((int) result[0] == -1) {
             gui.printGameLog(user.getUsername() + " is uncultured");
+            if (users[currentTurn] instanceof SkyCat)
+            {
+                nextTurn();
+            }
             return "profane";
         }
         return "Invalid";
@@ -628,11 +632,13 @@ public class Session {
                 if (aMove != null)
                     points += calculateMovePoints(aMove);
             }
-            for (Space space : usedSpaces) {
-                space.setUsed();
-            }
-
         }
+
+        for (Space space : usedSpaces) {
+            space.setUsed();
+        }
+
+        
         return points;
     }
 
