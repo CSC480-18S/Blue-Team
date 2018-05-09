@@ -1095,28 +1095,17 @@ public class BoardGUI implements Runnable {
     }
 
     public void updateTeamScore(User[] users) {
-        int greenScore = 0;
-        int goldScore = 0;
 
-        for (User user : users) {
-            if (user instanceof Player) {
-                if (((Player) user).getTeam().compareTo("GREEN") == 0) greenScore += user.getScore();
-                else goldScore += user.getScore();
+        int goldScore = Session.getSession().getTeamScores()[1];
+        int greenScore = Session.getSession().getTeamScores()[0];
 
                 teamGreen.setText("Team Green: " + greenScore);
                 teamGold.setText("Team Gold: " + goldScore);
             }
-        }
-    }
 
     public void gameOver(User[] users) {
-        int greenScore = 0;
-        int goldScore = 0;
-
-        greenScore += users[0].getScore();
-        goldScore += users[1].getScore();
-        greenScore += users[2].getScore();
-        goldScore += users[3].getScore();
+        int goldScore = Session.getSession().getTeamScores()[1];
+        int greenScore = Session.getSession().getTeamScores()[0];
 
         try
         {
