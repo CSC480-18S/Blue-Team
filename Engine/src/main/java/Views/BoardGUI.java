@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
@@ -420,35 +421,35 @@ public class BoardGUI implements Runnable {
         logLink = new javax.swing.JLabel();
 
         logPanel.setBackground(new java.awt.Color(243, 243, 243));
-        logPanel.setPreferredSize(new Dimension(350, 570));
+        logPanel.setPreferredSize(new Dimension(320, 550));
         logPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         teamPanel.setBackground(new java.awt.Color(243, 243, 243));
-        teamPanel.setPreferredSize(new Dimension(300, 190));
+        teamPanel.setPreferredSize(new Dimension(290,180));
 
         teamGreenPanel.setBackground(new java.awt.Color(243, 243, 243));
-        teamGreenPanel.setPreferredSize(new Dimension(100, 150));
+        teamGreenPanel.setPreferredSize(new Dimension(130,170));
 
-        teamGreen.setFont(new java.awt.Font("Serif", 1, 17)); // NOI18N
+        teamGreen.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         teamGreen.setForeground(new java.awt.Color(42, 99, 66));
         teamGreen.setText("Team Green");
 
-        player1Label.setFont(new java.awt.Font("Serif", 1, 15)); // NOI18N
+        player1Label.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         player1Label.setText("Player 1");
 
-        timeLabel1.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        timeLabel1.setFont(new java.awt.Font("Serif", 0, 10)); // NOI18N
         timeLabel1.setText("Time:");
 
-        timer1.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        timer1.setFont(new java.awt.Font("Serif", 1, 10)); // NOI18N
         timer1.setText("00");
 
-        player3Label.setFont(new java.awt.Font("Serif", 1, 15)); // NOI18N
+        player3Label.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         player3Label.setText("Player 3");
 
-        timeLabel3.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        timeLabel3.setFont(new java.awt.Font("Serif", 0, 10)); // NOI18N
         timeLabel3.setText("Time:");
 
-        timer3.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        timer3.setFont(new java.awt.Font("Serif", 1, 10)); // NOI18N
         timer3.setText("00");
 
         javax.swing.GroupLayout teamGreenPanelLayout = new javax.swing.GroupLayout(teamGreenPanel);
@@ -468,7 +469,7 @@ public class BoardGUI implements Runnable {
                                                 .addComponent(timeLabel3)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(timer3)))
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(0, 29, Short.MAX_VALUE))
         );
         teamGreenPanelLayout.setVerticalGroup(
                 teamGreenPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -490,28 +491,28 @@ public class BoardGUI implements Runnable {
         );
 
         teamGoldPanel.setBackground(new java.awt.Color(243, 243, 243));
-        teamGoldPanel.setPreferredSize(new Dimension(100, 150));
+        teamGreenPanel.setPreferredSize(new Dimension(130,170));
 
-        teamGold.setFont(new java.awt.Font("Serif", 1, 17)); // NOI18N
+        teamGold.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         teamGold.setForeground(new java.awt.Color(255, 204, 51));
         teamGold.setText("Team Gold");
 
-        player2Label.setFont(new java.awt.Font("Serif", 1, 15)); // NOI18N
+        player2Label.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         player2Label.setText("Player 2");
 
-        timeLabel2.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        timeLabel2.setFont(new java.awt.Font("Serif", 0, 10)); // NOI18N
         timeLabel2.setText("Time:");
 
-        timer2.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        timer2.setFont(new java.awt.Font("Serif", 1, 10)); // NOI18N
         timer2.setText("00");
 
-        player4Label.setFont(new java.awt.Font("Serif", 1, 15)); // NOI18N
+        player4Label.setFont(new java.awt.Font("Serif", 1, 12)); // NOI18N
         player4Label.setText("Player 4");
 
-        timer4.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        timer4.setFont(new java.awt.Font("Serif", 1, 10)); // NOI18N
         timer4.setText("00");
 
-        timeLabel4.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        timeLabel4.setFont(new java.awt.Font("Serif", 0, 10)); // NOI18N
         timeLabel4.setText("Time:");
 
         javax.swing.GroupLayout teamGoldPanelLayout = new javax.swing.GroupLayout(teamGoldPanel);
@@ -526,7 +527,7 @@ public class BoardGUI implements Runnable {
                                                 .addComponent(timeLabel2)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(timer2)))
-                                .addGap(0, 53, Short.MAX_VALUE))
+                                .addGap(0, 38, Short.MAX_VALUE))
                         .addGroup(teamGoldPanelLayout.createSequentialGroup()
                                 .addGroup(teamGoldPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(teamGoldPanelLayout.createSequentialGroup()
@@ -561,10 +562,10 @@ public class BoardGUI implements Runnable {
                 teamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(teamPanelLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(teamGreenPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(teamGreenPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(teamGoldPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         teamPanelLayout.setVerticalGroup(
                 teamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -585,6 +586,7 @@ public class BoardGUI implements Runnable {
         gameLogArea.setColumns(20);
         gameLogArea.setFont(new java.awt.Font("Comic Sans MS", 1, 12)); // NOI18N
         gameLogArea.setRows(5);
+        gameLogArea.setEditable(false);
         gameLogScrollPane.setViewportView(gameLogArea);
 
         javax.swing.GroupLayout gameLogPanelLayout = new javax.swing.GroupLayout(gameLogPanel);
@@ -592,10 +594,11 @@ public class BoardGUI implements Runnable {
         gameLogPanelLayout.setHorizontalGroup(
                 gameLogPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(gameLogPanelLayout.createSequentialGroup()
-                                .addContainerGap()
                                 .addGroup(gameLogPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(gameLogScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(logLabel))
+                                        .addComponent(logLabel)
+                                        .addGroup(gameLogPanelLayout.createSequentialGroup()
+                                                .addGap(10, 10, 10)
+                                                .addComponent(gameLogScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         gameLogPanelLayout.setVerticalGroup(
@@ -609,7 +612,7 @@ public class BoardGUI implements Runnable {
 
         qrPanel.setBackground(new java.awt.Color(243, 243, 243));
 
-        scanCode.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        scanCode.setFont(new java.awt.Font("Tahoma", 1, 17)); // NOI18N
         scanCode.setText("Scan QR Code To Play");
 
         final ImageIcon qrIcon = new ImageIcon(Start.qrFile.getPath());
@@ -637,7 +640,7 @@ public class BoardGUI implements Runnable {
                         .addGap(0, 148, Short.MAX_VALUE)
         );
 
-        logLink.setFont(new java.awt.Font("Serif", 1, 21)); // NOI18N
+        logLink.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         logLink.setText("http://10.42.0.1:8080/blueteam");
 
         javax.swing.GroupLayout qrPanelLayout = new javax.swing.GroupLayout(qrPanel);
@@ -647,14 +650,14 @@ public class BoardGUI implements Runnable {
                         .addGroup(qrPanelLayout.createSequentialGroup()
                                 .addGroup(qrPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(qrPanelLayout.createSequentialGroup()
-                                                .addGap(84, 84, 84)
+                                                .addContainerGap()
+                                                .addComponent(logLink))
+                                        .addGroup(qrPanelLayout.createSequentialGroup()
+                                                .addGap(60, 60, 60)
                                                 .addComponent(qrBackground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(qrPanelLayout.createSequentialGroup()
-                                                .addGap(51, 51, 51)
-                                                .addComponent(scanCode))
-                                        .addGroup(qrPanelLayout.createSequentialGroup()
-                                                .addGap(29, 29, 29)
-                                                .addComponent(logLink)))
+                                                .addGap(37, 37, 37)
+                                                .addComponent(scanCode)))
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         qrPanelLayout.setVerticalGroup(
@@ -664,7 +667,8 @@ public class BoardGUI implements Runnable {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(qrBackground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(logLink))
+                                .addComponent(logLink)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout logPanelLayout = new javax.swing.GroupLayout(logPanel);
@@ -672,15 +676,20 @@ public class BoardGUI implements Runnable {
         logPanelLayout.setHorizontalGroup(
                 logPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(teamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(logPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(gameLogPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(qrPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(logPanelLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(gameLogPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(logPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(qrPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addContainerGap())
         );
         logPanelLayout.setVerticalGroup(
                 logPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(logPanelLayout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(gameLogPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -836,7 +845,6 @@ public class BoardGUI implements Runnable {
         };
 
         statsPanel.setLayout(statsPanelLayout);
-        statsPanel.setPreferredSize(new Dimension(1440,900));
         statsPanel.setOpaque(false);
         background_stats.add(statsPanel);
         statsPanelLayout.setHorizontalGroup(
@@ -854,9 +862,9 @@ public class BoardGUI implements Runnable {
                                                 .addComponent(jLabel3)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(182, 182, 182)
+                                                .addGap(170, 170, 170)
                                                 .addComponent(statsScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(95, 95, 95))))
+                                                .addGap(77, 77, 77))))
                         .addGroup(statsPanelLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 680, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -892,27 +900,28 @@ public class BoardGUI implements Runnable {
                                         .addComponent(jLabel2)
                                         .addComponent(jLabel1))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(statsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(statsPanelLayout.createSequentialGroup()
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                                                .addGap(35, 35, 35))
-                                        .addGroup(statsPanelLayout.createSequentialGroup()
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)))
+                                .addGroup(statsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                                 .addComponent(statisticsLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(statsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(statsPanelLayout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(statsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(statsPanelLayout.createSequentialGroup()
+                                                                .addGap(63, 63, 63)
+                                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE))
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statsPanelLayout.createSequentialGroup()
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(jLabel3)
+                                                                .addGap(77, 77, 77))))
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statsPanelLayout.createSequentialGroup()
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jLabel3)
-                                                .addGap(77, 77, 77))
-                                        .addGroup(statsPanelLayout.createSequentialGroup()
-                                                .addGap(63, 63, 63)
-                                                .addGroup(statsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(statsScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                .addComponent(statsScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(20, 20, 20)))
                                 .addGroup(statsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(statsPanelLayout.createSequentialGroup()
                                                 .addComponent(conclusionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -926,11 +935,11 @@ public class BoardGUI implements Runnable {
         frame2.getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(background_stats, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(background_stats, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(background_stats, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(background_stats, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -1073,13 +1082,13 @@ public class BoardGUI implements Runnable {
         for (int i = 0; i < users.length; i++) {
             if (users[i] != null) {
                 if (i == 0) {
-                    player1Label.setText(users[i].getUsername() + "  [ " + users[i].getScore() + " ]");
+                    player1Label.setText(users[i].getUsername() + " [ " + users[i].getScore() + " ]");
                 } else if (i == 1) {
-                    player2Label.setText(users[i].getUsername() + "  [ " + users[i].getScore() + " ]");
+                    player2Label.setText(users[i].getUsername() + " [ " + users[i].getScore() + " ]");
                 } else if (i == 2) {
-                    player3Label.setText(users[i].getUsername() + "  [ " + users[i].getScore() + " ]");
+                    player3Label.setText(users[i].getUsername() + " [ " + users[i].getScore() + " ]");
                 } else if (i == 3) {
-                    player4Label.setText(users[i].getUsername() + "  [ " + users[i].getScore() + " ]");
+                    player4Label.setText(users[i].getUsername() + " [ " + users[i].getScore() + " ]");
                 }
             }
         }
@@ -1108,39 +1117,47 @@ public class BoardGUI implements Runnable {
         greenScore += users[2].getScore();
         goldScore += users[3].getScore();
 
-        if (greenScore > goldScore) {
-            gameover = new JFrame();
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            gameover.setUndecorated(true);
-            ImageIcon teamGreen = new ImageIcon(classloader.getResource("greenwins.png"));
-            JLabel lbl = new JLabel(teamGreen);
+        try
+        {
+            if (greenScore > goldScore) {
+                gameover = new JFrame();
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                gameover.setUndecorated(true);
+                ImageIcon teamGreen = new ImageIcon(classloader.getResource("greenwins.png"));
+                JLabel lbl = new JLabel(teamGreen);
 
-            gameover.getContentPane().add(lbl);
+                gameover.getContentPane().add(lbl);
 
-            gameover.setSize(teamGreen.getIconWidth(), teamGreen.getIconHeight());
+                gameover.setSize(teamGreen.getIconWidth(), teamGreen.getIconHeight());
 
-            int x = (screenSize.width - gameover.getSize().width) / 2;
-            int y = (screenSize.height - gameover.getSize().height) / 2;
+                int x = (screenSize.width - gameover.getSize().width) / 2;
+                int y = (screenSize.height - gameover.getSize().height) / 2;
 
-            gameover.setLocation(x, y);
-            gameover.setVisible(true);
-        } else {
-            gameover = new JFrame();
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            gameover.setUndecorated(true);
-            ImageIcon teamGold = new ImageIcon(classloader.getResource("goldwins.png"));
-            JLabel greenLbl = new JLabel(teamGold);
+                gameover.setLocation(x, y);
+                gameover.setVisible(true);
+                TimeUnit.SECONDS.sleep(8);
+            } else {
+                gameover = new JFrame();
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                gameover.setUndecorated(true);
+                ImageIcon teamGold = new ImageIcon(classloader.getResource("goldwins.png"));
+                JLabel greenLbl = new JLabel(teamGold);
 
-            gameover.getContentPane().add(greenLbl);
+                gameover.getContentPane().add(greenLbl);
 
-            gameover.setSize(teamGold.getIconWidth(), teamGold.getIconHeight());
+                gameover.setSize(teamGold.getIconWidth(), teamGold.getIconHeight());
 
-            int x = (screenSize.width - gameover.getSize().width) / 2;
-            int y = (screenSize.height - gameover.getSize().height) / 2;
+                int x = (screenSize.width - gameover.getSize().width) / 2;
+                int y = (screenSize.height - gameover.getSize().height) / 2;
 
-            gameover.setLocation(x, y);
-            gameover.setVisible(true);
+                gameover.setLocation(x, y);
+                gameover.setVisible(true);
+                TimeUnit.SECONDS.sleep(8);
+            }
         }
+        catch (InterruptedException ie) { System.out.println(ie.getMessage());}
+        catch (Exception e) { System.out.println(e.getMessage());}
+
     }
 
     public void setTimerText(int turn, int sec) {
