@@ -152,8 +152,13 @@ public class Validator {
                         Tile temp[] = new Tile[1];
                         temp[0] = move.getWord()[i];
                         Tile[] fullOffshootWord = getFullWord(x+i, y, false, temp);                        if (fullOffshootWord.length > 1)
-                            //creating move to add to list of offshoot moves
-                            offshootMoves.add(new Move(x+i, y0, false, fullOffshootWord, move.getUser()));
+                            if(y0 > y) {
+                                //creating move to add to list of offshoot moves
+                                offshootMoves.add(new Move(x + i, y, false, fullOffshootWord, move.getUser()));
+                            }
+                            else {
+                                offshootMoves.add(new Move(x + i, y0, false, fullOffshootWord, move.getUser()));
+                            }
                     }
                 }
             }
@@ -178,8 +183,13 @@ public class Validator {
                         temp[0] = move.getWord()[i];
                         Tile[] fullOffshootWord = getFullWord(x, y+i, true, temp);
                         if (fullOffshootWord.length > 1)
-                            //creating move and adding it to list of offshoot moves
-                            offshootMoves.add(new Move(x0, y+i, true, fullOffshootWord, move.getUser()));
+                            if(x0 > x) {
+                                //creating move and adding it to list of offshoot moves
+                                offshootMoves.add(new Move(x, y + i, true, fullOffshootWord, move.getUser()));
+                            }
+                            else{
+                                offshootMoves.add(new Move(x0, y + i, true, fullOffshootWord, move.getUser()));
+                            }
                     }
                 }
             }
