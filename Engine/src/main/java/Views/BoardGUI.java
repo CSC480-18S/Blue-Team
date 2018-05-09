@@ -1102,10 +1102,11 @@ public class BoardGUI implements Runnable {
             if (user instanceof Player) {
                 if (((Player) user).getTeam().compareTo("GREEN") == 0) greenScore += user.getScore();
                 else goldScore += user.getScore();
+
+                teamGreen.setText("Team Green: " + greenScore);
+                teamGold.setText("Team Gold: " + goldScore);
             }
         }
-        teamGreen.setText("Team Green: " + greenScore);
-        teamGold.setText("Team Green: " + goldScore);
     }
 
     public void gameOver(User[] users) {
