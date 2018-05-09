@@ -1105,7 +1105,7 @@ public class BoardGUI implements Runnable {
             }
         }
         teamGreen.setText("Team Green: " + greenScore);
-        teamGold.setText("Team GOLD: " + goldScore);
+        teamGold.setText("Team Gold: " + goldScore);
     }
 
     public void gameOver(User[] users) {
