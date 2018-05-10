@@ -602,7 +602,7 @@ public class Session {
                 current = boardLocal[move.getStartX()][move.getStartY() + i];
                 usedSpaces.add(current);
             }
-            if (current != null && current.getUsed() == false) {
+            if (!current.getUsed()) {
                 switch (mult) {
                     case NONE:
                         letterMult = 1;
