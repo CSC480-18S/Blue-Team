@@ -47,7 +47,7 @@ public class Board implements GameConstants {
 //                    }
 //                    multIndex++;
 //                }
-                int mulType = layout[r][c];
+                int mulType = layout[c][r];
                 System.out.print(mulType + " ");
                 switch(mulType){
                     case 0: break;
@@ -56,7 +56,7 @@ public class Board implements GameConstants {
                     case 3: mult = Multiplier.DOUBLE_WORD; break;
                     case 4: mult = Multiplier.TRIPLE_WORD; break;
                 }
-                board[r][c] = new Space(mult);
+                board[c][r] = new Space(mult);
             }
         }
     }
