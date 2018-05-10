@@ -624,7 +624,6 @@ public class Session {
             else{
                 letterMult = 1;
             }
-            System.out.println("************** " + move.getWordString().charAt(i) + " " + TileGenerator.getInstance().getTile(move.getWordString().charAt(i)).getValue() + " " + letterMult + wordMult);
             points += letterMult * TileGenerator.getInstance().getTile(move.getWordString().charAt(i)).getValue();;
         }
         points *= wordMult;
