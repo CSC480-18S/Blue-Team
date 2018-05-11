@@ -1,0 +1,171 @@
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+#waitOverlay {
+    position: fixed; /* Sit on top of the page content */
+    z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+#welcomeOverlay {
+    position: fixed; /* Sit on top of the page content */
+    z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+.wrap {
+    display: table;
+    width: 100%
+}
+
+.loginbox {
+    position: absolute;
+    z-index: 0;
+    width: 320px;
+    height: 420px;
+    background: black;
+    color: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    padding: 70px 30px;
+}
+
+.loginbox img {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: -50px;
+    left: calc(50% - 50px);
+    border-radius: 0px;
+}
+
+.loginbox p[id="usernameLbl"] {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+
+.loginbox p[id="wUsernameLbl"] {
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    display: table-cell;
+}
+
+.loginbox p[id="teamLbl"] {
+    display: inline-block;
+    font-size: 18px;
+    vertical-align: center;
+    position: relative;
+    left: 5%;
+}
+
+.loginbox p[id="wTeamLbl"] {
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    display: table-cell;
+}
+
+.loginbox p[id="wUsername"] {
+    text-align: right;
+}
+
+.loginbox p[id="wTeam"] {
+    text-align: right;
+}
+
+.loginbox input {
+    width: 100%;
+    margin-bottom: 20px;
+    color: gray;
+}
+
+.loginbox input[type="text"] {
+    border: none;
+    border-bottom: 1px solid gray;
+    background: transparent;
+    outline: none;
+    height: 40px;
+}
+
+.loginbox button {
+    border: none;
+    outline: none;
+    height: 40px;
+    width: 100px;
+    background-color: #3e8e41;
+    font-size: 18px;
+}
+
+.loginbox button:hover {
+    cursor: pointer;
+    background: limegreen;
+}
+
+.loginbox input[type=checkbox].toggle-switch {
+    display: none;
+}
+
+.loginbox input[type=checkbox].toggle-switch + label {
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    border-radius: 25px;
+    background-color: #3e8e41;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.09s ease-in-out;
+    position: relative;
+    float: right;
+    margin-top: 10px;
+}
+
+.loginbox input[type=checkbox].toggle-switch:checked + label {
+    background-color: #FFCC33;
+}
+
+.loginbox input[type=checkbox].toggle-switch + label::after {
+    content: '';
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border-radius: 25px;
+    position: absolute;
+    transform: scale(0.7);
+    left: 0;
+    transition: left 0.09s ease-in-out;
+    box-shadow: 0 0.1em rgba(0, 0, 0, 0.5);
+}
+
+.loginbox input[type=checkbox].toggle-switch:checked + label::after {
+    left: 30px;
+}
